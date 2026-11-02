@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "project": "WEASHION",
+    "guidePath": "docs/ui-ux-code-guide",
+    "baseline": "2026-11-02",
+    "verification": "Document snapshot; application behavior has not been revalidated by this MCP.",
+    "examplePlatform": "swiftui"
+  },
+  "files": [
+    {
+      "file": "README.md",
+      "originalSha256": "a59212b053ada8ca5c3234368a2d1e18b697b51f9bbb304860eb3e78e19536c5",
+      "bundledSha256": "a8816324537f9511fca7c531adeb062ead06ae6f4329d6357542e2d689c2b16e",
+      "codeBlocks": []
+    },
+    {
+      "file": "design-principles.md",
+      "originalSha256": "56eb2b9c7295eb46c453968d8a97cf3e84fc74c41f7cf87edcb85241b8b57a71",
+      "bundledSha256": "76e996b6dffe9091a906f49dc097b4d4ea46e350fbf46ce4160bc4e1fecfde85",
+      "codeBlocks": []
+    },
+    {
+      "file": "colors-and-surfaces.md",
+      "originalSha256": "443ec00df688105009bbb0d7336d930e9b9161645c868f0275ede5618e2b3931",
+      "bundledSha256": "d7e04c9d923860f302ee257c5eff7f1df84a455afb4e9d7ab5b4ab985ab19cbc",
+      "codeBlocks": [
+        "be3224aaf287bc0c84b09b4fd462d3597610035b1d485eb5b60e4de769ce0ebe"
+      ]
+    },
+    {
+      "file": "typography.md",
+      "originalSha256": "3890fc86eb50a2cd351f25509012a7245e5c0e3075c302dfcda4a24c5032f9ed",
+      "bundledSha256": "c073eae255ddc3f2e9827329273774337517942b10958820380f296c486e07e9",
+      "codeBlocks": [
+        "1a2ad22a73a51a0d513281c86493649834801ed087c9c30d2a8f69ce42e8465b",
+        "f5f723649fbbc40b5b45ae549c64efc82dea7a287a7de2396082b7f28643e0fc",
+        "02db2a23c358a11eaada8ff3a5325c19ff224b0c06ea0774c6447a3296e8debd",
+        "e28010b70d0fde1c8c480d3b6ce9a026dc05a601a98c3a678599b387ceb7ba92"
+      ]
+    },
+    {
+      "file": "editorial-graphics.md",
+      "originalSha256": "752aa3cb2ff1f257ed6154161555088612353b1bd931c03c15a83b2984c0f0da",
+      "bundledSha256": "dc345a6d6e400f1a759c8505a0ecefab2aaf83a2a7ab31d3b476002623fd71f5",
+      "codeBlocks": [
+        "c8d6be95db01f96c823c32ec549c41a7f51a4ee4abe9d75fdbe5e1d4d2d32503",
+        "67a3ddbdddafe0e9157b614f9f6dbd8660590b8d72e2ecdc5d9b88b133fd0566",
+        "1f89bffd356adb753502478680f74a8a4f60ffc9dab17488c07db0fcac5758de",
+        "1eed6ae0af30d126cd7277c5b2cd93a637b681a6e924e9d0c3ad7ff00b39d743"
+      ]
+    },
+    {
+      "file": "motion.md",
+      "originalSha256": "c851e007934801f12f2b36b7fb270dc01cd6e0f6f78910019ac2fcec06b79d75",
+      "bundledSha256": "31f68466001a9f30cc115feab943eb559dae52b01bd9656506f2398b3ad9ed1b",
+      "codeBlocks": [
+        "37a6e4bb97f28a810087e75297579752606b5378619a3729ab1abe27c85667a3",
+        "c38806f0a333396ad4f7af0f4caaf83aef79eac53dde3820dc87390a3dc62a9d",
+        "778fe96624002cacffad6b7a3f936cd82798a39f1f5451d200f870aff1eb8480",
+        "b85fd8e2230984cd0b021e0efbd408a48494af0e366e15b998d8f5c91380bb23",
+        "04eab49350c8bdf7a54b821c7d1a443774074614c7640a6b2865c8997dd4d772",
+        "3cf5678d15e15af4e5f2a043e9fe38f71dbd49e6f3efa28a5002fbc64db906be",
+        "648b476ea3a5d929b7a587235dde1617ab7660d54bf5d8b27779a4d76388d57d",
+        "ab6d806612a56796531aef0ac228caa4880d01460db29d66bc37cc73fd9e1082",
+        "5d5495a4d06c657834d12cdb6aa321354eda3b7b97852519484222d236177937",
+        "5a78392922a8df280e1cb9ca9b131d876071370f2d339f911e413aa8097e4ffe"
+      ]
+    },
+    {
+      "file": "layout.md",
+      "originalSha256": "a07186a9a872b8a67d9083f6fe6a87818df7978cf9cfd55ae507fe46f9d1b639",
+      "bundledSha256": "43e899417e81df64b907a9a7a5ba159a9e931e5e455f7cc31e5f9e48dc23cace",
+      "codeBlocks": [
+        "6c3a8ebd27a627b0cf495845184b8b7ca9b6bfa379ceaa0ff4f41d48d1e4000b",
+        "7d546bf9b635a7cd2d7b987f653473d47ab49f4ebf185dcdd8ab7b9ad81fd6b1",
+        "1d87341486dc4b43b9f0a127837857b4c7b255d06e1f70d72e4bc734bd3332ad",
+        "368df0da3174efeee47153094bb081a678952aeaeb03a0918c189ca2a56e74a0",
+        "1e232f80fc26571f4c1a48691eaeefba5d53c4b2136e006171727bec712ca58e"
+      ]
+    },
+    {
+      "file": "controls-and-input.md",
+      "originalSha256": "34e1cd7d40041cb2b2e335363ecc16cc41e6f6f697ec80a6f82bdb5aad4b1d61",
+      "bundledSha256": "2ab0a503f703ac282d564ba0e3db1f2387bc5750a567b4412511152780d329a2",
+      "codeBlocks": [
+        "dfed09a01d01ada81b4e344fd818b1cf3cba4533ebc5bf510f184f0550d7b7ea",
+        "20325339bea7a32de0cebb4981a9085bb7c500108d91ef58773a0451724ec1f9",
+        "f94826b043650479e562baf8ca0af968e7185a6afe68722ecb5c65f3bc6859a7",
+        "46ecfa5e59e684d405bb563e9b034e221fb63065f9899265e478c730aff16c06",
+        "78ec4d5bb2268840b3a4c7fa6d40ce0c2fda3fca74ecb865d6be170948436572"
+      ]
+    },
+    {
+      "file": "feedback-and-loading.md",
+      "originalSha256": "a4a0484ba160b1a4e9151be33d1b6a60de0c35da47ff998603f91841a3c360ef",
+      "bundledSha256": "a1974bb1acfbaa0c69247801537c6dfa5cde96515ea1617f0d8ce355da9432c0",
+      "codeBlocks": [
+        "71bd30ce30ed0975d37e54261375be5c290222de17fcf2cedbd3c3f1b5c92135",
+        "793b8a1cfac3d3cdbeca47cef369b7c04809b5f5f01b3fd88d8ecb1844ede9ba",
+        "3b1d9b075d80b073a43030bbaf8773a978e75237c673df488a8d811c7c289852",
+        "b3792646e82dc970d591121dcd84fa3b81b73e22a09c8b3219a3277a6d244c9e",
+        "cdfc7d15ce2b71240df2ea44f2bed6e6325563b7733b1b4b41e0d2d311b3cb61",
+        "e4d595004dcd1008671a2ab7f9063ef11166f34636063c50f6b31dcdb9440045"
+      ]
+    },
+    {
+      "file": "screen-composition.md",
+      "originalSha256": "abebb864065831ff4caac512fc9283a463d1c481c3166a610192fafdb249f840",
+      "bundledSha256": "09dba9911f82707391e67426d3f525fd151b9379a9e353f5eeccd682289e6eb5",
+      "codeBlocks": [
+        "acbad00aa28c3f5101daa601c62531e2e89d32d368187113ec9c8a20bfec051b",
+        "96a705ad4bca60a0f7842ac64d390002d10715bc59368bee08a9830c631c044f",
+        "c9bcbf9285c450362dba1e6f8bc21781fa7246220270e5bae8f02d7106a27132",
+        "7b9a65fd583043b548d271ed96cab785506329f74f2b041b5f05d730fcc0c870",
+        "5f466c8b312d5aecca5c45d17ff35850e28d221e9b92b3ec44600e283436681b"
+      ]
+    },
+    {
+      "file": "weather-graphics.md",
+      "originalSha256": "3ecba1022e2ccc005f4c7e2a7809a3f5c41a682b512dd3d68d0a416b771a8b4e",
+      "bundledSha256": "267a08ea63a2ff4f2a7f558ef582ba932ed142d00df0c74ac9833b1063341839",
+      "codeBlocks": [
+        "a29ac19478c1f7ad16d4ec8a951b924c9c9c28778745f0afbe19b06a0d3fe1b3",
+        "487ac6cda90648e01f11f89c4cf83855d88bd67ad1add93187f0dd91157a0938",
+        "f0e19026f8715d2758bc0c5aed041d810d867ba8db7eb3a8beaa137b3f839b36",
+        "51d85744659721cf6cb2e2e29ce3d7686d2b4829ae9e6ed07b430eae157067bc"
+      ]
+    },
+    {
+      "file": "measurement-diagrams.md",
+      "originalSha256": "d6fc9aa33e873e7883dc51b118d86ac2a4ea95f1105e3487e0f7ba86ed29e44c",
+      "bundledSha256": "4bde6bd50847cde4a2358e9af2bc1d05cbaf48e9b22148ef92b6c6d56210e3f3",
+      "codeBlocks": [
+        "81698f615287b8a721767d47592d67b49ec2e6c487d637accf0a9879e40710c2",
+        "57b77e19a9fc9d7c3cbb21de0ca267387dc4fb1cdf99cb7eb41327915918102a",
+        "646d85b35d461225fd6211d2277c97ee254d3f0b5e0ee068b9281a67be9c0659",
+        "0ec3471f0bc90ea9f2dd913116b5b1cffbce09d8de24bd21cd2fde0a5b99b2d9"
+      ]
+    },
+    {
+      "file": "rendering-and-gestures.md",
+      "originalSha256": "b68de955c4df5af21492ab9bd0ad4451d76d2a8de3ab0be812f984f80598d59c",
+      "bundledSha256": "e4ab55306f0835cb0585eb6725bbcb11ba801c2f814340f987484a9668058f17",
+      "codeBlocks": [
+        "8d8a0f05817ec39a6b7d557a2ebf58d6bc620041572620ad00c6e52c9d873f0b",
+        "2b86537e78ba9da0e162f98282846a334a8e001ef394898fd059d43bf404ce0e",
+        "2b9b113979d546b67f3cfd0500348c75dba3967b3c74bb76e1930989b72a2f9e",
+        "42023682a170eb75e3744405acafa4508089dc345a1834a8c10293e95c578962",
+        "11656de6408a3d0adc860a3eca1948eaa18727978c7ed7a8ac872cc7db145bc5",
+        "f6a10dbe00061835606bb23d715560b79e2c7763969ec471ae5bf8fc8936b7e6",
+        "91d658377a98cffccde57a071df2ee9ef316f290ceb90d996b0b346b8d595fa4"
+      ]
+    },
+    {
+      "file": "assets-and-icons.md",
+      "originalSha256": "ba928452bb9b91ad7801341f1df6b34c1df07fadd4beca552f4ea6a9c1b33ac7",
+      "bundledSha256": "e5a5afd0b45d918cb8275555007e0da1eb6d75f2811b1c9019db05a36ab27a39",
+      "codeBlocks": [
+        "e2dfa9b36a7b0d66c5ff286fc4e7d241d28e40551946784789072827a4f447b7"
+      ]
+    },
+    {
+      "file": "validation-and-inventory.md",
+      "originalSha256": "078e469cdb49589c32c8adf43c52d6b3df7d15316299d832af620dd0cb6bf6e9",
+      "bundledSha256": "c4f355652ad91d4328deaa417d610264166e5ba300337281cce8efeb9abfdd1e",
+      "codeBlocks": [
+        "933d1034a9cdfebf7bc59ac4a9ed6ddf12b887efa8f1c1c1604b1f63caeae7b4"
+      ]
+    }
+  ]
+}

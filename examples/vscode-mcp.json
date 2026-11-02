@@ -1,0 +1,16 @@
+{
+  "servers": {
+    "design": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${input:designMcpEntry}"]
+    }
+  },
+  "inputs": [
+    {
+      "id": "designMcpEntry",
+      "type": "promptString",
+      "description": "Absolute path to the built DESIGN/dist/index.js"
+    }
+  ]
+}
