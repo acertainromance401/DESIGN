@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honest manual progress demo</title>
+<style>
+  body { font: 1rem/1.5 system-ui; padding: 1rem; color: #17212b; background: #fff; }
+  button { font: inherit; padding: .65rem; margin-block: .5rem; }
+  progress { display: block; inline-size: min(100%, 30rem); }
+  :focus-visible { outline: 3px solid #1554b3; outline-offset: 3px; }
+</style>
+<main>
+  <h1>Manual progress demonstration</h1>
+  <p>No upload or background operation is running.</p>
+  <label for="progress">Example steps</label>
+  <progress id="progress" value="0" max="4"></progress>
+  <p id="status" role="status">0 of 4 steps</p>
+  <button id="next" type="button">Complete next step</button>
+  <button id="reset" type="button">Reset demonstration</button>
+</main>
+<script>
+  const progress = document.getElementById("progress");
+  const next = document.getElementById("next");
+  function render() {
+    next.disabled = progress.value === progress.max;
+    document.getElementById("status").textContent = next.disabled
+      ? "Demonstration complete." : `${progress.value} of ${progress.max} steps`;
+  }
+  next.addEventListener("click", () => { progress.value = Math.min(progress.max, progress.value + 1); render(); });
+  document.getElementById("reset").addEventListener("click", () => { progress.value = 0; render(); });
+</script>
+</html>

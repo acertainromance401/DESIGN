@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local list filter</title>
+<style>
+  body { font: 1rem/1.5 system-ui; padding: 1rem; color: #17212b; background: #fff; }
+  input, button { box-sizing: border-box; font: inherit; padding: .65rem; max-inline-size: 100%; }
+  :focus-visible { outline: 3px solid #1554b3; outline-offset: 3px; }
+</style>
+<main>
+  <h1>Fruit list</h1>
+  <p>This demo searches only the four items below.</p>
+  <label for="query">Search fruit</label>
+  <input id="query" type="search" autocomplete="off">
+  <button id="clear" type="button" disabled>Clear search</button>
+  <p id="count" role="status">4 results</p>
+  <p id="empty" hidden>No matching fruit. Try another name or clear the search.</p>
+  <ul id="results"><li>Apple</li><li>Banana</li><li>Cherry</li><li>Date</li></ul>
+</main>
+<script>
+  const query = document.getElementById("query");
+  const clear = document.getElementById("clear");
+  const items = [...document.querySelectorAll("#results li")];
+  function filter() {
+    const term = query.value.trim().toLocaleLowerCase();
+    let count = 0;
+    for (const item of items) {
+      item.hidden = !item.textContent.toLocaleLowerCase().includes(term);
+      if (!item.hidden) count++;
+    }
+    document.getElementById("count").textContent = `${count} results`;
+    document.getElementById("empty").hidden = count !== 0;
+    clear.disabled = query.value.length === 0;
+  }
+  query.addEventListener("input", filter);
+  clear.addEventListener("click", () => { query.value = ""; filter(); query.focus(); });
+</script>
+</html>

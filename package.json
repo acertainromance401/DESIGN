@@ -1,7 +1,7 @@
 {
   "name": "@acertainromance401/design-mcp",
-  "version": "0.1.0",
-  "description": "Portable, read-only MCP catalog of design principles and SwiftUI reference patterns",
+  "version": "0.2.0",
+  "description": "Portable design MCP with general UI/UX guidance, SwiftUI/web examples and project references",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -30,6 +30,7 @@
     "start": "node dist/index.js",
     "test": "npm run build && node --test",
     "verify:package": "npm run build && node scripts/verify-package.mjs",
+    "verify:swift": "node scripts/verify-swift.mjs",
     "import:guides": "node scripts/import-guides.mjs",
     "prepack": "npm test"
   },

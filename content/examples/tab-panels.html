@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keyboard tab panels</title>
+<style>
+  body { font: 1rem/1.5 system-ui; padding: 1rem; color: #17212b; background: #fff; }
+  button { font: inherit; padding: .75rem 1rem; }
+  [role="tablist"]:not([hidden]) { display: flex; flex-wrap: wrap; gap: .5rem; }
+  [aria-selected="true"] { background: #17212b; color: #fff; }
+  :focus-visible { outline: 3px solid #1554b3; outline-offset: 3px; }
+</style>
+<main>
+  <h1>Product information</h1>
+  <div id="tabs" role="tablist" aria-label="Information view" hidden>
+    <button id="overview-tab" role="tab" aria-controls="overview" aria-selected="true" tabindex="0">Overview</button>
+    <button id="details-tab" role="tab" aria-controls="specifications" aria-selected="false" tabindex="-1">Details</button>
+  </div>
+  <section id="overview"><h2>Overview</h2><p>A brief overview.</p></section>
+  <section id="specifications"><h2>Details</h2><p>Detailed specifications.</p></section>
+</main>
+<script>
+  const tablist = document.getElementById("tabs");
+  const tabs = [...tablist.querySelectorAll('[role="tab"]')];
+  function activate(selected) {
+    for (const tab of tabs) {
+      const active = tab === selected;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      const panel = document.getElementById(tab.getAttribute("aria-controls"));
+      panel.hidden = !active;
+    }
+  }
+  for (const tab of tabs) {
+    const panel = document.getElementById(tab.getAttribute("aria-controls"));
+    panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", tab.id);
+    panel.tabIndex = 0;
+    tab.addEventListener("click", () => activate(tab));
+    tab.addEventListener("keydown", (event) => {
+      const index = tabs.indexOf(tab);
+      let next;
+      if (event.key === "ArrowRight") next = tabs[(index + 1) % tabs.length];
+      else if (event.key === "ArrowLeft") next = tabs[(index - 1 + tabs.length) % tabs.length];
+      else if (event.key === "Home") next = tabs[0];
+      else if (event.key === "End") next = tabs[tabs.length - 1];
+      if (!next) return;
+      event.preventDefault();
+      next.focus();
+      activate(next);
+    });
+  }
+  tablist.hidden = false;
+  activate(tabs[0]);
+</script>
+</html>

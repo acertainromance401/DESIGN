@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessible sample bar comparison</title>
+<style>
+  body { font: 1rem/1.5 system-ui; padding: 1rem; color: #17212b; background: #fff; }
+  main { max-inline-size: 36rem; }
+  ol { padding: 0; list-style: none; display: grid; gap: 1rem; }
+  .track { height: 1rem; margin-block-start: .4rem; border-inline-start: 2px solid #17212b; }
+  .bar { height: 100%; background: #1554b3; inline-size: var(--size); }
+  @media (forced-colors: active) { .bar { background: Highlight; forced-color-adjust: none; } }
+</style>
+<main>
+  <h1>Sample values</h1>
+  <p>Illustrative positive values. Unit: points. Scale: 0 to 60.</p>
+  <ol aria-label="Sample values in points">
+    <li>Alpha: 30 points<div class="track" aria-hidden="true"><div class="bar" style="--size:50%"></div></div></li>
+    <li>Beta: 60 points<div class="track" aria-hidden="true"><div class="bar" style="--size:100%"></div></div></li>
+    <li>Gamma: 45 points<div class="track" aria-hidden="true"><div class="bar" style="--size:75%"></div></div></li>
+  </ol>
+</main>
+</html>

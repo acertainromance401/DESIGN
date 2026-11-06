@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Material with opaque alternative</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font: 1rem/1.5 system-ui; padding: 1rem; color: #17212b; background: linear-gradient(120deg, #bed1ef, #efd9cb); min-height: 100vh; margin: 0; }
+  .panel { max-inline-size: 32rem; margin-block: 2rem; padding: 1.5rem; background: #fff; border: 1px solid #526171; border-radius: 1rem; }
+  @supports (backdrop-filter: blur(1rem)) {
+    .panel { background: rgb(255 255 255 / .9); backdrop-filter: blur(1rem); }
+  }
+  @media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+    .panel { background: Canvas; color: CanvasText; backdrop-filter: none; }
+  }
+  body.opaque .panel { background: #fff; backdrop-filter: none; }
+  label { display: inline-flex; gap: .6rem; padding-block: .65rem; }
+  :focus-visible { outline: 3px solid #1554b3; outline-offset: 3px; }
+</style>
+<main>
+  <h1>Material panel</h1>
+  <label><input id="opaque" type="checkbox"> Use opaque panels</label>
+  <section class="panel" aria-labelledby="workspace">
+    <h2 id="workspace">Workspace</h2>
+    <p>A material panel with an opaque alternative. No images or external assets are used.</p>
+  </section>
+</main>
+<script>
+  document.getElementById("opaque").addEventListener("change", (event) => {
+    document.body.classList.toggle("opaque", event.target.checked);
+  });
+</script>
+</html>

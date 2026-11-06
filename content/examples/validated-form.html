@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connected form validation</title>
+<style>
+  body { font: 1rem/1.5 system-ui; padding: 1rem; color: #17212b; background: #fff; }
+  form { max-inline-size: 30rem; display: grid; gap: .75rem; }
+  input, button { box-sizing: border-box; font: inherit; padding: .65rem; max-inline-size: 100%; }
+  [aria-invalid="true"] { border: 2px solid #a12020; }
+  #error { color: #a12020; margin: 0; }
+  :focus-visible { outline: 3px solid #1554b3; outline-offset: 3px; }
+</style>
+<main>
+  <h1>Display name</h1>
+  <p>Local validation demo. No data is sent or saved.</p>
+  <form id="form" novalidate>
+    <label for="name">Display name (required)</label>
+    <input id="name" name="name" required autocomplete="nickname" aria-describedby="hint error">
+    <span id="hint">A name containing at least one non-space character.</span>
+    <p id="error" hidden>Enter a display name.</p>
+    <button id="submit" type="submit" disabled>Check name</button>
+    <noscript><p>Enable JavaScript to run this local validation demonstration.</p></noscript>
+    <p id="result" role="status"></p>
+  </form>
+</main>
+<script>
+  const form = document.getElementById("form");
+  const input = document.getElementById("name");
+  const error = document.getElementById("error");
+  const result = document.getElementById("result");
+  document.getElementById("submit").disabled = false;
+  let attempted = false;
+  function showError() {
+    const invalid = input.value.trim().length === 0;
+    error.hidden = !invalid;
+    input.setAttribute("aria-invalid", String(invalid));
+    return invalid;
+  }
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    attempted = true;
+    result.textContent = "";
+    if (showError()) input.focus();
+    else result.textContent = "Name is valid. Nothing has been saved.";
+  });
+  input.addEventListener("input", () => {
+    result.textContent = "";
+    if (attempted) showError();
+  });
+</script>
+</html>

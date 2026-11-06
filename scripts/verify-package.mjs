@@ -17,6 +17,8 @@ const [artifact] = packed;
 assert.ok(artifact?.filename && path.basename(artifact.filename) === artifact.filename);
 assert.ok(artifact.files.some(({ path }) => path === "content/guides/layout.md"));
 assert.ok(artifact.files.some(({ path }) => path === "content/provenance.json"));
+assert.ok(artifact.files.some(({ path }) => path === "content/library/index.json"));
+assert.ok(artifact.files.some(({ path }) => path === "content/examples/modal-dialog.html"));
 assert.ok(artifact.files.every(({ path }) => !path.startsWith("node_modules/")));
 const fixture = await mkdtemp(path.join(tmpdir(), "design-mcp-package-"));
 try {
@@ -40,6 +42,12 @@ try {
     } });
     assert.equal(result.isError, undefined);
     assert.match(result.structuredContent.sourceExample, /enum EditorialLayout/u);
+    const general = await client.callTool({ name: "get_design_pattern", arguments: {
+      id: "overlay.modal-dialog", platform: "web", includeSourceExample: true,
+    } });
+    assert.match(general.structuredContent.sourceExample, /showModal/u);
+    const counts = await client.callTool({ name: "list_design_categories", arguments: {} });
+    assert.equal(counts.structuredContent.patternCount, 186);
     assert.equal(stderr, "");
     console.log(`PASS: installed ${artifact.filename} in an isolated directory; real MCP lookup succeeded.`);
     console.log(`Reusable package: ${path.join(root, artifact.filename)}`);

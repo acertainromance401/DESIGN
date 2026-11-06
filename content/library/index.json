@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "project": "DESIGN General Library",
+    "baseline": "2026-11-06",
+    "verification": "Original educational guidance with official reference links, not copied brand assets or a claim of production implementation. Representative examples declare separate validation limits."
+  },
+  "categories": [
+    "design-foundations", "color-theming", "type-content", "responsive-systems",
+    "navigation-patterns", "overlays", "form-patterns", "collection-patterns",
+    "search-discovery", "data-visualization", "motion-patterns", "microinteractions",
+    "background-effects", "media-patterns", "inclusive-design", "state-patterns",
+    "onboarding", "commerce", "productivity", "spatial-design", "visual-styles",
+    "performance-design"
+  ]
+}

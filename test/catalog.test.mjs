@@ -10,16 +10,17 @@ import { codeBlocks, DesignError, loadCatalog } from "../dist/catalog.js";
 const catalog = await loadCatalog();
 
 test("all categories, source topics and exact code blocks are bundled", async () => {
-  assert.equal(catalog.categories.length, 14);
-  assert.equal(catalog.patterns.size, 48);
-  assert.equal(catalog.guides.size, 15);
-  const hashes = [...catalog.guides.values()].flatMap(({ markdown }) =>
+  assert.equal(catalog.categories.length, 36);
+  assert.equal(catalog.patterns.size, 186);
+  assert.equal(catalog.guides.size, 37);
+  const hashes = [...catalog.guides.values()].filter(({ origin }) => origin === "weashion").flatMap(({ markdown }) =>
     codeBlocks(markdown).map((block) => createHash("sha256").update(block).digest("hex")));
   const provenance = JSON.parse(await readFile(new URL("../content/provenance.json", import.meta.url), "utf8"));
   const expected = provenance.files.flatMap(({ codeBlocks }) => codeBlocks);
   assert.equal(hashes.length, 57);
   assert.deepEqual(hashes.sort(), expected.sort());
-  assert.equal(catalog.categories.reduce((sum, item) => sum + item.patternCount, 0), 48);
+  assert.equal(catalog.categories.reduce((sum, item) => sum + item.patternCount, 0), 186);
+  assert.deepEqual(catalog.listCategories().sourceCounts, { weashion: 48, general: 138 });
 });
 
 test("every migrated guide link is portable and resolves to a registered resource", () => {
@@ -50,7 +51,7 @@ test("guidance is compact by default and source is explicitly incomplete", () =>
   assert.match(catalog.getPattern("type.font-cascade", "swiftui", true).sourceExample, /OFL-BodoniModa/u);
 });
 
-test("web/agnostic requests never masquerade as runnable web examples", () => {
+test("original WEASHION excerpts never masquerade as runnable web/agnostic examples", () => {
   for (const platform of ["web", "agnostic"]) {
     const result = catalog.getPattern("layout.content-width", platform, true);
     assert.equal(result.sourceExample, null);

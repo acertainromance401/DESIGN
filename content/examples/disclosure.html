@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Native disclosure</title>
+<style>
+  body { font: 1rem/1.5 system-ui; padding: 1rem; color: #17212b; background: #fff; }
+  details { max-inline-size: 35rem; padding: 1rem; border: 1px solid #526171; border-radius: .5rem; }
+  summary { cursor: pointer; font-weight: 600; padding-block: .4rem; }
+  :focus-visible { outline: 3px solid #1554b3; outline-offset: 3px; }
+</style>
+<main>
+  <h1>Delivery information</h1>
+  <details>
+    <summary>Delivery details</summary>
+    <p>Delivery estimates depend on the destination. This is sample information.</p>
+    <a href="#support">Read support information</a>
+  </details>
+  <h2 id="support">Support</h2>
+  <p>Contact your delivery provider for actual estimates.</p>
+</main>
+</html>

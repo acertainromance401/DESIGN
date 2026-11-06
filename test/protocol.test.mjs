@@ -25,7 +25,8 @@ test("real stdio client discovers and calls tools, resources and prompts from an
   assert.equal(tools.length, 4);
   assert.ok(tools.every(({ annotations }) => annotations.readOnlyHint && !annotations.openWorldHint));
   const categories = await client.callTool({ name: "list_design_categories", arguments: {} });
-  assert.equal(categories.structuredContent.categories.length, 14);
+  assert.equal(categories.structuredContent.categories.length, 36);
+  assert.equal(categories.structuredContent.patternCount, 186);
   const search = await client.callTool({
     name: "search_design_patterns", arguments: { query: "반응형 레이아웃", category: "layout", limit: 2 },
   });
@@ -51,7 +52,7 @@ test("real stdio client discovers and calls tools, resources and prompts from an
   const invalid = await client.callTool({ name: "search_design_patterns", arguments: { query: " ", limit: 99 } });
   assert.equal(invalid.isError, true);
   const { resources } = await client.listResources();
-  assert.equal(resources.length, 64);
+  assert.equal(resources.length, 224);
   const resource = await client.readResource({ uri: "design://patterns/layout.content-width" });
   assert.equal(JSON.parse(resource.contents[0].text).id, "layout.content-width");
   const guide = await client.readResource({ uri: "design://guides/layout" });
@@ -63,6 +64,18 @@ test("real stdio client discovers and calls tools, resources and prompts from an
     name: "update_project_design", arguments: { objective: "웹 화면 개선", platform: "web" },
   });
   assert.match(prompt.messages[0].content.text, /Preserve existing behavior/u);
-  assert.match(prompt.messages[0].content.text, /no web implementation examples/u);
+  assert.match(prompt.messages[0].content.text, /validation\/limitations/u);
+  const general = await client.callTool({
+    name: "get_design_pattern",
+    arguments: { id: "overlay.modal-dialog", platform: "web", includeSourceExample: true },
+  });
+  assert.match(general.structuredContent.sourceExample, /showModal/u);
+  assert.equal(general.structuredContent.sourceKind, "general");
+  assert.equal(general.structuredContent.example.validation, "browser-tested");
+  const withExamples = await client.callTool({
+    name: "search_design_patterns",
+    arguments: { query: "dialog", platform: "web", source: "general", hasExample: true },
+  });
+  assert.ok(withExamples.structuredContent.results.some(({ id }) => id === "overlay.modal-dialog"));
   assert.equal(stderr, "");
 });

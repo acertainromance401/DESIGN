@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Named modal dialog</title>
+<style>
+  body { font: 1rem/1.5 system-ui; padding: 1rem; color: #17212b; background: #fff; }
+  button { font: inherit; padding: .65rem 1rem; }
+  :focus-visible { outline: 3px solid #1554b3; outline-offset: 3px; }
+  dialog { max-inline-size: min(30rem, calc(100vw - 3rem)); border: 1px solid #526171; border-radius: .75rem; padding: 1.5rem; }
+  dialog::backdrop { background: rgb(0 0 0 / .55); }
+</style>
+<main>
+  <h1>Modal example</h1>
+  <button id="open" type="button">Open details</button>
+  <p id="unsupported" hidden>This browser does not support this modal. Details: an educational example, not a saved operation.</p>
+  <dialog id="details" aria-labelledby="dialog-title" aria-describedby="description">
+    <h2 id="dialog-title">Details</h2>
+    <p id="description">This is an educational example, not a saved operation.</p>
+    <form method="dialog"><button autofocus>Close details</button></form>
+  </dialog>
+</main>
+<script>
+  const opener = document.getElementById("open");
+  const dialog = document.getElementById("details");
+  opener.addEventListener("click", () => {
+    if (typeof dialog.showModal !== "function") {
+      document.getElementById("unsupported").hidden = false;
+      return;
+    }
+    dialog.showModal();
+  });
+  // Some embedded browsers deliver Escape without a native close request.
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    event.preventDefault();
+    if (typeof dialog.requestClose === "function") dialog.requestClose();
+    else dialog.close();
+  });
+  dialog.addEventListener("close", () => opener.focus());
+</script>
+</html>

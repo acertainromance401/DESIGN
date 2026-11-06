@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adaptive content grid</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 1rem; font: 1rem/1.5 system-ui; color: #17212b; background: #fff; }
+  main { max-inline-size: 70rem; margin-inline: auto; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 1rem; padding: 0; list-style: none; }
+  .grid li { padding: 1rem; border: 1px solid #718096; border-radius: .75rem; min-inline-size: 0; overflow-wrap: anywhere; }
+  h2 { font-size: 1.15rem; }
+</style>
+<main>
+  <h1>Workspace</h1>
+  <ul class="grid">
+    <li><h2>Overview</h2><p>A summary that may wrap to more than one line.</p></li>
+    <li><h2>Recent activity</h2><p>The latest changes in this workspace.</p></li>
+    <li><h2>Saved items</h2><p>Items you chose to revisit later.</p></li>
+    <li><h2>Account</h2><p>Preferences and account information.</p></li>
+  </ul>
+</main>
+</html>
