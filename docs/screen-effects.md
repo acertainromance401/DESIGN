@@ -87,7 +87,7 @@
 - 애니메이션은 사용자 실행으로만 시작하고 대부분 180–850ms 안에 끝난다. 쉬머·입자는 자동 반복하지 않는다. 정지는 애니메이션을 취소하고 목표 상태를 남긴다. 재실행은 이전 애니메이션을 취소하는 방식이며 물리적 중간 속도를 보존하는 엔진은 아니다.
 - OS의 동작 줄이기 설정을 사용자가 이 페이지에서 해제할 수 없게 했다. 페이지 체크박스는 추가로 줄이는 선택이다.
 - 실제 앱에서는 포커스·키보드·터치·확대·고대비·투명도 줄이기, 숨김 탭, 느린 기기, 데이터 실패와 빠른 반복 입력을 검사한다. 이번 예시는 전체 접근성 적합성이나 FPS 인증이 아니다.
-- 이 페이지는 문서용 데모다. MCP 카탈로그를 수정하거나 기존 패턴 186개·대표 코드 예제 개수를 늘린 것이 아니다. 추가 효과를 MCP 검색으로 제공하려면 별도 스키마·테스트·패키지 작업이 필요하다.
+- MCP 0.3.0부터 `search_design_visuals`와 `get_design_visual`의 `id=screen-effects`로 이 갤러리와 문서를 조회한다. `includeSource=true`로 HTML을 받는다. 기존 패턴 186개·대표 코드 예제와 별도의 시각 자료이며, 추가 검토 19종이 실행 구현으로 바뀐 것은 아니다.
 
 관련 원칙: [배경·효과](../content/library/background-effects.json), [모션](../content/library/motion-patterns.json), [미세 상호작용](../content/library/microinteractions.json), [오버레이](../content/library/overlays.json), [상태·복구](../content/library/state-patterns.json), [공간·3D](../content/library/spatial-design.json).
 

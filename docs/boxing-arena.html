@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>마지막 벨 — 아레나 시안</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #080e12; color: #e7edef; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; }
+    main { width: min(100%, 650px); margin: auto; padding: 20px; }
+    .label, footer { display: flex; justify-content: space-between; gap: 20px; font-size: 11px; line-height: 1.8; }
+    .label { margin-bottom: 12px; color: #bac8ce; }
+    .poster { position: relative; aspect-ratio: 9 / 16; background: #041019; isolation: isolate; overflow: hidden; }
+    .lights, .boxer { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .headline { position: absolute; left: 15%; right: 15%; top: 22%; text-align: center; }
+    .headline p { font-size: clamp(9px, 1.8vw, 13px); letter-spacing: .14em; margin: 0 0 16px; }
+    h1 { font-size: clamp(53px, 13vw, 84px); line-height: 1.1; font-weight: 900; margin: 0; letter-spacing: -.075em; }
+    .boxer { z-index: 2; }
+    .note { position: absolute; bottom: 3%; left: 7%; right: 7%; z-index: 3; display: flex; justify-content: space-between; gap: 12px; font-size: clamp(9px, 1.7vw, 12px); line-height: 1.7; color: #d0dce0; }
+    .note p { margin: 0; }
+    .note b { font-size: clamp(11px, 2vw, 15px); }
+    footer { margin-top: 14px; align-items: start; color: #bac8ce; }
+    footer p { margin: 0; }
+    a { color: inherit; text-underline-offset: 4px; min-height: 44px; display: inline-flex; align-items: center; }
+    a:focus-visible { outline: 2px solid #e7edef; outline-offset: 4px; }
+    @media (max-width: 500px) {
+      main { padding: 12px; }
+      footer { flex-wrap: wrap; }
+      .headline { top: 20%; }
+      h1 { font-size: clamp(36px, 12vw, 60px); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="label"><span>03 / 조명 아래의 뒷모습</span><span>가상 복싱 단편 표지</span></div>
+    <article class="poster" aria-labelledby="title">
+      <svg class="lights" viewBox="0 0 600 1067" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id="haze"><stop stop-color="#8daeb5" stop-opacity=".65"/><stop offset=".4" stop-color="#456c7b" stop-opacity=".32"/><stop offset="1" stop-color="#05121c" stop-opacity="0"/></radialGradient>
+          <linearGradient id="beam" x2="0" y2="1"><stop stop-color="#e2f5f2" stop-opacity=".7"/><stop offset="1" stop-color="#507585" stop-opacity="0"/></linearGradient>
+          <filter id="blur"><feGaussianBlur stdDeviation="18"/></filter>
+          <filter id="glow"><feGaussianBlur stdDeviation="5"/></filter>
+          <pattern id="crowd" width="40" height="48" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="15" r="5" fill="#42525b"/><path d="M1 36 Q10 18 19 36" fill="#22333d"/>
+            <circle cx="31" cy="35" r="4" fill="#657274"/><path d="M22 48 Q31 35 40 48" fill="#30424b"/>
+          </pattern>
+        </defs>
+        <rect width="600" height="1067" fill="#041019"/>
+        <path d="M284 16 L106 661 L538 661 L310 16 Z" fill="url(#beam)" filter="url(#blur)"/>
+        <ellipse cx="309" cy="312" rx="241" ry="354" fill="url(#haze)"/>
+        <ellipse cx="303" cy="16" rx="25" ry="12" fill="#d8fbff" filter="url(#glow)"/>
+        <ellipse cx="303" cy="16" rx="14" ry="5" fill="#fff"/>
+        <path d="M180 124 L430 124" stroke="#384d54" stroke-width="7"/>
+        <circle cx="258" cy="124" r="5" fill="#c5d8d7"/><circle cx="354" cy="124" r="5" fill="#c5d8d7"/>
+        <path d="M292 147 L190 470 L440 470 L334 147 Z" fill="url(#beam)" opacity=".6" filter="url(#blur)"/>
+        <rect y="656" width="600" height="360" fill="url(#crowd)" opacity=".38"/>
+        <path d="M0 869 Q300 881 600 869 M0 941 Q300 929 600 941" stroke="#733026" stroke-width="4" fill="none"/>
+        <path d="M0 902 Q300 913 600 902" stroke="#7a9299" stroke-width="3" fill="none"/>
+      </svg>
+      <div class="headline"><p>경기가 끝난 뒤의 이야기</p><h1 id="title">마지막<br>벨.</h1></div>
+      <svg class="boxer" viewBox="0 0 600 1067" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="back"><stop stop-color="#294047"/><stop offset=".25" stop-color="#795840"/><stop offset=".5" stop-color="#17333b"/><stop offset=".75" stop-color="#806047"/><stop offset="1" stop-color="#18323a"/></linearGradient>
+          <linearGradient id="red"><stop stop-color="#f16c4b"/><stop offset=".45" stop-color="#b52a25"/><stop offset="1" stop-color="#4d181e"/></linearGradient>
+          <linearGradient id="shorts" x2="0" y2="1"><stop stop-color="#1d404b"/><stop offset="1" stop-color="#081b26"/></linearGradient>
+        </defs>
+        <path d="M249 724 Q236 819 211 884 L200 991 L273 1001 L304 901 L331 1001 L405 991 L379 877 L363 723 Z" fill="url(#shorts)"/>
+        <path d="M248 759 L365 759" stroke="#4a6870" stroke-width="11"/>
+        <path d="M240 599 Q200 574 166 513 L128 430 L153 415 L198 482 Q235 530 268 546 L338 546 Q379 526 405 479 L446 410 L475 428 L436 518 Q410 571 369 596 L358 681 L365 748 Q310 777 249 745 L255 680 Z" fill="url(#back)"/>
+        <path d="M159 454 L145 429 M440 452 L453 425" stroke="#b28d61" stroke-width="3"/>
+        <path d="M237 564 Q253 556 273 585 L298 622 M368 564 Q349 552 330 585 L310 622" fill="none" stroke="#8a7354" stroke-width="3"/>
+        <path d="M303 607 L303 717 M268 629 Q281 662 279 713 M340 629 Q325 662 328 713" fill="none" stroke="#102b34" stroke-width="5"/>
+        <path d="M271 563 L269 542 Q253 519 260 491 Q268 464 297 462 Q329 461 342 487 Q352 516 333 541 L334 563 Z" fill="#172c32"/>
+        <path d="M264 490 Q295 462 337 494" fill="none" stroke="#466068" stroke-width="3"/>
+        <path d="M118 422 L108 395 Q99 365 118 350 Q139 335 156 353 L169 377 L166 400 L151 421 Z" fill="url(#red)" stroke="#531d22" stroke-width="2"/>
+        <path d="M449 419 L432 399 L432 376 Q440 346 461 344 Q488 346 489 370 L488 397 L476 422 Z" fill="url(#red)" stroke="#531d22" stroke-width="2"/>
+        <path d="M123 414 L151 403 M447 404 L477 414" stroke="#1b3038" stroke-width="12"/>
+        <path d="M112 366 Q127 342 149 360 M443 360 Q459 343 479 359" fill="none" stroke="#ff9366" stroke-width="3"/>
+      </svg>
+      <div class="note"><p><b>마지막 벨</b><br>복싱 단편 / 가상 작품</p><p>빛은 위에, 인물은 아래에.<br>원본 사진을 사용하지 않은 시안.</p></div>
+    </article>
+    <footer><p>청록 조명 · 깊은 검정 · 붉은 글러브.<br>군중·조명·인물 모두 SVG로 제작했습니다.</p><a href="./boxing-references.md#arena">참고·제작 안내</a></footer>
+  </main>
+</body>
+</html>

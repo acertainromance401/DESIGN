@@ -5,6 +5,7 @@ import { z } from "zod";
 import {
   adoptionShape, DesignCatalog, DesignError, patternShape, platformSchema, searchShape,
 } from "./catalog.js";
+import { VisualCatalog, visualGetShape, visualSearchShape } from "./visuals.js";
 
 const packageInfo = z.object({ name: z.string(), version: z.string() }).parse(
   JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")),
@@ -27,12 +28,14 @@ function respond(operation: () => Record<string, unknown>): CallToolResult {
   }
 }
 
-export function createServer(catalog: DesignCatalog): McpServer {
+export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): McpServer {
   const server = new McpServer(packageInfo, {
     instructions: "Read-only design knowledge. Start with categories/search, then fetch only relevant patterns. " +
       "Separate authored general guidance, educational platform examples and incomplete WEASHION project excerpts. " +
       "Use adoption plans before new/existing project changes; the connected client must inspect, edit and test target files. " +
       "Selected general patterns include SwiftUI and dependency-free web examples with declared validation limits. " +
+      "For color palettes, mood screens and interactive screen effects, call search_design_visuals then get_design_visual. " +
+      "These separate web visual examples do not alter pattern counts. Request includeSource=true only when HTML is needed. " +
       "No external project access or runtime network requests are provided. Do not claim exhaustive coverage of every possible design.",
   });
 
@@ -40,7 +43,33 @@ export function createServer(catalog: DesignCatalog): McpServer {
     description: "List design categories, keywords, per-source counts, source baselines and reuse limitations. No full code is loaded into the response.",
     inputSchema: {},
     annotations,
-  }, () => respond(() => catalog.listCategories()));
+  }, () => respond(() => ({ ...catalog.listCategories(), visualExamples: visuals.list() })));
+
+  server.registerTool("search_design_visuals", {
+    description: "Search bundled color combinations, mood screens, personal design notes and interactive app screen effect galleries. Returns compact metadata and resource URIs, not HTML.",
+    inputSchema: visualSearchShape,
+    annotations,
+  }, args => respond(() => visuals.search(args)));
+
+  server.registerTool("get_design_visual", {
+    description: "Get a visual example's guidance, limitations and resource links. includeSource=true returns HTML/CSS/JavaScript text to save and open in a browser. Check limitations for required local assets; asset binaries are not returned. This is not a rendered MCP screen or native app component.",
+    inputSchema: visualGetShape,
+    annotations,
+  }, args => respond(() => visuals.get(args)));
+
+  server.registerResource("visual-examples", "design://visual-examples", {
+    title: "Visual example index", mimeType: "application/json",
+  }, uri => ({
+    contents: [{ uri: uri.href, mimeType: "application/json", text: JSON.stringify(visuals.list()) }],
+  }));
+  for (const file of visuals.files.values()) {
+    server.registerResource(`visual-file-${file.file}`, `design://visual-files/${file.file}`, {
+      title: file.file, mimeType: file.mimeType,
+      description: "Bundled educational visual source or guidance; HTML is returned as text, not executed.",
+    }, uri => ({
+      contents: [{ uri: uri.href, mimeType: file.mimeType, text: visuals.readFile(file.file).text }],
+    }));
+  }
 
   server.registerTool("search_design_patterns", {
     description: "Search Korean/English design keywords with category, source and platform-example filtering plus pagination. Returns short summaries, not full code. A match without an example is guidance only.",
@@ -66,7 +95,7 @@ export function createServer(catalog: DesignCatalog): McpServer {
     mimeType: "application/json",
     description: "Compact catalog; use tools or pattern resources for details.",
   }, (uri) => ({
-    contents: [{ uri: uri.href, mimeType: "application/json", text: JSON.stringify(catalog.listCategories()) }],
+    contents: [{ uri: uri.href, mimeType: "application/json", text: JSON.stringify({ ...catalog.listCategories(), visualExamples: visuals.list() }) }],
   }));
   for (const pattern of catalog.patterns.values()) {
     server.registerResource(`pattern-${pattern.id}`, `design://patterns/${pattern.id}`, {
@@ -113,6 +142,7 @@ export function createServer(catalog: DesignCatalog): McpServer {
               ? "Inspect the existing project's design tokens, components, state, tests and user changes first. Preserve existing behavior; do not impose WEASHION's brand or numerical values."
               : "Identify the product purpose, key screens, target platform/API versions and accessibility requirements before selecting tokens and components.",
             "Call list_design_categories, search_design_patterns with short relevant keywords, then get_design_pattern for selected IDs.",
+            "For palette combinations, mood screens or interactive effects, use search_design_visuals and get_design_visual; these are separate web visual examples, not native app components.",
             "Call create_design_adoption_plan with explicit patternIds and the requested project type/platform.",
             "Use source=general for cross-project guidance or source=weashion for original examples. Request hasExample=true to find platform examples.",
             "Only fetch examples when relevant and inspect their validation/limitations. General guidance is not an implemented component; WEASHION excerpts do not become web code.",

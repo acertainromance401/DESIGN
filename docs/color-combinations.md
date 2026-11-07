@@ -31,4 +31,6 @@
 
 이 자료는 문서용 시각 예시다. MCP 패턴 카탈로그에 등록된 예제가 아니므로 기존 138개 범용 패턴 및 대표 웹 예제 10개의 집계에는 포함하지 않는다.
 
+MCP 0.3.0부터 별도 시각 예시로 등록했다. `search_design_visuals`로 `배색`을 검색하거나 `get_design_visual`의 `id=color-combinations`로 조회한다. `includeSource=true`는 HTML을 반환한다. 기존 패턴 집계는 그대로다.
+
 원칙은 [색상·테마 지침](../content/library/color-theming.json), 기존 프로젝트의 팔레트 적용은 [색상, 배경면과 대비](../content/guides/colors-and-surfaces.md)를 참고한다. 더 큰 색면을 쓴 예시는 [야간 러닝 이벤트](./high-energy.html)에 있다.

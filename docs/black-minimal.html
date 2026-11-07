@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="검정과 차콜, 얇은 경계와 파일 목록으로 구성한 모던 미니멀 앱 시안.">
+  <title>작업 보관함 — 검정 미니멀</title>
+  <style>
+    :root {
+      --bg: #101112;
+      --surface: #17191b;
+      --raised: #202326;
+      --line: #373b40;
+      --text: #f0f1f2;
+      --secondary: #a7adb5;
+      --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #090a0b; color: var(--text); font-family: var(--sans); }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-underline-offset: 4px; }
+    :is(button, input, a):focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
+    .frame { max-width: 1440px; margin: auto; min-height: 100vh; display: grid; grid-template-columns: 196px minmax(0, 1fr); background: var(--bg); }
+    .sidebar { border-right: 1px solid var(--line); padding: 32px 20px; display: flex; flex-direction: column; gap: 46px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 650; padding: 0 12px; }
+    .brand-mark { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; width: 18px; height: 18px; }
+    .brand-mark i { background: var(--text); }
+    .brand-mark i:last-child { background: var(--secondary); }
+    nav { display: grid; gap: 4px; }
+    nav button { display: flex; justify-content: space-between; gap: 12px; width: 100%; text-align: left; border: 1px solid transparent; border-radius: 5px; background: transparent; color: var(--secondary); padding: 13px 12px; min-height: 46px; font-size: 13px; }
+    nav button[aria-pressed="true"] { background: var(--raised); color: var(--text); border-color: #737b85; font-weight: 600; }
+    nav button span { font-size: 11px; font-variant-numeric: tabular-nums; }
+    nav button:hover { color: var(--text); background: var(--surface); }
+    nav button[aria-pressed="true"]:hover { background: var(--raised); }
+    .sidebar-note { margin: auto 12px 0; color: var(--secondary); font-size: 11px; line-height: 1.9; }
+    .content { min-width: 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 38px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--secondary); }
+    .topbar p { margin: 0; }
+    .topbar strong { color: var(--text); font-weight: 500; }
+    .workspace { padding: 48px 38px 30px; }
+    .title-row { display: flex; align-items: start; justify-content: space-between; gap: 24px; margin-bottom: 38px; }
+    h1 { font-size: 30px; letter-spacing: -1.2px; font-weight: 600; margin: 0 0 12px; }
+    .subtitle { font-size: 13px; line-height: 1.8; color: var(--secondary); margin: 0; }
+    .search { width: 225px; min-width: 0; }
+    .search label { display: block; font-size: 11px; color: var(--secondary); margin-bottom: 8px; }
+    .search input { width: 100%; min-height: 44px; border: 1px solid #737b85; background: var(--surface); color: var(--text); border-radius: 5px; padding: 12px; font-size: 12px; }
+    .search input::placeholder { color: var(--secondary); opacity: 1; }
+    .body-grid { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 32px; }
+    .files { min-width: 0; }
+    .list-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 17px; font-size: 11px; color: var(--secondary); }
+    .list-head p { margin: 0; }
+    .file-list { list-style: none; margin: 0; padding: 0; }
+    .file-list li { border-top: 1px solid var(--line); }
+    .file-list li:last-child { border-bottom: 1px solid var(--line); }
+    .file-button { width: 100%; text-align: left; padding: 21px 15px; background: transparent; color: var(--text); border: 0; display: grid; grid-template-columns: 38px minmax(0, 1fr) 58px; align-items: center; gap: 15px; min-height: 88px; border-radius: 0; }
+    .file-button:hover { background: var(--surface); }
+    .file-button[aria-pressed="true"] { background: var(--raised); box-shadow: inset 2px 0 var(--text); }
+    .file-icon { display: grid; place-items: center; width: 34px; height: 40px; background: var(--surface); border: 1px solid #737b85; border-radius: 3px; color: var(--secondary); font-size: 9px; letter-spacing: .5px; }
+    .file-name { font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
+    .file-meta { display: block; font-size: 11px; line-height: 1.8; color: var(--secondary); margin-top: 5px; }
+    .file-time { font-size: 11px; color: var(--secondary); text-align: right; font-variant-numeric: tabular-nums; }
+    .empty { padding: 32px 15px; margin: 0; color: var(--secondary); font-size: 13px; line-height: 1.9; }
+    .detail { border: 1px solid var(--line); border-radius: 6px; background: var(--surface); align-self: start; min-width: 0; }
+    .preview { height: 205px; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 30px; background: #1c1f22; border-bottom: 1px solid var(--line); overflow: hidden; }
+    .preview-sheet { background: #d6d9dc; width: 82px; height: 112px; padding: 13px 10px; }
+    .preview-sheet:nth-child(2) { background: #858d96; margin-top: 27px; }
+    .preview-sheet span { display: block; height: 3px; background: #363b40; margin-bottom: 7px; }
+    .preview-sheet span:first-child { height: 22px; margin-bottom: 13px; }
+    .preview-sheet span:last-child { width: 60%; }
+    .detail-body { padding: 24px 20px; }
+    .detail-caption { font-size: 10px; color: var(--secondary); margin: 0 0 12px; }
+    .detail h2 { font-size: 17px; font-weight: 550; line-height: 1.6; letter-spacing: -.5px; overflow-wrap: anywhere; margin: 0; }
+    .detail-description { font-size: 12px; line-height: 1.9; color: var(--secondary); margin: 13px 0 25px; word-break: keep-all; }
+    dl { margin: 0; font-size: 11px; line-height: 1.9; }
+    dl div { display: flex; justify-content: space-between; gap: 15px; padding: 8px 0; border-top: 1px solid var(--line); }
+    dt { color: var(--secondary); }
+    dd { margin: 0; text-align: right; }
+    .pin { width: 100%; min-height: 44px; margin-top: 23px; background: var(--text); color: var(--bg); border: 1px solid var(--text); border-radius: 4px; font-size: 12px; font-weight: 600; }
+    .pin:hover { background: #d6d9dc; }
+    .hint { font-size: 11px; color: var(--secondary); line-height: 1.8; margin: 16px 0 0; }
+    #status { margin: 24px 0 0; min-height: 22px; font-size: 12px; color: var(--secondary); line-height: 1.8; }
+    footer { margin-top: 55px; border-top: 1px solid var(--line); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; font-size: 11px; line-height: 1.9; color: var(--secondary); }
+    footer p { margin: 0; max-width: 620px; }
+    footer a { display: inline-flex; min-height: 44px; align-items: center; }
+    [hidden] { display: none !important; }
+    @media (max-width: 1100px) {
+      .frame { grid-template-columns: 164px minmax(0, 1fr); }
+      .sidebar { padding: 30px 12px; }
+      .workspace { padding: 36px 26px 26px; }
+      .topbar { padding: 24px 26px; }
+      .body-grid { grid-template-columns: minmax(0, 1fr) 235px; gap: 22px; }
+      .file-button { gap: 10px; padding: 20px 12px; }
+    }
+    @media (max-width: 900px) {
+      .body-grid { grid-template-columns: 1fr; }
+      .detail { display: grid; grid-template-columns: 230px minmax(0, 1fr); }
+      .preview { height: 100%; min-height: 250px; border-bottom: 0; border-right: 1px solid var(--line); }
+      .title-row { flex-wrap: wrap; }
+      .search { width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .frame { display: block; }
+      .sidebar { padding: 22px; border-right: 0; border-bottom: 1px solid var(--line); gap: 22px; }
+      .brand { padding: 0; }
+      nav { display: flex; gap: 8px; }
+      nav button { flex: 1; width: auto; padding: 12px 10px; font-size: 12px; }
+      .sidebar-note { display: none; }
+      .topbar { padding: 18px 22px; font-size: 11px; }
+      .workspace { padding: 30px 22px; }
+      .title-row { margin-bottom: 28px; gap: 24px; }
+      h1 { font-size: 26px; }
+      .file-button { grid-template-columns: 30px minmax(0, 1fr); gap: 12px; padding: 18px 10px; }
+      .file-icon { width: 28px; height: 34px; font-size: 8px; }
+      .file-time { display: none; }
+      .detail { display: block; }
+      .preview { min-height: 0; height: 180px; border-right: 0; border-bottom: 1px solid var(--line); }
+      footer { margin-top: 38px; }
+    }
+    @media (forced-colors: active) {
+      .file-button[aria-pressed="true"] { outline: 2px solid Highlight; outline-offset: -3px; }
+      .file-icon, .preview-sheet { border: 1px solid CanvasText; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <aside class="sidebar" aria-label="보관함 탐색">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>작업 보관함</div>
+      <nav aria-label="파일 보기">
+        <button type="button" data-filter="all" aria-pressed="true" disabled>전체 파일 <span>4</span></button>
+        <button type="button" data-filter="pinned" aria-pressed="false" disabled>고정 <span id="pin-count">1</span></button>
+      </nav>
+      <p class="sidebar-note">검정 미니멀 시안<br>검색·선택·고정만 작동합니다.</p>
+    </aside>
+    <div class="content">
+      <header class="topbar"><p>개인 작업실 <span aria-hidden="true">/</span> <strong id="breadcrumb">전체 파일</strong></p><p>로컬 시연</p></header>
+      <main class="workspace">
+        <div class="title-row">
+          <div><h1>작업 파일</h1><p class="subtitle">화면 구성과 문구를 모아 둔 보관함.</p></div>
+          <div class="search"><label for="search">파일 이름 검색</label><input id="search" type="search" placeholder="예: 첫 화면" autocomplete="off" disabled></div>
+        </div>
+        <div class="body-grid">
+          <section class="files" aria-label="파일 목록">
+            <div class="list-head"><p id="result-count">파일 4개</p><p>수정일</p></div>
+            <ul class="file-list" id="file-list">
+              <li><button type="button" class="file-button" data-id="layout" aria-pressed="true" disabled><span class="file-icon" aria-hidden="true">UI</span><span class="file-name">첫 화면 구성<span class="file-meta">화면 설계 · 고정</span></span><span class="file-time">11. 07</span></button></li>
+              <li><button type="button" class="file-button" data-id="copy" aria-pressed="false" disabled><span class="file-icon" aria-hidden="true">TXT</span><span class="file-name">입력 안내 문구<span class="file-meta">콘텐츠</span></span><span class="file-time">11. 06</span></button></li>
+              <li><button type="button" class="file-button" data-id="colors" aria-pressed="false" disabled><span class="file-icon" aria-hidden="true">UI</span><span class="file-name">검정 색상 토큰<span class="file-meta">색상 체계</span></span><span class="file-time">11. 05</span></button></li>
+              <li><button type="button" class="file-button" data-id="review" aria-pressed="false" disabled><span class="file-icon" aria-hidden="true">TXT</span><span class="file-name">모바일 검토 메모<span class="file-meta">검토</span></span><span class="file-time">11. 04</span></button></li>
+            </ul>
+            <p class="empty" id="empty" hidden>일치하는 파일이 없습니다. 검색어를 지우거나 전체 파일을 선택하세요.</p>
+          </section>
+          <section class="detail" aria-labelledby="detail-title">
+            <div class="preview" aria-hidden="true"><div class="preview-sheet"><span></span><span></span><span></span><span></span></div><div class="preview-sheet"><span></span><span></span><span></span><span></span></div></div>
+            <div class="detail-body">
+              <p class="detail-caption">선택한 파일 / 도형 미리보기</p>
+              <h2 id="detail-title">첫 화면 구성</h2>
+              <p class="detail-description" id="detail-description">파일 목록과 상세 패널의 배치. 강조색 없이 선택한 행의 바탕과 왼쪽 선을 바꿨다.</p>
+              <dl><div><dt>분류</dt><dd id="detail-category">화면 설계</dd></div><div><dt>수정일</dt><dd id="detail-date">2026. 11. 07</dd></div><div><dt>상태</dt><dd>시연 데이터</dd></div></dl>
+              <button type="button" class="pin" id="pin" aria-pressed="true" disabled>고정 해제</button>
+              <p class="hint">고정은 이 페이지 안에서만 유지됩니다. 새로고침하면 초기화됩니다.</p>
+            </div>
+          </section>
+        </div>
+        <p id="status" role="status" aria-atomic="true"></p>
+        <noscript><p class="hint">JavaScript가 꺼져 있어 기본 파일 목록과 첫 파일만 표시합니다. 검색·선택·고정은 사용할 수 없습니다.</p></noscript>
+        <footer><p>바탕 #101112 · 표면 #17191B · 선택 #202326<br>본문 #F0F1F2 · 보조 글자 #A7ADB5. 그라데이션·블러·자동 모션은 쓰지 않았다.</p><a href="../README.md">README</a></footer>
+      </main>
+    </div>
+  </div>
+  <script>
+    const files = [
+      { id: "layout", name: "첫 화면 구성", category: "화면 설계", date: "2026. 11. 07", pinned: true, description: "파일 목록과 상세 패널의 배치. 강조색 없이 선택한 행의 바탕과 왼쪽 선을 바꿨다." },
+      { id: "copy", name: "입력 안내 문구", category: "콘텐츠", date: "2026. 11. 06", pinned: false, description: "입력칸 아래에 넣을 도움말과 오류 문구. 무엇을 고쳐야 하는지 짧게 적었다." },
+      { id: "colors", name: "검정 색상 토큰", category: "색상 체계", date: "2026. 11. 05", pinned: false, description: "바탕은 검정, 패널은 차콜. 보조 글자도 너무 어둡게 낮추지 않고 표면 사이에 얇은 경계를 뒀다." },
+      { id: "review", name: "모바일 검토 메모", category: "검토", date: "2026. 11. 04", pinned: false, description: "좁은 화면에서는 상세를 목록 아래에 둔다. 제목이 길어져도 잘리지 않게 하고 검색과 선택은 유지한다." },
+    ];
+    let selected = files[0];
+    let filter = "all";
+    const search = document.getElementById("search");
+    const status = document.getElementById("status");
+    const pin = document.getElementById("pin");
+    const buttons = [...document.querySelectorAll(".file-button")];
+    const visibleFiles = () => {
+      const query = search.value.trim().normalize("NFKC").toLowerCase();
+      return files.filter(file => (filter === "all" || file.pinned) && file.name.normalize("NFKC").toLowerCase().includes(query));
+    };
+    const render = () => {
+      const visible = visibleFiles();
+      for (const button of buttons) {
+        const file = files.find(file => file.id === button.dataset.id);
+        button.closest("li").hidden = !visible.includes(file);
+        button.setAttribute("aria-pressed", String(file === selected));
+        button.querySelector(".file-meta").textContent = `${file.category}${file.pinned ? " · 고정" : ""}`;
+      }
+      document.getElementById("pin-count").textContent = String(files.filter(file => file.pinned).length);
+      document.getElementById("result-count").textContent = `파일 ${visible.length}개`;
+      document.getElementById("empty").hidden = visible.length > 0;
+      document.getElementById("detail-title").textContent = selected.name;
+      document.getElementById("detail-description").textContent = selected.description;
+      document.getElementById("detail-category").textContent = selected.category;
+      document.getElementById("detail-date").textContent = selected.date;
+      pin.textContent = selected.pinned ? "고정 해제" : "파일 고정";
+      pin.setAttribute("aria-pressed", String(selected.pinned));
+    };
+    document.getElementById("file-list").addEventListener("click", event => {
+      const button = event.target.closest(".file-button");
+      if (!button) return;
+      selected = files.find(file => file.id === button.dataset.id);
+      render();
+      status.textContent = `${selected.name} 선택`;
+    });
+    search.addEventListener("input", () => {
+      render();
+      status.textContent = `검색 결과 ${visibleFiles().length}개. 상세 패널은 선택한 파일을 유지합니다.`;
+    });
+    document.querySelectorAll("[data-filter]").forEach(button => button.addEventListener("click", () => {
+      filter = button.dataset.filter;
+      document.querySelectorAll("[data-filter]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      document.getElementById("breadcrumb").textContent = filter === "all" ? "전체 파일" : "고정";
+      render();
+      status.textContent = `${filter === "all" ? "전체" : "고정"} 파일 ${visibleFiles().length}개`;
+    }));
+    pin.addEventListener("click", () => {
+      selected.pinned = !selected.pinned;
+      render();
+      status.textContent = `${selected.name} ${selected.pinned ? "고정" : "고정 해제"}. 페이지 안에만 반영했습니다.`;
+    });
+    document.querySelectorAll("button, input").forEach(control => { control.disabled = false; });
+  </script>
+</body>
+</html>

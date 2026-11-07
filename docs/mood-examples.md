@@ -79,5 +79,6 @@
 - JavaScript 없이도 여섯 화면의 기본 배색은 보인다. 배색 선택은 비활성화하고 안내문과 배색 문서 링크를 제공한다. JavaScript 사용 시 외부 요청·저장·자동 애니메이션은 없다.
 - 느낌에 대한 설명은 이 예시의 해석이지 심리학적 보장이나 접근성 인증이 아니다. 기기별 서체, 실제 콘텐츠, 확대, 스크린리더와 앱 상태는 대상 앱에서 추가 검증한다.
 - 문서용 예시이며 MCP 카탈로그의 패턴 수·대표 코드 예제 수는 바꾸지 않는다.
+- MCP 0.3.0부터 `search_design_visuals`와 `get_design_visual`의 `id=mood-examples`로 조회할 수 있다. `includeSource=true`로 HTML을 받는다. 기존 패턴과 별도인 시각 예시다.
 
 색 역할과 대비 기준은 [색 조합 적용 메모](./color-combinations.md#앱에-옮길-때)와 [색상·테마 지침](../content/library/color-theming.json)을 참고한다.

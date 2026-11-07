@@ -24,6 +24,14 @@
 
 ## 제공 범위
 
+[검정 미니멀 예시](./docs/black-minimal.html)는 검정·차콜·회색의 파일 보관함 화면이다. 검색·파일 선택·페이지 내 고정이 작동하며 실제 파일 접근이나 영구 저장은 없다. MCP에서는 `get_design_visual`의 `id=black-minimal`로 조회한다.
+
+[검정 포스터형 시안](./docs/black-editorial.html)은 공유한 레퍼런스의 큰 번호·얇은 타이포·수평 구획·붉은 빛을 참고해 별도로 만들었다. 작업 설명은 아코디언으로 열 수 있다. 220–480ms의 진입·펼침, 작은 호버 이동, 마우스에 반응하는 빛(가로 최대 14px·세로 10px)을 적용했다. 상단에서 효과를 끌 수 있고 OS 모션 감소 설정을 우선하며, 숨겨진 탭에서는 중지한다. 반복 재생·스크롤 강제 이동은 없으며 JavaScript 없이도 내용과 아코디언을 사용할 수 있다. 원본 자산이나 문구를 복제하지 않은 가상 포트폴리오이며 MCP ID는 `black-editorial`이다.
+
+[스포츠 사진 콜라주](./docs/sports-collage.html)는 흰 여백·가로 사진 구획·얼굴 확대·프레임을 넘는 인물을 조합한 가상 지면이다. CC0 사진과 수동 SVG 윤곽을 사용하며 대각선 화살표는 없다. 참고 원본은 권한 미확인으로 링크만 기록했다. [사진 출처·사용 조건](./docs/sports-collage.md)을 확인하고 HTML과 `docs/assets/sports-soccer-cc0.jpg`를 함께 보관한다. MCP ID는 `sports-collage`이며 사진 바이너리는 HTML 조회로 전달하지 않는다.
+
+[복싱 레퍼런스별 시안](./docs/boxing-references.md)은 [위에서 본 링](./docs/boxing-overhead.html), [종이 질감 포스터](./docs/boxing-vintage.html), [조명 아래 뒷모습](./docs/boxing-arena.html) 세 가지다. 각 링크의 구성·색을 독자적인 SVG 일러스트로 해석했다. 외부 자산·원본 사진·대각선 화살표 없이 열린다. MCP ID는 `boxing-overhead`, `boxing-vintage`, `boxing-arena`이다.
+
 화면 효과는 [HTML 갤러리](./docs/screen-effects.html)에서 32개를 직접 실행·초기화·정지하며 비교할 수 있다. [효과 목록 문서](./docs/screen-effects.md)에는 기존 패턴 연결, 보충한 효과 종류, 웹에서 재현하지 않은 네이티브·3D 항목의 한계도 적었다. 아래 MCP 집계와는 별도의 문서용 자료다.
 
 - **36개 카테고리, 186개 패턴**: 범용 지침 22개 카테고리·138개 패턴 + 기존 WEASHION 14개 카테고리·48개 패턴.
@@ -31,7 +39,8 @@
 - 한국어·영어 키워드 검색, 카테고리·출처·플랫폼별 예제 유무 필터와 페이지 단위 조회.
 - 패턴별 범용 원칙, 플랫폼별 적용 지침, 원본 의존성·구현 상태·주의사항·검증 기준.
 - 신규 프로젝트 설계와 기존 프로젝트 개선을 구분한 적용 가이드.
-- MCP Tools 4개, Resources **224개**(카탈로그 1 + 패턴 186 + 가이드 37), Prompts 2개.
+- MCP Tools **6개**, Resources **241개**(카탈로그 1 + 패턴 186 + 가이드 37 + 시각 예시 인덱스 1 + HTML·문서 16), Prompts 2개.
+- 별도 시각 예시 11종: 복싱 3종, 스포츠 콜라주, 검정 포스터형, 검정 미니멀, 개인 작업 노트, 러닝 이벤트, 8가지 배색, 분위기별 18가지 배색, 32개 화면 효과. `search_design_visuals`와 `get_design_visual`로 조회.
 - 원본 저장소나 개발자 컴퓨터의 절대 경로가 필요 없는 패키지.
 - 런타임 외부 API·LLM·검색 서비스·벡터 DB·API 키 없이 로컬 실행.
 
@@ -81,12 +90,12 @@ MCP 실행 진입점은 빌드된 `dist/index.js`입니다. 터미널에서 직�
    npm run verify:package
    ```
 
-   생성 결과는 `acertainromance401-design-mcp-0.2.0.tgz`입니다. 별도 임시 디렉터리에 설치한 뒤 실제 stdio MCP 요청으로 범용 웹 예제까지 확인합니다. 임시 설치는 검증 후 정리합니다.
+   생성 결과는 `acertainromance401-design-mcp-0.3.0.tgz`입니다. 별도 임시 디렉터리에 설치한 뒤 실제 stdio MCP 요청으로 범용 웹 예제와 시각 예시 11종의 HTML 조회까지 확인합니다. 임시 설치는 검증 후 정리합니다.
 
 2. 검증한 패키지를 한 번 설치합니다. 경로는 실제 생성 위치로 바꿉니다.
 
    ```bash
-   npm install --global /absolute/path/to/acertainromance401-design-mcp-0.2.0.tgz
+   npm install --global /absolute/path/to/acertainromance401-design-mcp-0.3.0.tgz
    ```
 
 3. VS Code 명령 팔레트에서 **MCP: Add Server → Command (stdio)**를 선택하고 `design-mcp`를 등록합니다. 현재 VS Code에서 제공하는 **Global/사용자 범위** 저장 위치를 선택하면 여러 프로젝트에서 공유할 수 있습니다.
@@ -121,6 +130,26 @@ VS Code의 사용자 범위 MCP 설정 또는 대상 프로젝트의 `.vscode/mc
 다른 클라이언트에서는 해당 제품이 요구하는 MCP 설정 형식에 맞춥니다. 서버는 표준 stdio MCP를 사용하며 특정 AI 서비스에 종속되지 않습니다.
 
 ## 도구 계약
+
+### 시각 예시 조회 (0.3.0 추가)
+
+기존 패턴 검색과 구분해 배색·분위기별 화면·효과 갤러리를 조회합니다. `list_design_categories`의 `visualExamples`와 `design://visual-examples`에서 11종의 ID·키워드·리소스 URI를 확인합니다.
+
+```json
+{"query":"배색 카페","limit":5,"offset":0}
+```
+
+위 인자로 `search_design_visuals`를 호출합니다. `query`는 공백 제외 1~200자, `limit`은 1~10(기본 5), `offset`은 0~1000입니다. 결과는 `total`, `nextOffset`, `results`이며 메타데이터와 문서의 결정적 키워드 검색입니다. HTML 전체는 검색 결과에 넣지 않습니다.
+
+```json
+{"id":"screen-effects","includeSource":true}
+```
+
+위 인자로 `get_design_visual`을 호출합니다. 기본 `includeSource=false`는 요약·한계·문서·리소스 링크만 반환하며, `true`는 HTML/CSS/JavaScript 소스를 추가합니다. 지원 ID는 `boxing-overhead`, `boxing-vintage`, `boxing-arena`, `sports-collage`, `black-editorial`, `black-minimal`, `aesthetic-notes`, `high-energy`, `color-combinations`, `mood-examples`, `screen-effects`입니다. 스포츠 콜라주는 패키지에 포함된 사진 파일도 함께 필요합니다.
+
+`htmlUri`와 `guideUri`는 `design://visual-files/<파일명>` 리소스입니다. 문서의 로컬 링크는 등록된 시각 파일 리소스 또는 원본 GitHub 링크로 변환됩니다. **MCP는 HTML 텍스트를 반환할 뿐 실행·렌더링하지 않습니다.** 브라우저에서 보려면 HTML을 파일로 저장해 엽니다. HTML 내부의 상대 문서 링크까지 사용할 때는 원본 저장소 구조를 유지하거나 MCP의 문서 리소스로 조회합니다.
+
+로컬 빌드를 사용하는 MCP는 빌드 후 재시작합니다. 설치된 패키지를 사용하는 MCP는 0.3.0 tarball로 교체한 뒤 재시작합니다. 이 시각 예시는 웹 데모이며 네이티브 앱 컴포넌트나 햅틱·실기기 품질 보장이 아닙니다.
 
 ### `list_design_categories`
 
@@ -220,6 +249,8 @@ MCP 연결만으로 자동 적용을 보장하지는 않습니다. 클라이언�
 | 패턴 186개 | `design://patterns/{id}` | 기본 SwiftUI 대상 상세·참조·해당 예제 |
 | 기존 문서 15개 | `design://guides/{category}` 및 `design://guides/README` | 원본 상세 문서 스냅샷 |
 | 범용 가이드 22개 | `design://guides/general-{category}` | 범용 패턴 전체의 사용 조건·구조·접근성·검증 |
+| 시각 예시 인덱스 | `design://visual-examples` | 시각 예시 11종의 ID·키워드·파일 URI |
+| 시각 파일 16개 | `design://visual-files/{filename}` | HTML 11개와 적용 문서 5개 (사진은 패키지 파일로 제공) |
 | 신규 프롬프트 | `start_design_project` | `objective`, 선택적 `platform`을 받아 조회→적용→검증 흐름 제공 |
 | 기존 프롬프트 | `update_project_design` | 기존 동작과 디자인 시스템을 보존하는 개선 흐름 제공 |
 
@@ -239,6 +270,7 @@ MCP 연결만으로 자동 적용을 보장하지는 않습니다. 클라이언�
 | [src/library.ts](./src/library.ts) | 범용 스키마·예제 플랫폼·경로·중복 검증과 가이드 렌더링 |
 | [src/catalog.ts](./src/catalog.ts) | 검증·색인·검색·패턴·적용 가이드 |
 | [src/server.ts](./src/server.ts) | 도구·리소스·프롬프트 등록 |
+| [src/visuals.ts](./src/visuals.ts) | 별도 시각 예시 등록·파일 검증·검색·소스와 문서 조회 |
 | [scripts/import-guides.mjs](./scripts/import-guides.mjs) | 명시적으로 선택한 원본 문서에서 스냅샷 재생성 |
 | [test/](./test/) | 데이터 보존·오류·플랫폼 구분·실제 MCP 통신 검증 |
 
@@ -278,7 +310,7 @@ npm run verify:package
 ```
 
 - 기존 14개 카테고리·48개 패턴·57개 코드 블록 보존과 출처 무결성.
-- 전체 36개 카테고리·186개 패턴·224개 리소스, 범용 지침의 세부 필드·예제 20개.
+- 전체 36개 카테고리·186개 패턴·241개 리소스, 범용 지침의 세부 필드·예제 20개 및 별도 시각 예시 11종.
 - 모든 내부 MCP 링크, 한국어·영어 검색, 필터·페이지·입력 한계.
 - 웹 응답의 실제 HTML 예제, 플랫폼 공통/예제 없는 패턴의 코드 생략, 출처·예제 유무 필터.
 - 신규·기존 적용 흐름, 알 수 없는 ID·무관한 검색·카테고리 충돌 오류.

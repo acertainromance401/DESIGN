@@ -19,6 +19,9 @@ assert.ok(artifact.files.some(({ path }) => path === "content/guides/layout.md")
 assert.ok(artifact.files.some(({ path }) => path === "content/provenance.json"));
 assert.ok(artifact.files.some(({ path }) => path === "content/library/index.json"));
 assert.ok(artifact.files.some(({ path }) => path === "content/examples/modal-dialog.html"));
+for (const file of ["boxing-overhead.html", "boxing-vintage.html", "boxing-arena.html", "boxing-references.md", "sports-collage.html", "sports-collage.md", "assets/sports-soccer-cc0.jpg", "aesthetic.html", "black-editorial.html", "black-minimal.html", "high-energy.html", "color-combinations.html", "color-combinations.md", "mood-examples.html", "mood-examples.md", "screen-effects.html", "screen-effects.md"]) {
+  assert.ok(artifact.files.some(({ path }) => path === `docs/${file}`), file);
+}
 assert.ok(artifact.files.every(({ path }) => !path.startsWith("node_modules/")));
 const fixture = await mkdtemp(path.join(tmpdir(), "design-mcp-package-"));
 try {
@@ -48,6 +51,16 @@ try {
     assert.match(general.structuredContent.sourceExample, /showModal/u);
     const counts = await client.callTool({ name: "list_design_categories", arguments: {} });
     assert.equal(counts.structuredContent.patternCount, 186);
+    assert.equal(counts.structuredContent.visualExamples.exampleCount, 11);
+    for (const { id } of counts.structuredContent.visualExamples.examples) {
+      const visual = await client.callTool({ name: "get_design_visual", arguments: { id, includeSource: true } });
+      assert.equal(visual.isError, undefined);
+      assert.match(visual.structuredContent.source, /^<!doctype html>/iu);
+    }
+    const visuals = await client.callTool({ name: "search_design_visuals", arguments: { query: "배색" } });
+    assert.ok(visuals.structuredContent.results.some(({ id }) => id === "mood-examples"));
+    const resource = await client.readResource({ uri: "design://visual-files/screen-effects.md" });
+    assert.match(resource.contents[0].text, /design:\/\/visual-files\/screen-effects.html/u);
     assert.equal(stderr, "");
     console.log(`PASS: installed ${artifact.filename} in an isolated directory; real MCP lookup succeeded.`);
     console.log(`Reusable package: ${path.join(root, artifact.filename)}`);

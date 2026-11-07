@@ -43,9 +43,19 @@ WEASHION에 사용됐는지와 무관하게 선택할 수 있는 설계 지침�
 
 문서용 시각 예시이며 MCP 카탈로그에 등록된 대표 예제와는 별도다. 아래 패턴·예제 개수에는 포함하지 않는다.
 
+MCP 0.3.0부터 아래 시각 자료도 별도 도구로 조회한다. `search_design_visuals`에 `배색`, `카페`, `화면 효과` 등의 키워드를 넣고, 선택한 ID를 `get_design_visual`로 조회한다. `includeSource=true`면 HTML 소스도 받는다. `design://visual-examples`에서 인덱스를 볼 수 있으며 HTML은 MCP가 렌더링하지 않으므로 파일로 저장해 브라우저에서 연다.
+
 [분위기별 HTML 예시](./mood-examples.html)는 독서·음악·여행·전시·작업 도구·카페의 서로 다른 구성에 배색 선택을 붙였다. 화면별 3가지, 총 18가지 추가 조합의 색 코드와 적용 메모는 [분위기별 배색 문서](./mood-examples.md)에 있다. 기존 8가지를 포함해 문서용 배색 예시는 총 26가지다.
 
 ### 화면 효과 시각 비교
+
+[검정 미니멀 HTML 예시](./black-minimal.html)는 검정·차콜·회색의 파일 목록과 상세 화면이다. 검색·선택·페이지 내 고정을 제공하고, 외부 요청이나 영구 저장은 없다. MCP 시각 예시 ID는 `black-minimal`이다.
+
+[검정 포스터형 HTML 시안](./black-editorial.html)은 큰 번호·얇은 타이포·수평 구획·국소적인 붉은 빛을 참고한 별도 포트폴리오다. 원본 자산·문구는 사용하지 않았으며, 작업 설명을 네이티브 아코디언으로 열 수 있다. MCP ID는 `black-editorial`이다.
+
+[스포츠 사진 콜라주](./sports-collage.html)는 CC0 사진을 전체·얼굴 확대·인물 윤곽으로 겹친 가상 지면이다. 원본 참고 이미지는 저장하지 않고 [출처 문서](./sports-collage.md)에 링크만 기록했다. HTML과 사진 파일을 함께 보관해야 하며 MCP ID는 `sports-collage`이다.
+
+[복싱 레퍼런스 3종](./boxing-references.md): [오버헤드 링](./boxing-overhead.html), [빈티지 지면](./boxing-vintage.html), [조명 아래 뒷모습](./boxing-arena.html). 원본 사진 없이 독자적인 SVG로 구성했으며 MCP ID는 각각 `boxing-overhead`, `boxing-vintage`, `boxing-arena`이다.
 
 화면 효과를 눈으로 비교하려면 [32개 효과 HTML 갤러리](./screen-effects.html)와 [효과 목록·추가 검토 항목](./screen-effects.md)을 참고한다. 기존 배경·모션·조작 지침을 모으고 리플·틸트·뒤집기·시차·쉬머 등의 분류를 보충했다. 실행·초기화·정지·동작 줄이기를 제공하는 문서용 시연이며 MCP 카탈로그 집계와는 별도다.
 

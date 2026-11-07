@@ -22,7 +22,7 @@ test("real stdio client discovers and calls tools, resources and prompts from an
   t.after(() => client.close());
   await client.connect(transport);
   const { tools } = await client.listTools();
-  assert.equal(tools.length, 4);
+  assert.equal(tools.length, 6);
   assert.ok(tools.every(({ annotations }) => annotations.readOnlyHint && !annotations.openWorldHint));
   const categories = await client.callTool({ name: "list_design_categories", arguments: {} });
   assert.equal(categories.structuredContent.categories.length, 36);
@@ -52,7 +52,35 @@ test("real stdio client discovers and calls tools, resources and prompts from an
   const invalid = await client.callTool({ name: "search_design_patterns", arguments: { query: " ", limit: 99 } });
   assert.equal(invalid.isError, true);
   const { resources } = await client.listResources();
-  assert.equal(resources.length, 224);
+  assert.equal(resources.length, 241);
+  assert.equal(categories.structuredContent.visualExamples.exampleCount, 11);
+  const visuals = await client.callTool({ name: "search_design_visuals", arguments: { query: "시트 쉬머" } });
+  assert.ok(visuals.structuredContent.results.some(({ id }) => id === "screen-effects"));
+  const visual = await client.callTool({ name: "get_design_visual", arguments: { id: "screen-effects", includeSource: true } });
+  assert.match(visual.structuredContent.source, /dialog\.showModal/u);
+  assert.match(visual.structuredContent.guide, /32개/u);
+  const unknownVisual = await client.callTool({ name: "get_design_visual", arguments: { id: "missing" } });
+  assert.equal(unknownVisual.isError, true);
+  assert.equal(unknownVisual.structuredContent.error.code, "UNKNOWN_VISUAL");
+  const visualHtml = await client.readResource({ uri: "design://visual-files/mood-examples.html" });
+  assert.equal(visualHtml.contents[0].mimeType, "text/html");
+  assert.match(visualHtml.contents[0].text, /music-violet/u);
+  const visualIndex = await client.readResource({ uri: "design://visual-examples" });
+  assert.equal(JSON.parse(visualIndex.contents[0].text).fileCount, 16);
+  const compactVisual = await client.callTool({ name: "get_design_visual", arguments: { id: "mood-examples" } });
+  assert.equal(compactVisual.structuredContent.source, null);
+  assert.match(compactVisual.structuredContent.guide, /18가지를/u);
+  const invalidVisual = await client.callTool({ name: "get_design_visual", arguments: { id: "../package" } });
+  assert.equal(invalidVisual.isError, true);
+  const invalidVisualSearch = await client.callTool({ name: "search_design_visuals", arguments: { query: " " } });
+  assert.equal(invalidVisualSearch.isError, true);
+  for (const file of ["color-combinations.md", "mood-examples.md", "screen-effects.md"]) {
+    const guide = await client.readResource({ uri: `design://visual-files/${file}` });
+    for (const [, uri] of guide.contents[0].text.matchAll(/\]\((design:\/\/visual-files\/[^)]+)\)/gu)) {
+      const linked = await client.readResource({ uri });
+      assert.equal(linked.contents.length, 1);
+    }
+  }
   const resource = await client.readResource({ uri: "design://patterns/layout.content-width" });
   assert.equal(JSON.parse(resource.contents[0].text).id, "layout.content-width");
   const guide = await client.readResource({ uri: "design://guides/layout" });
