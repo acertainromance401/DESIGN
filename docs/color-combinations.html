@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>색 조합 비교 — 여덟 가지 기록 화면</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #fafaf8; color: #262724; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+    main { max-width: 1280px; margin: auto; padding: 48px 40px; }
+    h1 { margin: 0 0 18px; font-size: 36px; letter-spacing: -1.5px; }
+    .intro { margin: 0; max-width: 630px; font-size: 15px; line-height: 1.9; word-break: keep-all; }
+    a { color: inherit; text-underline-offset: 4px; }
+    a:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+    nav { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 22px 0 42px; }
+    nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; }
+    .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 46px 32px; }
+    article { min-width: 0; scroll-margin-top: 20px; }
+    h2 { margin: 0 0 15px; font-size: 18px; font-weight: 600; }
+    .demo { background: var(--bg); color: var(--text); padding: 28px; border: 1px solid var(--text); }
+    .demo-head { display: flex; justify-content: space-between; gap: 15px; font-size: 12px; }
+    .metric { background: var(--accent); color: var(--on-accent); display: flex; align-items: baseline; gap: 12px; margin: 26px 0 24px; padding: 18px 22px; }
+    .metric strong { font-size: 72px; font-weight: 750; line-height: 1.1; letter-spacing: -4px; }
+    .metric span { font-size: 20px; }
+    .demo h3 { margin: 0 0 12px; font-size: 22px; letter-spacing: -.7px; }
+    .record { background: var(--surface); color: var(--text); display: flex; justify-content: space-between; gap: 12px; padding: 16px; font-size: 13px; line-height: 1.7; }
+    .memo { margin: 15px 0 0; font-size: 13px; line-height: 1.9; word-break: keep-all; }
+    details { margin-top: 9px; font-size: 12px; line-height: 1.8; }
+    summary { cursor: pointer; padding: 10px 0; min-height: 44px; width: fit-content; }
+    details p { margin: 5px 0 0; overflow-wrap: anywhere; }
+    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #c8cac2; font-size: 12px; line-height: 1.9; }
+    .orange { --bg: #FF5426; --text: #171916; --surface: #F3F1E9; --accent: #DFFF70; --on-accent: #171916; }
+    .blue { --bg: #F7F9FC; --text: #172B4D; --surface: #E8EEF8; --accent: #2456C4; --on-accent: #FFFFFF; }
+    .green { --bg: #F3F1E6; --text: #243A2D; --surface: #E2E8D8; --accent: #345C43; --on-accent: #FFFFFF; }
+    .navy { --bg: #151E32; --text: #F3EEDC; --surface: #25324A; --accent: #DFC080; --on-accent: #151E32; }
+    .pink { --bg: #F9E7EE; --text: #49213B; --surface: #EED4E0; --accent: #74345C; --on-accent: #FFFFFF; }
+    .cyan { --bg: #101F24; --text: #E1F4F4; --surface: #20343A; --accent: #66E3DF; --on-accent: #101F24; }
+    .sand { --bg: #EDE1CD; --text: #3C322A; --surface: #DED0B7; --accent: #285D59; --on-accent: #FFFFFF; }
+    .mono { --bg: #FAFAF8; --text: #262724; --surface: #E8E9E4; --accent: #262724; --on-accent: #FAFAF8; }
+    @media (max-width: 650px) {
+      main { padding: 30px 22px; }
+      h1 { font-size: 30px; }
+      .gallery { grid-template-columns: 1fr; gap: 32px; }
+      .demo { padding: 22px; }
+      .metric strong { font-size: 64px; }
+    }
+    @media (forced-colors: active) { .demo { border-color: CanvasText; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>색만 바꿔 보기</h1>
+    <p class="intro">같은 산책 기록을 여덟 가지 색으로 놓았다.<br>글자, 간격, 강조 면적은 그대로다. 느낌은 이 화면을 기준으로 적었다.</p>
+    <nav aria-label="색 조합 바로가기">
+      <a href="#orange">주황 + 라임</a><a href="#blue">흰색 + 파랑</a><a href="#green">크림 + 초록</a><a href="#navy">남색 + 금색</a>
+      <a href="#pink">분홍 + 자두색</a><a href="#cyan">먹색 + 시안</a><a href="#sand">모래색 + 청록</a><a href="#mono">흰색 + 먹색</a>
+    </nav>
+    <div class="gallery">
+      <article id="orange" class="orange">
+        <h2>주황 + 라임</h2>
+        <div class="demo"><div class="demo-head"><span>오늘의 기록</span><span>11월 7일</span></div><div class="metric"><strong>24</strong><span>분</span></div><h3>저녁 산책</h3><div class="record"><span>걸은 거리 2.1km</span><span>기록 완료</span></div></div>
+        <p class="memo">눈에 바로 들어온다. 운동이나 이벤트 화면에 써볼 만하다. 라임색은 숫자 뒤에만 뒀다.</p>
+        <details><summary>색 코드 보기</summary><p>바탕 #FF5426 / 본문 #171916 / 표면 #F3F1E9<br>강조 #DFFF70 / 강조 위 글자 #171916</p></details>
+      </article>
+      <article id="blue" class="blue">
+        <h2>흰색 + 파랑</h2>
+        <div class="demo"><div class="demo-head"><span>오늘의 기록</span><span>11월 7일</span></div><div class="metric"><strong>24</strong><span>분</span></div><h3>저녁 산책</h3><div class="record"><span>걸은 거리 2.1km</span><span>기록 완료</span></div></div>
+        <p class="memo">가볍고 또렷하다. 일정이나 업무 화면에 익숙한 색이다. 파란색이 선택 표시까지 혼자 맡지는 않게 한다.</p>
+        <details><summary>색 코드 보기</summary><p>바탕 #F7F9FC / 본문 #172B4D / 표면 #E8EEF8<br>강조 #2456C4 / 강조 위 글자 #FFFFFF</p></details>
+      </article>
+      <article id="green" class="green">
+        <h2>크림 + 초록</h2>
+        <div class="demo"><div class="demo-head"><span>오늘의 기록</span><span>11월 7일</span></div><div class="metric"><strong>24</strong><span>분</span></div><h3>저녁 산책</h3><div class="record"><span>걸은 거리 2.1km</span><span>기록 완료</span></div></div>
+        <p class="memo">차분한 생활 기록 쪽에 가깝다. 초록을 연하게만 쓰지 않고 숫자 뒤에서는 짙게 잡았다.</p>
+        <details><summary>색 코드 보기</summary><p>바탕 #F3F1E6 / 본문 #243A2D / 표면 #E2E8D8<br>강조 #345C43 / 강조 위 글자 #FFFFFF</p></details>
+      </article>
+      <article id="navy" class="navy">
+        <h2>남색 + 금색</h2>
+        <div class="demo"><div class="demo-head"><span>오늘의 기록</span><span>11월 7일</span></div><div class="metric"><strong>24</strong><span>분</span></div><h3>저녁 산책</h3><div class="record"><span>걸은 거리 2.1km</span><span>기록 완료</span></div></div>
+        <p class="memo">조금 격식 있어 보인다. 예약이나 전시 안내에도 어울린다. 금색은 반짝임 없는 단색으로 썼다.</p>
+        <details><summary>색 코드 보기</summary><p>바탕 #151E32 / 본문 #F3EEDC / 표면 #25324A<br>강조 #DFC080 / 강조 위 글자 #151E32</p></details>
+      </article>
+      <article id="pink" class="pink">
+        <h2>분홍 + 자두색</h2>
+        <div class="demo"><div class="demo-head"><span>오늘의 기록</span><span>11월 7일</span></div><div class="metric"><strong>24</strong><span>분</span></div><h3>저녁 산책</h3><div class="record"><span>걸은 거리 2.1km</span><span>기록 완료</span></div></div>
+        <p class="memo">부드러운 바탕에 짙은 포인트. 취미나 커뮤니티 화면에 써볼 만하다. 본문까지 연하게 만들지는 않았다.</p>
+        <details><summary>색 코드 보기</summary><p>바탕 #F9E7EE / 본문 #49213B / 표면 #EED4E0<br>강조 #74345C / 강조 위 글자 #FFFFFF</p></details>
+      </article>
+      <article id="cyan" class="cyan">
+        <h2>먹색 + 시안</h2>
+        <div class="demo"><div class="demo-head"><span>오늘의 기록</span><span>11월 7일</span></div><div class="metric"><strong>24</strong><span>분</span></div><h3>저녁 산책</h3><div class="record"><span>걸은 거리 2.1km</span><span>기록 완료</span></div></div>
+        <p class="memo">야간 화면이나 전자 장비 같은 인상. 오디오·기기 제어 화면에 맞는다. 빛 번짐은 넣지 않았다.</p>
+        <details><summary>색 코드 보기</summary><p>바탕 #101F24 / 본문 #E1F4F4 / 표면 #20343A<br>강조 #66E3DF / 강조 위 글자 #101F24</p></details>
+      </article>
+      <article id="sand" class="sand">
+        <h2>모래색 + 청록</h2>
+        <div class="demo"><div class="demo-head"><span>오늘의 기록</span><span>11월 7일</span></div><div class="metric"><strong>24</strong><span>분</span></div><h3>저녁 산책</h3><div class="record"><span>걸은 거리 2.1km</span><span>기록 완료</span></div></div>
+        <p class="memo">따뜻한 바탕에 시원한 포인트가 붙는다. 여행·음식 안내에 써볼 만하다. 베이지 위 본문은 충분히 어둡게.</p>
+        <details><summary>색 코드 보기</summary><p>바탕 #EDE1CD / 본문 #3C322A / 표면 #DED0B7<br>강조 #285D59 / 강조 위 글자 #FFFFFF</p></details>
+      </article>
+      <article id="mono" class="mono">
+        <h2>흰색 + 먹색</h2>
+        <div class="demo"><div class="demo-head"><span>오늘의 기록</span><span>11월 7일</span></div><div class="metric"><strong>24</strong><span>분</span></div><h3>저녁 산책</h3><div class="record"><span>걸은 거리 2.1km</span><span>기록 완료</span></div></div>
+        <p class="memo">내용이 먼저 보인다. 문서나 작업 도구에 쓸 수 있다. 색을 줄인 만큼 크기와 간격으로 구분해야 한다.</p>
+        <details><summary>색 코드 보기</summary><p>바탕 #FAFAF8 / 본문 #262724 / 표면 #E8E9E4<br>강조 #262724 / 강조 위 글자 #FAFAF8</p></details>
+      </article>
+    </div>
+    <footer>고정된 시연 데이터다. 기록·저장 기능은 없다. 색이 주는 느낌은 서체와 면적에 따라 달라질 수 있다.<br><a href="./color-combinations.md">조합별 용도와 적용 메모</a> · <a href="../README.md">README</a></footer>
+  </main>
+</body>
+</html>

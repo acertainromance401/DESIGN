@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>앱 화면 효과 — 직접 비교하기</title>
+  <style>
+    :root { --ink: #292f32; --paper: #f7f8f5; --blue: #315a89; --line: #bbc4c5; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+    main { max-width: 1440px; padding: 40px; margin: auto; }
+    h1 { margin: 0 0 18px; font-size: 34px; letter-spacing: -1.5px; }
+    .intro { max-width: 780px; line-height: 1.9; font-size: 14px; margin: 0; word-break: keep-all; }
+    a { color: inherit; text-underline-offset: 4px; }
+    button, select { font: inherit; color: inherit; min-height: 44px; padding: 10px 12px; background: #fff; border: 1px solid #697c80; border-radius: 4px; cursor: pointer; }
+    button:disabled { cursor: default; color: #5e6669; background: #e7eceb; }
+    :is(button, select, input, a, .scroll-box):focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+    .tools { display: flex; gap: 16px 24px; align-items: center; flex-wrap: wrap; padding: 22px 0; margin: 15px 0 28px; border-bottom: 1px solid var(--line); font-size: 13px; }
+    .tools label { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+    input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--blue); }
+    .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 24px; }
+    article { min-width: 0; scroll-margin-top: 20px; }
+    article[hidden] { display: none; }
+    h2 { font-size: 18px; margin: 0 0 8px; letter-spacing: -.5px; }
+    .category { font-size: 11px; margin: 0 0 10px; }
+    .stage { height: 225px; background: #e7eeef; border: 1px solid #8a9b9e; border-radius: 6px; position: relative; display: grid; place-items: center; overflow: hidden; isolation: isolate; }
+    .object { background: #fff; color: var(--ink); border: 1px solid #7d9297; border-radius: 8px; padding: 16px 22px; width: 170px; min-height: 75px; position: relative; z-index: 1; }
+    .object strong { display: block; font-size: 17px; }
+    .object small { display: block; font-size: 12px; margin-top: 8px; }
+    .controls { display: flex; gap: 8px; margin: 12px 0 8px; }
+    .controls button { font-size: 12px; flex: 1; }
+    .note { font-size: 12px; line-height: 1.9; margin: 8px 0; word-break: keep-all; }
+    .status { min-height: 22px; margin: 0; font-size: 11px; line-height: 1.8; }
+    .stage.gradient.on { background: radial-gradient(ellipse at 15% 10%, #ffc992, transparent 60%), radial-gradient(ellipse at 90% 90%, #9cb4ec, transparent 60%), #d4e4de; }
+    .stage.grain.on::before { content: ""; position: absolute; inset: 0; opacity: .22; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23n)' d='M0 0h180v180H0z'/%3E%3C/svg%3E"); pointer-events: none; }
+    .stage.shadow.on .object { box-shadow: 0 4px 8px #142e3920, 0 18px 30px #142e3930; }
+    .stage.glass { background: radial-gradient(circle at 20% 30%, #74b4b8 0 25%, transparent 26%), radial-gradient(circle at 80% 65%, #e0a387 0 28%, transparent 29%), #c6d3e5; }
+    .stage.glass.on .object { background: #ffffffeb; }
+    @supports (backdrop-filter: blur(12px)) { .stage.glass.on .object { background: #ffffffcc; backdrop-filter: blur(12px); } }
+    .stage.mask.on .art { clip-path: polygon(0 15%, 80% 0, 100% 75%, 20% 100%); }
+    .art { width: 155px; height: 130px; background: linear-gradient(145deg, #315a89 0 45%, #83b8b0 45% 70%, #e8b682 70%); }
+    .stage.spotlight { background: #263c4a; }
+    .stage.spotlight.on::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), #b8d8e780, transparent 48%); pointer-events: none; }
+    .stage.glow.on .object { box-shadow: 0 0 0 3px #315a89, 0 0 28px #315a8970; }
+    .confetti-piece { position: absolute; width: 8px; height: 12px; top: 70%; left: 50%; pointer-events: none; opacity: 0; }
+    .shape { width: 105px; height: 105px; border-radius: 10px; background: var(--blue); }
+    .stage.morph.on .shape { border-radius: 50%; }
+    .stage.flip.on .object { background: #315a89; color: #fff; }
+    .stage.shared { align-items: start; justify-items: start; padding: 22px; }
+    .stage.shared.on { align-items: center; justify-items: center; }
+    .stage.shared.on .object { width: 85%; min-height: 160px; }
+    .stack { display: grid; gap: 8px; width: 75%; }
+    .row { background: #fff; border: 1px solid #7d9297; border-radius: 4px; padding: 10px 14px; font-size: 13px; }
+    svg { width: 160px; height: 110px; overflow: visible; }
+    .path { fill: none; stroke: var(--blue); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    .pressed { width: 160px; min-height: 62px; background: #315a89; color: #fff; border: 2px solid #183b64; border-radius: 8px; display: grid; place-items: center; font-size: 15px; position: relative; }
+    .stage.press.on .pressed { transform: scale(.94); background: #234366; }
+    .ripple-disc { position: absolute; inset: 10px; border-radius: 50%; border: 2px solid #315a89; pointer-events: none; opacity: 0; }
+    .tabs { width: 85%; background: #fff; border: 1px solid #7d9297; display: grid; grid-template-columns: 1fr 1fr; border-radius: 6px; padding: 5px; position: relative; }
+    .tabs span { padding: 12px 4px; text-align: center; font-size: 13px; z-index: 1; }
+    .tab-marker { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc(50% - 5px); background: #c6e1de; border: 1px solid #476b69; border-radius: 3px; }
+    .stage.indicator.on .tab-marker { left: 50%; }
+    .stage.drag .row:first-child { cursor: grab; touch-action: none; border-width: 2px; }
+    .swipe-tray { width: 80%; background: #315a89; color: #fff; border-radius: 4px; position: relative; }
+    .swipe-tray > span { position: absolute; right: 12px; top: 18px; font-size: 12px; }
+    .swipe-tray .row { color: var(--ink); position: relative; padding: 18px; touch-action: pan-y; }
+    .stage.swipe.on .row { transform: translateX(-70px); }
+    .scroll-box { overflow-y: auto; width: 90%; height: 185px; border: 1px solid #7d9297; border-radius: 4px; background: #fff; position: relative; }
+    .scroll-content { min-height: 410px; padding: 14px; }
+    .scroll-content > p { margin: 0 0 100px; font-size: 12px; }
+    .scroll-content .row { margin-top: 14px; }
+    .mountains { height: 100px; background: linear-gradient(150deg, #bad5d2 50%, #315a89 51% 75%, #e7b68d 76%); }
+    .sticky-header { padding: 12px; background: #315a89; color: #fff; font-size: 13px; z-index: 2; }
+    .stage.sticky.on .sticky-header { position: sticky; top: 0; }
+    .skeleton-lines { width: 160px; }
+    .skeleton-lines span { display: block; background: #b8c7c8; height: 14px; margin: 12px 0; border-radius: 3px; }
+    .skeleton-lines span:last-child { width: 65%; }
+    .stage.skeleton.on .skeleton-lines { display: none; }
+    .stage.skeleton .object { display: none; }
+    .stage.skeleton.on .object { display: block; }
+    .shimmer-line { width: 160px; height: 60px; background: #bdcecf; border-radius: 6px; position: relative; overflow: hidden; }
+    .shimmer-sweep { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #ffffffe0, transparent); transform: translateX(-100%); }
+    .meter { width: 80%; }
+    progress { width: 100%; height: 24px; accent-color: var(--blue); }
+    .meter p { margin: 10px 0 0; font-size: 12px; }
+    .toast-box { position: absolute; bottom: 16px; left: 16px; right: 16px; background: #263c4a; color: #fff; padding: 14px; border-radius: 4px; font-size: 12px; }
+    .toast-box[hidden], .popover-box[hidden] { display: none; }
+    .popover-box { position: absolute; top: 45px; right: 20px; padding: 14px; border: 1px solid #7d9297; background: #fff; color: var(--ink); box-shadow: 0 8px 20px #142e3920; font-size: 12px; z-index: 3; max-width: 85%; }
+    dialog { width: min(420px, calc(100% - 40px)); max-height: calc(100dvh - 40px); overflow: auto; border: 2px solid #315a89; border-radius: 12px; background: #fff; color: var(--ink); padding: 26px; }
+    dialog::backdrop { background: #122d3db3; }
+    dialog.sheet { margin: auto auto 0; border-radius: 14px 14px 0 0; }
+    dialog h2 { font-size: 22px; }
+    dialog p { font-size: 14px; line-height: 1.9; }
+    footer { font-size: 12px; line-height: 1.9; border-top: 1px solid var(--line); margin-top: 40px; padding-top: 20px; }
+    @media (max-width: 1050px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 650px) { main { padding: 26px 22px; } h1 { font-size: 28px; } .gallery { grid-template-columns: 1fr; } .tools { gap: 12px; } .stage { height: 220px; } }
+    @media (forced-colors: active) {
+      .object, .stage, .row, .tabs, .shape, .art { border: 1px solid CanvasText; }
+      .stage.glass.on .object { background: Canvas; backdrop-filter: none; }
+      .confetti-piece, .shimmer-sweep { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>앱 화면 효과, 직접 비교하기</h1>
+    <p class="intro">32가지 효과를 작은 화면으로 나눴다. 처음에는 움직이지 않는다.<br>실행 후 초기화하거나 ‘효과 사용’을 끄면 기본 상태와 비교할 수 있다. 모든 데이터는 시연용이며 저장·전송하지 않는다.</p>
+    <noscript><p>효과 시연에는 JavaScript가 필요하다. <a href="./screen-effects.md">효과 목록과 적용 메모</a>는 JavaScript 없이 읽을 수 있다.</p></noscript>
+    <div class="tools">
+      <label>분류 <select id="filter" disabled><option value="all">전체</option><option>배경·재질</option><option>등장·전환</option><option>조작</option><option>스크롤</option><option>상태·오버레이</option></select></label>
+      <label><input id="effects" type="checkbox" checked disabled>효과 사용</label>
+      <label><input id="reduce" type="checkbox" disabled>동작 줄이기</label>
+      <button id="stop" disabled>움직임 정지</button>
+      <button id="reset" disabled>전체 초기화</button>
+      <span id="summary" role="status"></span>
+    </div>
+    <div class="gallery" id="gallery"></div>
+    <dialog id="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-copy">
+      <h2 id="dialog-title">화면 위의 안내</h2>
+      <p id="dialog-copy">오버레이 시연입니다. 실제 신청이나 저장은 하지 않습니다. Escape 또는 닫기 버튼으로 돌아갑니다.</p>
+      <button id="close-dialog" autofocus>닫기</button>
+    </dialog>
+    <footer><a href="./screen-effects.md">32가지 효과 목록과 추가 검토 항목</a> · <a href="./mood-examples.html">분위기별 화면</a> · <a href="../README.md">README</a><br>웹 시각 예시다. iOS 네이티브 재질·스프링·햅틱의 동작과 품질을 보장하지 않는다.</footer>
+  </main>
+  <script>
+    const object = '<div class="object"><strong>저녁 산책</strong><small>시연 화면 / 2.1km</small></div>';
+    const rows = '<div class="stack"><div class="row">산책</div><div class="row">독서</div><div class="row">메모</div></div>';
+    const scroller = '<div class="scroll-box" tabindex="0" aria-label="효과 시연 스크롤 영역"><div class="scroll-content"><p>이 안을 스크롤하거나 실행 버튼을 누르세요.</p><div class="row">다음 구획</div><div class="row">마지막 구획</div></div></div>';
+    const demos = [
+      ['gradient', '그라데이션', '배경·재질', '선형·방사형 색면을 겹친다. 본문은 불투명 표면 위에 둔다.', object],
+      ['grain', '그레인', '배경·재질', '정적 SVG 노이즈. 글자 뒤가 아닌 배경에만 약하게 얹는다.', object],
+      ['shadow', '그림자·고도', '배경·재질', '경계는 남기고 그림자를 더한다. 그림자만으로 버튼을 구분하지 않는다.', object],
+      ['glass', '반투명·블러', '배경·재질', '배경을 흐리는 재질. 미지원 브라우저에서는 불투명에 가까운 표면을 쓴다.', object],
+      ['mask', '클립·컷아웃', '배경·재질', '도형을 잘라 다른 윤곽으로 만든다. 개인정보 삭제용 마스크가 아니다.', '<div class="art" aria-hidden="true"></div>'],
+      ['spotlight', '스포트라이트', '배경·재질', '실행하면 고정된 빛이 생긴다. 포인터를 움직이면 위치를 따라간다.', object],
+      ['confetti', '컨페티', '배경·재질', '16개 입자를 한 번만 재생한다. 동작 줄이기에서는 움직이지 않는 표시로 대체한다.', object],
+      ['glow', '글로우', '배경·재질', '빛 번짐을 경계 밖에만 둔다. 글자와 포커스는 번짐 없이도 읽혀야 한다.', object],
+      ['fade', '페이드', '등장·전환', '내용은 기본으로 보인다. 실행할 때만 짧게 투명도를 바꾼다.', object],
+      ['slide', '슬라이드', '등장·전환', '작은 거리의 이동. 클릭 가능한 영역을 화면 밖에 숨기지 않는다.', object],
+      ['stagger', '순차 등장', '등장·전환', '항목 3개를 70ms 간격으로 보여준다. 마지막 지연은 140ms다.', rows],
+      ['spring', '탄성 이동', '등장·전환', '오버슈트가 있는 키프레임 근사다. 실제 물리 스프링 엔진은 아니다.', object],
+      ['morph', '형태 모핑', '등장·전환', '둥근 사각형과 원 사이를 바꾼다. 복잡한 SVG 경로 보간은 별도 구현이다.', '<div class="shape" aria-hidden="true"></div>'],
+      ['stroke', '선 그리기', '등장·전환', 'SVG 선의 dashoffset을 바꾼다. 완료 상태를 이 선 하나로만 전달하지 않는다.', '<svg aria-hidden="true" viewBox="0 0 160 110"><path class="path" pathLength="1" d="M15 60 L55 88 L140 20"/></svg>'],
+      ['shared', '카드 → 상세 연속성', '등장·전환', '같은 DOM 요소의 위치·크기를 FLIP으로 이어 준다. 실제 화면 내비게이션은 없다.', object],
+      ['flip', '카드 뒤집기', '등장·전환', '입체 회전으로 표면을 전환한다. 동작 줄이기에서는 색과 상태만 바뀐다.', object],
+      ['press', '눌림 피드백', '조작', '실행하면 눌린 크기를 비교한다. 아래 실행 버튼의 조작 영역은 줄어들지 않는다.', '<div class="pressed">눌림 표본</div>'],
+      ['ripple', '리플', '조작', '한 번 퍼지는 원으로 입력을 보조한다. 색 변화와 섬광을 반복하지 않는다.', '<div class="pressed">입력 표본</div><div class="ripple-disc" aria-hidden="true"></div>'],
+      ['indicator', '선택 표시 이동', '조작', '표시는 좌우로 이동한다. 현재 선택은 아래 문구로도 알린다. 실제 탭 컴포넌트는 아니다.', '<div class="tabs"><i class="tab-marker" aria-hidden="true"></i><span>오늘</span><span>이번 주</span></div>'],
+      ['tilt', '포인터 틸트', '조작', '실행은 고정 기울기, 포인터는 위치 기반 기울기. 기본 커서는 유지한다.', object],
+      ['drag', '드래그 정렬', '조작', '첫 행을 아래로 끌거나 실행 버튼으로 맨 뒤에 이동한다. DOM 순서도 바꾼다.', rows],
+      ['swipe', '스와이프 노출', '조작', '행을 왼쪽으로 밀거나 실행 버튼으로 보조 영역을 노출한다. 실제 삭제는 하지 않는다.', '<div class="swipe-tray"><span>보조 영역</span><div class="row">산책 기록</div></div>'],
+      ['reveal', '스크롤 리빌', '스크롤', '실행 후 안쪽을 스크롤하면 다음 구획이 등장한다. 기본 콘텐츠는 항상 보인다.', scroller],
+      ['parallax', '시차 스크롤', '스크롤', '배경만 스크롤보다 느리게 이동한다. 동작 줄이기에서는 고정한다.', '<div class="scroll-box" tabindex="0" aria-label="시차 스크롤 영역"><div class="scroll-content"><div class="mountains" aria-hidden="true"></div><p style="margin-top:20px">아래로 스크롤해 배경 차이를 보세요.</p><div class="row">여행 기록</div></div></div>'],
+      ['sticky', '고정 헤더', '스크롤', '구획 안에서 헤더가 위에 붙는다. 전역 페이지 헤더가 아닌 로컬 표본이다.', '<div class="scroll-box" tabindex="0" aria-label="고정 헤더 스크롤 영역"><div class="sticky-header">산책 기록</div><div class="scroll-content"><p>헤더 아래를 스크롤하세요.</p><div class="row">이전 기록</div></div></div>'],
+      ['skeleton', '스켈레톤 → 콘텐츠', '상태·오버레이', '수동으로 준비 전·후를 바꾼다. 실제 네트워크 로딩이나 성공을 흉내 내지 않는다.', '<div class="skeleton-lines" aria-hidden="true"><span></span><span></span><span></span></div>' + object],
+      ['shimmer', '쉬머', '상태·오버레이', '자리표시자 위를 밝은 면이 한 번 지난다. 자동 반복은 하지 않는다.', '<div class="shimmer-line" aria-hidden="true"><span class="shimmer-sweep"></span></div>'],
+      ['progress', '진행률', '상태·오버레이', '실행할 때마다 25% 증가한다. 실제 업로드가 아니라 수동 단계 시연이다.', '<div class="meter"><progress value="0" max="100" aria-label="수동 시연 진행률"></progress><p>수동 시연: 0%</p></div>'],
+      ['toast', '토스트', '상태·오버레이', '비차단 메시지. 자동으로 사라지지 않고 다시 실행하거나 초기화로 닫는다.', object + '<div class="toast-box" hidden>알림 시연 / 실제 저장은 하지 않았습니다.</div>'],
+      ['modal', '모달', '상태·오버레이', '네이티브 dialog를 사용한다. 포커스 유지, Escape, 호출 버튼 복귀를 확인한다.', object],
+      ['sheet', '하단 시트', '상태·오버레이', '같은 dialog를 화면 하단에 둔다. iOS 시트의 드래그·높이 단계 구현은 아니다.', object],
+      ['popover', '앵커 팝오버', '상태·오버레이', '연결된 표본 안에 비모달 안내를 띄운다. Escape와 재실행으로 닫는다.', object + '<div class="popover-box" hidden>산책 기록의 보조 설명입니다.</div>']
+    ];
+    const gallery = document.getElementById("gallery");
+    const effects = document.getElementById("effects");
+    const reduce = document.getElementById("reduce");
+    const filter = document.getElementById("filter");
+    const summary = document.getElementById("summary");
+    const dialog = document.getElementById("dialog");
+    const preference = matchMedia("(prefers-reduced-motion: reduce)");
+    const states = new Map();
+    let trigger = null;
+    const motionAllowed = () => effects.checked && !reduce.checked && !preference.matches;
+    const cancel = state => {
+      for (const animation of state.animations) animation.cancel();
+      state.animations.clear();
+      state.article.querySelectorAll(".confetti-piece").forEach(piece => piece.remove());
+    };
+    const animate = (state, element, frames, duration = 450, delay = 0) => {
+      if (!motionAllowed() || !element.animate) return;
+      const animation = element.animate(frames, { duration, delay, easing: "ease-out" });
+      state.animations.add(animation);
+      animation.onfinish = () => { state.animations.delete(animation); animation.cancel(); };
+    };
+    const report = (state, text) => { state.article.querySelector(".status").textContent = text; };
+    const reset = state => {
+      cancel(state);
+      state.on = false;
+      state.step = 0;
+      state.stage.classList.remove("on");
+      state.stage.innerHTML = state.markup;
+      if (state.id === "popover") state.article.querySelector('[data-action="run"]').setAttribute("aria-expanded", "false");
+      bind(state);
+      state.paused = false;
+      state.revealed = false;
+      state.stage.style.removeProperty("--x");
+      state.stage.style.removeProperty("--y");
+      report(state, "기본 상태");
+    };
+    const setOn = (state, on) => {
+      state.on = on;
+      state.stage.classList.toggle("on", on && effects.checked);
+    };
+    const bind = state => {
+      const { id, stage } = state;
+      if (id === "spotlight" || id === "tilt") {
+        stage.onpointermove = event => {
+          if (!state.on || state.paused || !motionAllowed() || event.pointerType === "touch") return;
+          const rect = stage.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width;
+          const y = (event.clientY - rect.top) / rect.height;
+          if (id === "spotlight") {
+            stage.style.setProperty("--x", `${x * 100}%`);
+            stage.style.setProperty("--y", `${y * 100}%`);
+          } else stage.querySelector(".object").style.transform = `perspective(600px) rotateX(${(y - .5) * -14}deg) rotateY(${(x - .5) * 14}deg)`;
+        };
+        stage.onpointerleave = () => {
+          stage.style.removeProperty("--x");
+          stage.style.removeProperty("--y");
+          const target = stage.querySelector(".object");
+          if (target) target.style.removeProperty("transform");
+        };
+      }
+      if (id === "drag" || id === "swipe") {
+        stage.querySelectorAll(".row").forEach(item => {
+          item.onpointerdown = null;
+          item.onpointermove = null;
+          item.onpointerup = null;
+          item.onpointercancel = null;
+        });
+        const row = stage.querySelector(".row");
+        let start = null;
+        row.onpointerdown = event => {
+          if (event.button !== 0 || !effects.checked) return;
+          state.paused = false;
+          start = { x: event.clientX, y: event.clientY };
+          row.setPointerCapture(event.pointerId);
+        };
+        row.onpointermove = event => {
+          if (!start || state.paused || !motionAllowed()) return;
+          const distance = id === "drag" ? Math.max(0, Math.min(event.clientY - start.y, 80)) : Math.max(-70, Math.min(event.clientX - start.x, 0));
+          row.style.transform = id === "drag" ? `translateY(${distance}px)` : `translateX(${distance}px)`;
+        };
+        row.onpointerup = event => {
+          if (!start) return;
+          const moved = id === "drag" ? event.clientY - start.y > 28 : event.clientX - start.x < -28;
+          start = null;
+          row.style.removeProperty("transform");
+          if (row.hasPointerCapture(event.pointerId)) row.releasePointerCapture(event.pointerId);
+          if (moved) run(state);
+        };
+        row.onpointercancel = () => { start = null; row.style.removeProperty("transform"); };
+      }
+      const box = stage.querySelector(".scroll-box");
+      if (id === "popover") stage.querySelector(".popover-box").id = "popover-content";
+      if (box) box.onscroll = () => {
+        if (!state.on || state.paused || !effects.checked) return;
+        if (id === "parallax") stage.querySelector(".mountains").style.transform = motionAllowed() ? `translateY(${Math.min(box.scrollTop * .3, 60)}px)` : "none";
+        if (id === "reveal" && !state.revealed && box.scrollTop > 50) {
+          state.revealed = true;
+          animate(state, stage.querySelector(".row"), [{ opacity: .35, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }]);
+          report(state, "다음 구획 표시");
+        }
+      };
+    };
+    const run = state => {
+      cancel(state);
+      state.paused = false;
+      if (state.id === "modal" || state.id === "sheet") {
+        trigger = state.article.querySelector('[data-action="run"]');
+        dialog.classList.toggle("sheet", state.id === "sheet");
+        dialog.querySelector("h2").textContent = state.id === "sheet" ? "하단 시트 시연" : "모달 시연";
+        dialog.showModal();
+        animate(state, dialog, [{ opacity: .3, transform: "translateY(18px)" }, { opacity: 1, transform: "none" }]);
+        report(state, "오버레이 열림");
+        return;
+      }
+      if (!effects.checked) { report(state, "효과가 꺼져 있습니다. 효과 사용을 켜서 비교하세요."); return; }
+      const previous = state.on;
+      const target = state.stage.querySelector(".object");
+      const before = target?.getBoundingClientRect();
+      setOn(state, !previous);
+      const on = state.on;
+      const stage = state.stage;
+      report(state, on ? "효과 적용" : "기본 상태");
+      switch (state.id) {
+        case "confetti":
+          setOn(state, true);
+          if (!motionAllowed()) { report(state, "축하 표시 시연 / 입자 이동 없음"); break; }
+          for (let i = 0; i < 16; i++) {
+            const piece = document.createElement("i");
+            piece.className = "confetti-piece";
+            piece.setAttribute("aria-hidden", "true");
+            piece.style.background = ["#315a89", "#c26a3d", "#54856b"][i % 3];
+            stage.append(piece);
+            const x = (i - 7.5) * 17;
+            animate(state, piece, [{ opacity: 0, transform: "translate(0,0)" }, { opacity: 1, transform: `translate(${x * .5}px,-95px) rotate(80deg)`, offset: .45 }, { opacity: 0, transform: `translate(${x}px,20px) rotate(180deg)` }], 850);
+          }
+          report(state, "축하 시연 / 16개 입자 한 번");
+          break;
+        case "fade": animate(state, target, [{ opacity: .15 }, { opacity: 1 }]); break;
+        case "slide": animate(state, target, [{ transform: "translateX(-30px)" }, { transform: "none" }]); break;
+        case "stagger": stage.querySelectorAll(".row").forEach((row, i) => animate(state, row, [{ opacity: .3, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], 320, i * 70)); break;
+        case "spring": animate(state, target, [{ transform: "translateY(25px)" }, { transform: "translateY(-8px)", offset: .65 }, { transform: "translateY(3px)", offset: .85 }, { transform: "none" }], 600); break;
+        case "morph": animate(state, stage.querySelector(".shape"), [{ borderRadius: previous ? "50%" : "10px" }, { borderRadius: on ? "50%" : "10px" }]); break;
+        case "stroke": animate(state, stage.querySelector(".path"), [{ strokeDasharray: "1", strokeDashoffset: "1" }, { strokeDasharray: "1", strokeDashoffset: "0" }], 650); break;
+        case "shared": {
+          const after = target.getBoundingClientRect();
+          animate(state, target, [{ transformOrigin: "0 0", transform: `translate(${before.left - after.left}px,${before.top - after.top}px) scale(${before.width / after.width},${before.height / after.height})` }, { transformOrigin: "0 0", transform: "none" }], 550);
+          report(state, on ? "상세 표본 / 같은 요소" : "카드 표본");
+          break;
+        }
+        case "flip": animate(state, target, [{ transform: "perspective(600px) rotateY(-90deg)", opacity: .4 }, { transform: "none", opacity: 1 }]); break;
+        case "press":
+          animate(state, stage.querySelector(".pressed"), [{ transform: previous ? "scale(.94)" : "scale(1)" }, { transform: on ? "scale(.94)" : "scale(1)" }], 180);
+          report(state, on ? "눌린 크기 표본" : "기본 크기 표본");
+          break;
+        case "ripple": animate(state, stage.querySelector(".ripple-disc"), [{ opacity: .8, transform: "scale(.15)" }, { opacity: 0, transform: "scale(1.5)" }], 650); break;
+        case "indicator": animate(state, stage.querySelector(".tab-marker"), [{ left: previous ? "50%" : "5px" }, { left: on ? "50%" : "5px" }], 300); report(state, on ? "선택 표본: 이번 주" : "선택 표본: 오늘"); break;
+        case "tilt": if (on && motionAllowed()) animate(state, target, [{ transform: "none" }, { transform: "perspective(600px) rotateY(10deg)" }, { transform: "none" }], 700); break;
+        case "drag": {
+          const stack = stage.querySelector(".stack");
+          stack.append(stack.firstElementChild);
+          bind(state);
+          report(state, `시연 순서: ${[...stack.children].map(row => row.textContent).join(", ")}`);
+          break;
+        }
+        case "swipe":
+          animate(state, stage.querySelector(".row"), [{ transform: previous ? "translateX(-70px)" : "none" }, { transform: on ? "translateX(-70px)" : "none" }], 250);
+          report(state, on ? "보조 영역 노출 / 삭제 없음" : "행 복귀");
+          break;
+        case "reveal": state.revealed = false; stage.querySelector(".scroll-box").scrollTop = 110; stage.querySelector(".scroll-box").dispatchEvent(new Event("scroll")); break;
+        case "parallax":
+        case "sticky": stage.querySelector(".scroll-box").scrollTop = on ? 100 : 0; stage.querySelector(".scroll-box").dispatchEvent(new Event("scroll")); break;
+        case "skeleton": report(state, on ? "시연 콘텐츠 표시 / 실제 로딩 없음" : "자리표시자 / 실제 로딩 없음"); break;
+        case "shimmer": {
+          animate(state, stage.querySelector(".shimmer-sweep"), [{ transform: "translateX(-100%)" }, { transform: "translateX(100%)" }], 700);
+          report(state, motionAllowed() ? "자리표시자 빛 이동 한 번" : "정적 자리표시자");
+          break;
+        }
+        case "progress": {
+          state.step = Math.min(state.step + 25, 100);
+          stage.querySelector("progress").value = state.step;
+          stage.querySelector(".meter p").textContent = `수동 시연: ${state.step}%`;
+          report(state, `수동 시연 ${state.step}% / 실제 작업 없음`);
+          break;
+        }
+        case "toast": stage.querySelector(".toast-box").hidden = !on; report(state, on ? "알림 시연 / 실제 저장 없음" : "알림 닫힘"); break;
+        case "popover":
+          stage.querySelector(".popover-box").hidden = !on;
+          state.article.querySelector('[data-action="run"]').setAttribute("aria-expanded", String(on));
+          report(state, on ? "보조 설명 열림" : "보조 설명 닫힘");
+          break;
+      }
+    };
+    for (const [id, title, category, note, markup] of demos) {
+      const article = document.createElement("article");
+      article.id = id;
+      article.dataset.category = category;
+      article.innerHTML = `<p class="category">${category}</p><h2>${title}</h2><div class="stage ${id}">${markup}</div><div class="controls"><button data-action="run" aria-label="${title} 실행">실행 / 전환</button><button data-action="reset" aria-label="${title} 초기화">초기화</button></div><p class="note">${note}</p><p class="status" role="status">기본 상태</p>`;
+      gallery.append(article);
+      const state = { id, article, stage: article.querySelector(".stage"), markup, on: false, step: 0, revealed: false, animations: new Set() };
+      states.set(id, state);
+      if (id === "popover") {
+        article.querySelector(".popover-box").id = "popover-content";
+        article.querySelector('[data-action="run"]').setAttribute("aria-controls", "popover-content");
+        article.querySelector('[data-action="run"]').setAttribute("aria-expanded", "false");
+      }
+      bind(state);
+    }
+    gallery.addEventListener("click", event => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const state = states.get(button.closest("article").id);
+      if (button.dataset.action === "reset") reset(state);
+      else run(state);
+    });
+    const resetAll = () => {
+      if (dialog.open) dialog.close();
+      for (const state of states.values()) reset(state);
+    };
+    const stopAll = () => {
+      for (const state of states.values()) {
+        cancel(state);
+        state.paused = true;
+        state.stage.querySelector(".object")?.style.removeProperty("transform");
+        state.stage.querySelector(".mountains")?.style.removeProperty("transform");
+        state.stage.querySelectorAll(".row").forEach(row => row.style.removeProperty("transform"));
+        if (state.on) report(state, "움직임 정지 / 상태 유지");
+      }
+    };
+    const updateSummary = () => {
+      summary.textContent = `${[...states.values()].filter(state => !state.article.hidden).length}개 / ${preference.matches ? "OS 동작 줄이기 적용" : reduce.checked ? "동작 줄이기 적용" : "수동 재생"}`;
+    };
+    filter.addEventListener("change", () => {
+      for (const state of states.values()) {
+        state.article.hidden = filter.value !== "all" && state.article.dataset.category !== filter.value;
+        if (state.article.hidden) reset(state);
+      }
+      updateSummary();
+    });
+    effects.addEventListener("change", resetAll);
+    reduce.addEventListener("change", () => { stopAll(); updateSummary(); });
+    preference.addEventListener("change", () => { stopAll(); updateSummary(); });
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stopAll(); });
+    document.getElementById("stop").addEventListener("click", stopAll);
+    document.getElementById("reset").addEventListener("click", resetAll);
+    document.getElementById("close-dialog").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("close", () => {
+      const state = trigger && states.get(trigger.closest("article").id);
+      if (state) { cancel(state); report(state, "오버레이 닫힘"); }
+      trigger?.focus();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape") return;
+      if (dialog.open) { event.preventDefault(); dialog.close(); }
+      const state = states.get("popover");
+      if (state.on) {
+        setOn(state, false);
+        state.stage.querySelector(".popover-box").hidden = true;
+        state.article.querySelector('[data-action="run"]').setAttribute("aria-expanded", "false");
+        report(state, "보조 설명 닫힘");
+        state.article.querySelector('[data-action="run"]').focus();
+      }
+    });
+    document.querySelectorAll(".tools :is(input, select, button)").forEach(control => { control.disabled = false; });
+    updateSummary();
+  </script>
+</body>
+</html>

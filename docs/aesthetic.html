@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="배치, 글자, 색을 고르는 과정을 담은 디자인 메모.">
+  <title>디자인 메모</title>
+  <style>
+    :root {
+      --paper: #fafaf8;
+      --ink: #30312e;
+      --muted: #666761;
+      --line: #d8d9d2;
+      --surface: #eeefea;
+      --blue: #354f82;
+      --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+    main { max-width: 1200px; margin: auto; padding: 48px 64px 30px; }
+    p { margin: 0; }
+    a { color: inherit; text-underline-offset: 4px; }
+    a:hover { color: var(--blue); }
+    a:focus-visible { outline: 2px solid var(--blue); outline-offset: 5px; }
+    .top { display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 12px; }
+    header { margin: 65px 0 68px; }
+    h1 { margin: 0 0 20px; font-size: 43px; line-height: 1.25; font-weight: 600; letter-spacing: -2px; }
+    .intro { max-width: 430px; font-size: 16px; line-height: 1.9; word-break: keep-all; }
+    .workspace { display: grid; grid-template-columns: minmax(0, 690px) minmax(0, 245px); gap: 70px; }
+    .samples, aside { min-width: 0; }
+    h2 { margin: 0 0 20px; font-size: 14px; font-weight: 500; }
+    .type-sample { padding: 30px 0 34px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); }
+    .type-sample p { font-size: clamp(36px, 4.2vw, 54px); letter-spacing: -2.4px; line-height: 1.4; font-weight: 500; }
+    .caption { margin-top: 17px; font-size: 12px; line-height: 1.8; color: var(--muted); word-break: keep-all; }
+    .spacing { margin: 44px 0 0 82px; max-width: 445px; }
+    .spacing-sample { background: var(--surface); padding: 29px 32px 32px; }
+    .spacing-sample h3 { margin: 0 0 26px; font-size: 20px; font-weight: 500; letter-spacing: -.6px; }
+    .spacing-sample p { max-width: 290px; font-size: 14px; line-height: 1.9; word-break: keep-all; }
+    aside { padding-top: 10px; }
+    .feedback { padding-left: 15px; border-left: 2px solid var(--blue); }
+    .feedback blockquote { margin: 0 0 12px; font-size: 17px; line-height: 1.7; letter-spacing: -.5px; word-break: keep-all; }
+    .feedback p { font-size: 12px; line-height: 1.9; color: var(--muted); }
+    .notes { margin: 64px 0 0; }
+    .notes h2 { margin-bottom: 15px; }
+    .notes ul { padding: 0 0 0 17px; margin: 0; }
+    .notes li { margin-bottom: 14px; padding-left: 3px; font-size: 13px; line-height: 1.85; word-break: keep-all; }
+    .notes li::marker { color: var(--muted); }
+    .color-note { margin: 50px 0 0; }
+    .colors { display: flex; gap: 8px; margin-bottom: 16px; }
+    .chip { width: 38px; height: 38px; border: 1px solid var(--line); }
+    .chip.paper { background: var(--paper); }
+    .chip.ink { background: var(--ink); border-color: var(--ink); }
+    .chip.surface { background: var(--surface); }
+    .color-note p { font-size: 12px; color: var(--muted); line-height: 1.85; word-break: keep-all; }
+    .bottom-note { margin: 62px 0 0; max-width: 580px; font-size: 14px; line-height: 1.9; word-break: keep-all; }
+    .bottom-note span { border-bottom: 1px solid var(--blue); padding-bottom: 3px; }
+    footer { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; margin-top: 70px; padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; line-height: 1.8; }
+    footer p { max-width: 650px; word-break: keep-all; }
+    footer a { flex-shrink: 0; padding: 4px 0; }
+    @media (max-width: 950px) {
+      main { padding: 36px; }
+      .workspace { grid-template-columns: minmax(0, 1fr) minmax(0, 220px); gap: 40px; }
+      .spacing { margin-left: 30px; }
+    }
+    @media (max-width: 640px) {
+      main { padding: 24px; }
+      header { margin: 46px 0 44px; }
+      h1 { font-size: 34px; letter-spacing: -1.5px; }
+      .intro { font-size: 14px; }
+      .workspace { grid-template-columns: 1fr; gap: 44px; }
+      .type-sample p { font-size: 36px; letter-spacing: -1.5px; }
+      .spacing { margin: 34px 0 0 16px; }
+      .spacing-sample { padding: 25px; }
+      .notes { margin-top: 36px; }
+      .color-note { margin: 32px 0 0 16px; }
+      .bottom-note { margin-top: 42px; font-size: 13px; }
+      footer { margin-top: 48px; flex-direction: column; gap: 14px; }
+    }
+    @media (forced-colors: active) {
+      .chip, .feedback, .bottom-note span { border-color: CanvasText; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="top"><span>디자인 / 작업 노트</span><span>2026. 11. 07</span></div>
+    <header>
+      <h1>디자인 메모</h1>
+      <p class="intro">완성된 소개 페이지보다는<br>작업 중인 노트에 가깝게.<br>문장도, 배치도 너무 반듯하게 만들지 않기.</p>
+    </header>
+
+    <div class="workspace">
+      <div class="samples">
+        <section aria-labelledby="type-title">
+          <h2 id="type-title">글자</h2>
+          <div class="type-sample"><p>화면을 만들 때<br>먼저 보는 것</p></div>
+          <p class="caption">영문 제목 대신 한국어. 서체를 늘리지 않고 크기와 굵기만 바꿨다.</p>
+        </section>
+
+        <section class="spacing" aria-labelledby="spacing-title">
+          <h2 id="spacing-title">간격</h2>
+          <div class="spacing-sample">
+            <h3>제목과 본문 사이</h3>
+            <p>같은 문단의 줄은 가까이 둔다.<br>제목 아래는 조금 더 띄운다.<br>다른 내용이면 그보다 더.</p>
+          </div>
+          <p class="caption">모든 내용을 같은 크기의 상자에 넣지는 않았다.<br>이 표본은 본문보다 조금 안쪽에 둔다.</p>
+        </section>
+      </div>
+
+      <aside aria-label="수정 메모">
+        <div class="feedback">
+          <blockquote>“너무 정돈되어 보인다.”</blockquote>
+          <p>이전 시안에 대한 피드백.<br>이번에는 여기서부터 다시.</p>
+        </div>
+        <section class="notes" aria-labelledby="notes-title">
+          <h2 id="notes-title">이번에 뺀 것</h2>
+          <ul>
+            <li>취향에 이름을 붙이는 영문 슬로건</li>
+            <li>내용을 억지로 셋으로 나눈 구성</li>
+            <li>어느 소개 페이지에도 들어갈 법한 문장</li>
+          </ul>
+        </section>
+        <section class="color-note" aria-labelledby="color-title">
+          <h2 id="color-title">색은 일단 이 정도</h2>
+          <div class="colors" aria-hidden="true"><span class="chip paper"></span><span class="chip ink"></span><span class="chip surface"></span></div>
+          <p>바탕 #FAFAF8 / 글자 #30312E<br>표본 배경 #EEEFEA<br>파란색은 메모 옆 선에만 조금.</p>
+        </section>
+      </aside>
+    </div>
+
+    <p class="bottom-note">배치를 풀어도 <span>읽는 순서는 남겨 둔다.</span><br>작은 화면에서는 위에서 아래로. 링크에는 키보드 포커스 표시를 둔다.</p>
+    <footer>
+      <p>피드백을 반영해 다시 만든 시안. 색과 서체는 아직 제안이고, 확정된 취향은 아니다.</p>
+      <a href="../README.md">README로 돌아가기</a>
+    </footer>
+  </main>
+</body>
+</html>
