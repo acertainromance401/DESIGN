@@ -16,6 +16,7 @@ const packed = JSON.parse(execFileSync(process.execPath, [
 const [artifact] = packed;
 assert.ok(artifact?.filename && path.basename(artifact.filename) === artifact.filename);
 assert.ok(artifact.files.some(({ path }) => path === "content/guides/layout.md"));
+assert.ok(artifact.files.some(({ path }) => path === "content/design-cautions.md"));
 assert.ok(artifact.files.some(({ path }) => path === "content/provenance.json"));
 assert.ok(artifact.files.some(({ path }) => path === "content/library/index.json"));
 assert.ok(artifact.files.some(({ path }) => path === "content/examples/modal-dialog.html"));
@@ -40,10 +41,15 @@ try {
   transport.stderr?.on("data", (chunk) => { stderr += chunk.toString(); });
   try {
     await client.connect(transport);
+    assert.match(client.getInstructions(), /FIRST read design:\/\/design-cautions/u);
+    const cautions = await client.readResource({ uri: "design://design-cautions" });
+    assert.match(cautions.contents[0].text, /장식용 대각선 화살표/u);
     const result = await client.callTool({ name: "get_design_pattern", arguments: {
       id: "layout.content-width", includeSourceExample: true,
     } });
     assert.equal(result.isError, undefined);
+    assert.equal(Object.keys(result.structuredContent)[0], "designCautions");
+    assert.equal(result.structuredContent.designCautions.document, cautions.contents[0].text);
     assert.match(result.structuredContent.sourceExample, /enum EditorialLayout/u);
     const general = await client.callTool({ name: "get_design_pattern", arguments: {
       id: "overlay.modal-dialog", platform: "web", includeSourceExample: true,
@@ -60,7 +66,8 @@ try {
     const visuals = await client.callTool({ name: "search_design_visuals", arguments: { query: "배색" } });
     assert.ok(visuals.structuredContent.results.some(({ id }) => id === "mood-examples"));
     const resource = await client.readResource({ uri: "design://visual-files/screen-effects.md" });
-    assert.match(resource.contents[0].text, /design:\/\/visual-files\/screen-effects.html/u);
+    assert.equal(resource.contents[0].uri, "design://design-cautions");
+    assert.match(resource.contents[1].text, /design:\/\/visual-files\/screen-effects.html/u);
     assert.equal(stderr, "");
     console.log(`PASS: installed ${artifact.filename} in an isolated directory; real MCP lookup succeeded.`);
     console.log(`Reusable package: ${path.join(root, artifact.filename)}`);

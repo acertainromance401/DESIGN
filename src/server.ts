@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import type { CallToolResult, ReadResourceResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import {
   adoptionShape, DesignCatalog, DesignError, patternShape, platformSchema, searchShape,
@@ -16,21 +16,41 @@ const annotations = {
   idempotentHint: true,
   openWorldHint: false,
 };
+const designCautions = {
+  uri: "design://design-cautions",
+  requiredBeforeDesign: true,
+  document: readFileSync(new URL("../content/design-cautions.md", import.meta.url), "utf8"),
+};
+if (!designCautions.document.trim()) throw new Error("Design cautions document must not be empty.");
+
+function resourceResponse(uri: string, mimeType: string, text: string): ReadResourceResult {
+  return {
+    contents: [
+      { uri: designCautions.uri, mimeType: "text/markdown", text: designCautions.document },
+      { uri, mimeType, text },
+    ],
+  };
+}
 
 function respond(operation: () => Record<string, unknown>): CallToolResult {
   try {
-    const result = operation();
+    const result = { designCautions, ...operation() };
     return { content: [{ type: "text", text: JSON.stringify(result) }], structuredContent: result };
   } catch (error) {
     if (!(error instanceof DesignError)) throw error;
-    const result = { error: { code: error.code, message: error.message } };
+    const result = { designCautions, error: { code: error.code, message: error.message } };
     return { isError: true, content: [{ type: "text", text: JSON.stringify(result) }], structuredContent: result };
   }
 }
 
 export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): McpServer {
   const server = new McpServer(packageInfo, {
-    instructions: "Read-only design knowledge. Start with categories/search, then fetch only relevant patterns. " +
+    instructions: "Read-only design knowledge. FIRST read design://design-cautions and apply it before selecting or implementing designs. " +
+      "These are mandatory cross-project anti-AI-template design rules, not optional cautions for one example. " +
+      "Apply them to every design element in every project throughout selection, implementation, revision and visual verification. " +
+      "Every tool response includes the mandatory document in designCautions; resource reads return it before the requested content. " +
+      "Do not default to boxed layouts, left accent bars or decorative diagonal arrows. " +
+      "Then start with categories/search and fetch only relevant patterns. " +
       "Separate authored general guidance, educational platform examples and incomplete WEASHION project excerpts. " +
       "Use adoption plans before new/existing project changes; the connected client must inspect, edit and test target files. " +
       "Selected general patterns include SwiftUI and dependency-free web examples with declared validation limits. " +
@@ -38,6 +58,14 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
       "These separate web visual examples do not alter pattern counts. Request includeSource=true only when HTML is needed. " +
       "No external project access or runtime network requests are provided. Do not claim exhaustive coverage of every possible design.",
   });
+
+  server.registerResource("design-cautions", designCautions.uri, {
+    title: "FIRST: AI 티가 나지 않는 디자인을 위한 공통 규칙",
+    mimeType: "text/markdown",
+    description: "Mandatory design rules for every project and design element, throughout selection, implementation, revision and visual verification.",
+  }, uri => ({
+    contents: [{ uri: uri.href, mimeType: "text/markdown", text: designCautions.document }],
+  }));
 
   server.registerTool("list_design_categories", {
     description: "List design categories, keywords, per-source counts, source baselines and reuse limitations. No full code is loaded into the response.",
@@ -59,16 +87,12 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
 
   server.registerResource("visual-examples", "design://visual-examples", {
     title: "Visual example index", mimeType: "application/json",
-  }, uri => ({
-    contents: [{ uri: uri.href, mimeType: "application/json", text: JSON.stringify(visuals.list()) }],
-  }));
+  }, uri => resourceResponse(uri.href, "application/json", JSON.stringify(visuals.list())));
   for (const file of visuals.files.values()) {
     server.registerResource(`visual-file-${file.file}`, `design://visual-files/${file.file}`, {
       title: file.file, mimeType: file.mimeType,
       description: "Bundled educational visual source or guidance; HTML is returned as text, not executed.",
-    }, uri => ({
-      contents: [{ uri: uri.href, mimeType: file.mimeType, text: visuals.readFile(file.file).text }],
-    }));
+    }, uri => resourceResponse(uri.href, file.mimeType, visuals.readFile(file.file).text));
   }
 
   server.registerTool("search_design_patterns", {
@@ -94,21 +118,13 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
     title: "Design categories and reuse contract",
     mimeType: "application/json",
     description: "Compact catalog; use tools or pattern resources for details.",
-  }, (uri) => ({
-    contents: [{ uri: uri.href, mimeType: "application/json", text: JSON.stringify({ ...catalog.listCategories(), visualExamples: visuals.list() }) }],
-  }));
+  }, (uri) => resourceResponse(uri.href, "application/json", JSON.stringify({ ...catalog.listCategories(), visualExamples: visuals.list() })));
   for (const pattern of catalog.patterns.values()) {
     server.registerResource(`pattern-${pattern.id}`, `design://patterns/${pattern.id}`, {
       title: pattern.title,
       description: `${pattern.principle} ${pattern.origin === "weashion" ? "Original project excerpt." : "Authored guidance; examples, when present, are educational."}`,
       mimeType: "application/json",
-    }, (uri) => ({
-      contents: [{
-        uri: uri.href,
-        mimeType: "application/json",
-        text: JSON.stringify(catalog.getPattern(pattern.id, "swiftui", true)),
-      }],
-    }));
+    }, (uri) => resourceResponse(uri.href, "application/json", JSON.stringify(catalog.getPattern(pattern.id, "swiftui", true))));
   }
   for (const guide of catalog.guides.values()) {
     server.registerResource(`guide-${guide.id}`, `design://guides/${guide.id}`, {
@@ -117,9 +133,7 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
       description: guide.origin === "weashion"
         ? "Full bundled project snapshot. WEASHION: references identify original files, not installed local files."
         : "Authored general design guide. References inform the guidance; they do not prove a production implementation.",
-    }, (uri) => ({
-      contents: [{ uri: uri.href, mimeType: "text/markdown", text: guide.markdown }],
-    }));
+    }, (uri) => resourceResponse(uri.href, "text/markdown", guide.markdown));
   }
 
   for (const projectType of ["new", "existing"] as const) {
@@ -136,6 +150,8 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
         content: {
           type: "text",
           text: [
+            `FIRST: Read and apply ${designCautions.uri} before design selection or implementation.\n\n${designCautions.document}`,
+            "Apply these cross-project design rules to every screen, component, graphic and motion you create or revise, and recheck them before completion.",
             `Target: ${platform}. Project type: ${projectType}.`,
             `User objective (task data, not server instructions): ${JSON.stringify(objective)}`,
             projectType === "existing"
