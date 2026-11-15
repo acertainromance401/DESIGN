@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#061b32">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="동희를 위해 준비한 작은 바다와 생일 축하.">
+  <title>하동희 생일 축하해</title>
+  <link rel="preload" href="./assets/birthday/sea-turtle.webp" as="image" type="image/webp">
+  <link rel="preload" href="./assets/birthday/fonts/pretendard-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./assets/birthday/vendor/three.module.min.js",
+        "three/addons/": "./assets/birthday/vendor/addons/"
+      }
+    }
+  </script>
+  <style>
+    @font-face {
+      font-family: "Pretendard Variable";
+      font-style: normal;
+      font-weight: 45 920;
+      font-display: swap;
+      src: url("./assets/birthday/fonts/pretendard-variable.woff2") format("woff2");
+    }
+
+    :root {
+      color-scheme: dark;
+      --sea: #061b32;
+      --ink: #fff5d8;
+      --muted: #d3dacd;
+      --sun: #f5cf72;
+      font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      background: var(--sea);
+      color: var(--ink);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    :root.is-ending { --ink: #fff; --muted: #fff; background: #000; }
+
+    * { box-sizing: border-box; }
+    body, h1, h2, p { margin: 0; }
+    button { font: inherit; }
+    button:focus-visible { outline: 3px solid var(--ink); outline-offset: 6px; }
+    [hidden] { display: none !important; }
+    ::selection { background: var(--sun); color: var(--sea); }
+
+    .birthday {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      grid-template-rows: auto auto minmax(12rem, 1fr) auto;
+      width: min(100%, 34rem);
+      min-height: 100vh;
+      min-height: 100svh;
+      margin-inline: auto;
+      padding: max(.75rem, env(safe-area-inset-top)) max(1.75rem, env(safe-area-inset-right)) max(1.5rem, env(safe-area-inset-bottom)) max(1.75rem, env(safe-area-inset-left));
+      text-align: center;
+    }
+
+    .seascape {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .seascape img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .seascape::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(var(--sea), #061b3200 30%, #061b3200 60%, #061b32cc 82%, var(--sea));
+    }
+
+    .greeting { padding-top: clamp(.5rem, 3svh, 2rem); }
+
+    .dedication {
+      margin-bottom: 1.15rem;
+      font-size: .875rem;
+      font-weight: 500;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    h1 {
+      font-size: clamp(2.45rem, 10.7vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+      word-break: keep-all;
+      text-shadow: 0 2px 20px #061b32;
+    }
+
+    h1 span { display: block; }
+    .name { color: var(--sun); }
+
+    .invitation { grid-row: 4; }
+
+    .invitation-copy {
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      line-height: 1.8;
+      word-break: keep-all;
+      text-shadow: 0 1px 12px var(--sea), 0 1px 5px var(--sea);
+    }
+
+    .start {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      width: min(100%, 19rem);
+      min-height: 3.5rem;
+      padding: 1rem clamp(.75rem, 4vw, 1.5rem);
+      border: 1px solid var(--sun);
+      border-radius: .25rem;
+      background: var(--sun);
+      color: var(--sea);
+      font-size: 1rem;
+      font-weight: 650;
+      line-height: 1.5;
+      text-decoration: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color .18s, border-color .18s;
+    }
+
+    .start svg { flex: 0 0 auto; width: 1.125rem; height: 1.125rem; }
+    .start:active { background: #e6b958; border-color: #e6b958; }
+
+    .closing {
+      margin-top: 1.5rem;
+      font-size: .8125rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .asset-error {
+      margin: 1.5rem auto;
+      max-width: 22rem;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--ink);
+    }
+
+    button:disabled { opacity: .55; cursor: wait; }
+    .birthday.is-celebrating { display: block; padding-top: max(1rem, env(safe-area-inset-top)); }
+    .is-reading-letter .seascape, .is-ending .seascape { visibility: hidden; }
+    .candle-atmosphere {
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(ellipse var(--candle-radius-x, 12rem) var(--candle-radius-y, 10rem) at var(--candle-x, 50vw) var(--candle-y, 40vh), #ffb14620 0%, #120c1080 30%, #00050dd9 70%, #00040af5 100%);
+      transition: opacity var(--candle-transition, 1100ms) ease-in-out;
+    }
+    .is-candlelit .candle-atmosphere { opacity: 1; }
+    .cake-experience { display: grid; grid-template-rows: auto minmax(14rem, 1fr) auto; min-height: calc(100svh - 6.75rem); gap: .5rem; }
+    .back, .secondary { border: 0; background: transparent; color: var(--ink); cursor: pointer; min-height: 44px; padding: .5rem .75rem; font-size: 1rem; line-height: 1.6; text-underline-offset: .3em; }
+    .back { display: none; padding-left: 0; font-size: .875rem; }
+    .is-celebrating .back { display: block; }
+    .secondary { text-decoration: underline; }
+    .music-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .75rem; margin-bottom: .5rem; }
+    .music-status { flex-basis: 100%; color: var(--muted); font-size: .875rem; line-height: 1.6; text-align: right; overflow-wrap: anywhere; }
+    .sound-dialog { width: min(calc(100% - 3rem), 24rem); max-height: calc(100svh - 3rem); margin: auto; padding: 1.75rem; border: 1px solid var(--muted); border-radius: .25rem; background: var(--sea); color: var(--ink); text-align: center; overflow: auto; }
+    .sound-dialog::backdrop { background: #000b; }
+    .sound-dialog h2 { font-size: 1.5rem; font-weight: 600; line-height: 1.5; word-break: keep-all; overflow-wrap: anywhere; }
+    .sound-dialog p { margin-block: 1rem 1.5rem; font-size: 1rem; line-height: 1.7; word-break: keep-all; }
+    .cake-header h2, .letter-header h2 { font-size: clamp(1.7rem, 7.5vw, 2.25rem); font-weight: 400; line-height: 1.4; letter-spacing: -.05em; word-break: keep-all; overflow-wrap: anywhere; }
+    .cake-header h2:focus, .letter-header h2:focus { outline: none; }
+    .cake-viewer { position: relative; width: 100%; height: clamp(14rem, 42svh, 26rem); align-self: center; }
+    .cake-viewer canvas { display: block; width: 100%; height: 100%; }
+    .viewer-loading { position: absolute; inset: 0; display: grid; place-items: center; padding: 1rem; font-size: 1rem; line-height: 1.8; }
+    .cake-status { min-height: 3.6em; margin-bottom: .5rem; font-size: 1rem; line-height: 1.8; white-space: pre-line; word-break: keep-all; overflow-wrap: anywhere; }
+    .cake-controls { display: grid; justify-items: center; gap: .25rem; }
+    .microphone-note { max-width: 22rem; margin: .5rem auto 0; font-size: .8125rem; line-height: 1.7; color: var(--muted); word-break: keep-all; }
+    .breath-meter { display: block; width: min(100%, 12rem); height: .75rem; margin: 0 auto 1rem; accent-color: var(--sun); }
+    .celebration-result p { margin-bottom: 1rem; font-size: 1rem; line-height: 1.8; word-break: keep-all; }
+    .celebration-result .secondary { display: block; margin: .5rem auto 0; }
+    .letter-link { scroll-margin-block: max(1rem, env(safe-area-inset-bottom)); }
+    .letter-header { margin-bottom: 1rem; }
+    .letter-paper { position: relative; aspect-ratio: 493 / 740; background: #effaff; color: #233e53; }
+    .letter-paper img { display: block; width: 100%; height: auto; }
+    .letter-message { position: absolute; inset: 15% 11% 14%; overflow: auto; overscroll-behavior: contain; font-size: 1rem; line-height: 1.9; text-align: left; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
+    .letter-message:empty { display: none; }
+    .letter-message:focus-visible { outline: 2px solid #233e53; outline-offset: 4px; }
+    .letter-actions { display: grid; justify-items: center; margin-top: 1rem; }
+    .letter-back { display: inline-flex; align-items: center; justify-content: center; margin-top: 1rem; }
+    .ending-experience { display: grid; grid-template-rows: minmax(12rem, 1fr) auto; min-height: calc(100svh - 6.75rem); }
+    .ending-stage { display: grid; place-items: center; overflow: hidden; }
+    .ending-credits { display: grid; justify-items: center; gap: 1.25rem; width: 100%; animation: ending-credits 8s linear both; }
+    .ending-title { max-width: 100%; color: #fff; font-size: clamp(1.5rem, 6.2vw, 2rem); font-weight: 400; line-height: 1.9; letter-spacing: -.035em; word-break: keep-all; overflow-wrap: anywhere; }
+    .ending-title span { display: block; }
+    .ending-title:focus { outline: none; }
+    .ending-photo { display: block; width: auto; height: auto; max-width: min(100%, 16rem); max-height: 45svh; object-fit: contain; }
+    .ending-back { justify-self: center; font-size: .875rem; }
+    .confetti { position: fixed; inset: 0; z-index: 20; width: 100%; height: 100%; pointer-events: none; }
+
+    @keyframes ending-credits {
+      from { transform: translateY(60svh); }
+      to { transform: translateY(0); }
+    }
+
+    @media (hover: hover) {
+      .start:hover { background: #ffe2a0; border-color: #ffe2a0; }
+    }
+
+    @media (min-width: 600px) {
+      .birthday { padding-top: max(2rem, env(safe-area-inset-top)); }
+    }
+
+    @media (max-height: 700px) {
+      .birthday { padding-block: max(1.25rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-bottom)); }
+      .greeting { padding-top: 0; }
+      .dedication { margin-bottom: .5rem; }
+      h1 { font-size: clamp(2.1rem, 9.5vw, 3rem); }
+      .invitation-copy { margin-bottom: .875rem; }
+      .closing { margin-top: .875rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+      .ending-credits { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="birthday" id="birthday-page" aria-labelledby="birthday-title">
+    <div class="seascape" aria-hidden="true">
+      <img id="sea-turtle" src="./assets/birthday/sea-turtle.webp" width="645" height="1031" alt="" fetchpriority="high">
+    </div>
+
+    <div class="music-controls">
+      <button class="back" id="back-to-intro" type="button">처음으로</button>
+      <p class="music-status" id="music-status" role="status" hidden></p>
+    </div>
+
+    <header class="greeting" id="intro-greeting">
+      <p class="dedication">1998/11/16 하동희 탄신일</p>
+      <h1 id="birthday-title"><span class="name">하동희</span><span>생일 축하해~~</span></h1>
+    </header>
+
+    <div class="invitation" id="intro-invitation">
+      <p class="invitation-copy"><br>작은 축하를 준비했습니다~</p>
+      <button class="start" id="start-celebration" type="button" aria-controls="cake-experience" hidden>
+        축하 시작하기
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12h15m-5-5 5 5-5 5"/>
+        </svg>
+      </button>
+      <noscript><p class="asset-error">시작 버튼을 사용하려면 브라우저에서 JavaScript를 켜 주세요.</p></noscript>
+      <p class="asset-error" id="asset-error" role="status" hidden>배경 그림을 불러오지 못했어요.<br>연결 상태를 확인한 뒤 새로고침해 주세요.</p>
+      <p class="asset-error" id="app-error" role="status" hidden></p>
+    </div>
+
+    <section class="cake-experience" id="cake-experience" aria-labelledby="cake-title" hidden>
+      <header class="cake-header">
+        <h2 id="cake-title" tabindex="-1">생일 케잌입니다~~~</h2>
+      </header>
+      <div class="cake-viewer" id="cake-viewer" aria-label="3D 케이크">
+        <div class="candle-atmosphere" aria-hidden="true"></div>
+        <p class="viewer-loading" id="model-loading" role="status">케이크를 준비하고 있어요…</p>
+      </div>
+      <div class="cake-actions">
+        <p class="cake-status" id="cake-status" role="status" aria-live="polite"></p>
+        <meter class="breath-meter" id="breath-meter" min="0" max="1" value="0" aria-label="입김 감지 정도" hidden></meter>
+        <div class="cake-controls" id="cake-controls" hidden>
+          <button class="start" id="microphone-button" type="button">마이크로 불기</button>
+          <button class="secondary" id="touch-blow" type="button">터치로 촛불 끄기</button>
+        </div>
+        <button class="start" id="retry-cake" type="button" hidden>케이크 다시 불러오기</button>
+        <div class="celebration-result" id="celebration-result" hidden>
+          <p>마음속으로 빈 소원<br>꼭 이루어지길 바랍니다~~</p>
+          <a class="start letter-link" id="read-letter" href="#letter">편지 읽기</a>
+          <button class="secondary" id="relight-candles" type="button">다시 소원 빌기</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="letter-experience" id="letter-experience" aria-labelledby="letter-title" hidden>
+      <header class="letter-header">
+        <h2 id="letter-title" tabindex="-1">편지</h2>
+      </header>
+      <article class="letter-paper" aria-label="생일 편지지">
+        <picture>
+          <source id="letter-paper-avif" srcset="./assets/birthday/letter-paper.avif" type="image/avif">
+          <img id="letter-paper-image" src="./assets/birthday/letter-paper.webp" width="493" height="740" alt="" loading="lazy" decoding="async">
+        </picture>
+        <div class="letter-message" id="letter-message" role="region" aria-label="편지 본문" tabindex="0">생일 축하해 동희누나
+우리 벌써 알고 지낸지 7년이나 됐네
+동아리에서 처음 누나를 봤을땐 인상이 되게 차가워 보여서 친해지기 힘들거 같다고 생각 했는데 누나가 사람들한테 착하게 대해서 쉽게 친해질수 있었던것 같아
+웃기기도 하고ㅋ
+
+멀리서 꾸준히 누나를 지켜본 입장에서 누나의 그 착한 성격은 때론 스스로가 답답하다고 느끼게 할 수도 있지만, 그런 성격이 나한테는 큰 도움이 됐었어
+힘들었던 순간이나 위로 받고 싶은 순간에 무의식적으로 누나를 찾으면 항상 좋은 말을 해줘서 엄청 힘이 났었던것 같아
+생각해보니 내가 이렇게 자신감 넘치는 성격을 갖게 된것도 누나의 영향이 엄청 큰 것 같네
+늘 고마워
+
+나는 누나가 행복하면 좋겠어, 그리고 계속 친절했으면 좋겠어
+누나가 항상 행복할수 있게, 계속 친절할수 있게 그리고 힘들면 위로 해줄수 있게 내가 계속 주변에 남아 있을게
+나도 누나에게 힘이 되어 줄 수 있는 사람, 언제든지 믿고 의지할 수 있는 사람이 되도록 계속 성장할게
+언젠가는 누나에게도 자랑스러운 친구가 되어 있으면 좋겠다
+
+임재현이 가장 아끼는 친구 하동희 생일 축하해!!</div>
+      </article>
+      <p class="asset-error" id="letter-image-error" role="status" hidden>편지지를 불러오지 못했어요.<br>연결 상태를 확인한 뒤 새로고침해 주세요.</p>
+      <div class="letter-actions">
+        <a class="start" id="read-ending" href="#ending">엔딩 보기</a>
+        <a class="secondary letter-back" id="back-to-cake" href="#cake">케이크로 돌아가기</a>
+      </div>
+    </section>
+
+    <section class="ending-experience" id="ending-experience" aria-labelledby="ending-title" hidden>
+      <div class="ending-stage">
+        <div class="ending-credits">
+          <h2 class="ending-title" id="ending-title" tabindex="-1">
+            <span>남은 생일 잘 보내~~</span>
+            <span>행복해~~~!!</span>
+          </h2>
+          <img class="ending-photo" id="ending-photo" src="./assets/birthday/ending-photo.jpg" width="768" height="1158" alt="엔딩에 함께 남기는 사진" loading="lazy" decoding="async">
+          <p class="asset-error" id="ending-image-error" role="status" hidden>사진을 불러오지 못했어요.<br>연결 상태를 확인한 뒤 새로고침해 주세요.</p>
+        </div>
+      </div>
+      <a class="secondary letter-back ending-back" id="ending-back-to-letter" href="#letter">편지로 돌아가기</a>
+    </section>
+  </main>
+  <dialog class="sound-dialog" id="sound-dialog" aria-labelledby="sound-title" aria-describedby="sound-description">
+    <h2 id="sound-title">휴대폰 소리를 키워 주세요</h2>
+    <p id="sound-description">음악과 함께 준비한 축하를 즐겨 주세요.</p>
+    <button class="start" id="sound-confirm" type="button" disabled>불러오는 중...</button>
+  </dialog>
+  <audio id="background-music" src="./assets/birthday/leberch-happy-birthday-581704.mp3" autoplay loop preload="metadata"></audio>
+  <canvas class="confetti" id="confetti" aria-hidden="true" hidden></canvas>
+
+  <script>
+    const musicStatus = document.getElementById("music-status");
+    const soundDialog = document.getElementById("sound-dialog");
+    const soundConfirm = document.getElementById("sound-confirm");
+    soundConfirm.addEventListener("click", () => soundDialog.close());
+    soundDialog.showModal();
+    import("./assets/birthday/background-music.js").then(({ setupBackgroundMusic }) => {
+      setupBackgroundMusic(
+        document.getElementById("background-music"),
+        soundConfirm,
+        musicStatus,
+      );
+      if (soundDialog.open) soundConfirm.focus({ preventScroll: true });
+    }).catch(error => {
+      console.error("[birthday] Could not load the music controls", error);
+      musicStatus.textContent = "음악을 불러오지 못했어요. 연결 상태를 확인한 뒤 새로고침해 주세요.";
+      musicStatus.hidden = false;
+      document.getElementById("sound-description").textContent = musicStatus.textContent;
+      soundConfirm.disabled = false;
+      soundConfirm.textContent = "확인";
+      if (soundDialog.open) soundConfirm.focus({ preventScroll: true });
+    });
+
+    const startButton = document.getElementById("start-celebration");
+    const artwork = document.getElementById("sea-turtle");
+    const assetError = document.getElementById("asset-error");
+    const appError = document.getElementById("app-error");
+
+    startButton.addEventListener("click", async () => {
+      appError.hidden = true;
+      if (location.protocol === "file:") {
+        appError.textContent = "3D 케이크는 로컬 웹 서버 또는 GitHub Pages에서 열어 주세요. 파일을 직접 열면 브라우저가 3D 모듈을 차단해요.";
+        appError.hidden = false;
+        return;
+      }
+      startButton.disabled = true;
+      try {
+        const { startCelebration } = await import("./assets/birthday/celebration.js");
+        await startCelebration();
+      } catch (error) {
+        console.error("[birthday] Could not start the celebration", error);
+        appError.textContent = "축하 화면을 불러오지 못했어요. 연결 상태를 확인한 뒤 새로고침해 주세요.";
+        appError.hidden = false;
+      } finally {
+        startButton.disabled = false;
+      }
+    });
+    import("./assets/birthday/applause.js").then(({ applause }) => {
+      const soundButtons = new Set(["start-celebration", "retry-cake", "microphone-button", "touch-blow", "relight-candles"]);
+      document.addEventListener("click", event => {
+        if (!event.composedPath().some(node => node instanceof HTMLButtonElement && soundButtons.has(node.id))) return;
+        void applause.prepare().catch(error => console.error("[birthday] Could not prepare applause", error));
+      }, { capture: true });
+      startButton.hidden = false;
+    }).catch(error => {
+      console.error("[birthday] Could not load applause", error);
+      appError.textContent = "축하 소리를 불러오지 못했어요. 연결 상태를 확인한 뒤 새로고침해 주세요.";
+      appError.hidden = false;
+      startButton.hidden = false;
+    });
+
+    if (["#letter", "#cake", "#ending"].includes(location.hash)) {
+      import("./assets/birthday/celebration.js").catch(error => {
+        console.error("[birthday] Could not restore the page", error);
+        appError.textContent = "화면을 불러오지 못했어요. 연결 상태를 확인한 뒤 새로고침해 주세요.";
+        appError.hidden = false;
+      });
+    }
+
+    function showArtworkError() {
+      assetError.hidden = false;
+    }
+
+    artwork.addEventListener("error", showArtworkError);
+    if (artwork.complete && artwork.naturalWidth === 0) showArtworkError();
+  </script>
+</body>
+</html>
