@@ -1,0 +1,1099 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e9e9ed">
+  <meta name="description" content="Polished optical glass controls with WebGL refraction, studio reflections and soft contact shadows.">
+  <title>Liquid Glass UI Kit Showcase</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='3' y='16' width='58' height='32' rx='16' fill='%2311182a' stroke='%238f9cff' stroke-width='3'/%3E%3Cpath d='M15 22h34M14 43h36' stroke='%23e4e6ff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #14151a;
+      background: #d7d8dc;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      --blue: #39c9ff;
+      --violet: #9c62ff;
+      --pink: #ff5ac8;
+      --green: #60e7ae;
+    }
+
+    * { box-sizing: border-box; }
+    body { min-width: 320px; min-height: 100vh; margin: 0; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid #536dff;
+      outline-offset: 4px;
+    }
+
+    .showcase {
+      position: relative;
+      isolation: isolate;
+      width: min(100%, 736px);
+      min-height: 920px;
+      margin-inline: auto;
+      padding: 31px 34px 36px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ededee, #d2d3d7 70%, #c9cbd0);
+    }
+
+    .showcase::before {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background:
+        linear-gradient(115deg, transparent 20%, #ffffff72 45%, transparent 58%),
+        radial-gradient(ellipse at 50% 48%, #ffffff80 0, transparent 68%);
+      content: "";
+      pointer-events: none;
+    }
+
+    .masthead {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 52px;
+    }
+
+    .masthead h1 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 2.45rem);
+      font-weight: 760;
+      letter-spacing: -.075em;
+      line-height: 1;
+    }
+
+    .masthead p {
+      margin: 0;
+      font-size: clamp(.8rem, 2.7vw, 1.08rem);
+      font-weight: 450;
+      letter-spacing: -.035em;
+      white-space: nowrap;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 64px 48px;
+    }
+
+    .glass {
+      --glow: #8a9aff;
+      --glow-soft: #717fff;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-width: 0;
+      min-height: 98px;
+      padding: 0 22px;
+      overflow: hidden;
+      border: 1px solid #ffffffbd;
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, #ffffff35 0%, #ffffff0b 21%, transparent 50%),
+        linear-gradient(145deg, #303541, #0d1017 50%, #171a24);
+      box-shadow:
+        inset 0 2px 2px #ffffffa6,
+        inset 0 -2px 3px #000000a6,
+        inset 0 0 0 3px #11131c9c,
+        -7px 12px 6px #11131b52,
+        -14px 24px 20px #13152245,
+        0 21px 24px color-mix(in srgb, var(--glow) 42%, transparent),
+        0 0 13px color-mix(in srgb, var(--glow) 45%, transparent);
+      color: #f7f8ff;
+      font-size: 1.2rem;
+      font-weight: 430;
+      letter-spacing: -.025em;
+      text-align: center;
+      text-shadow: 0 1px 5px #000b;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(14px);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+
+    .glass::before {
+      position: absolute;
+      inset: 4px 8px auto;
+      height: 35%;
+      border-radius: inherit;
+      background: linear-gradient(180deg, #ffffff7c, #ffffff22 35%, transparent);
+      content: "";
+      opacity: .8;
+      pointer-events: none;
+    }
+
+    .glass::after {
+      position: absolute;
+      right: 12%;
+      bottom: 1px;
+      left: 12%;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--glow);
+      box-shadow: 0 0 8px 3px var(--glow), 0 0 19px 6px var(--glow-soft);
+      content: "";
+      opacity: .94;
+      pointer-events: none;
+    }
+
+    .glass:hover {
+      filter: brightness(1.09);
+      transform: translateY(-2px);
+    }
+
+    .glass:active { transform: translateY(1px) scale(.99); }
+    .glass > * { position: relative; z-index: 1; }
+    .glass-primary { --glow: #777dff; --glow-soft: #314bff; }
+    .glass-secondary { --glow: #ff9a42; --glow-soft: #ff41ce; }
+    .glass-icon { --glow: #29dcff; --glow-soft: #1495ff; }
+    .glass-search { --glow: #c9cfff; --glow-soft: #969dff; }
+    .glass-select { --glow: #6ef2a9; --glow-soft: #e6b948; }
+    .glass-switch { --glow: #7d68ff; --glow-soft: #2fbfff; }
+    .glass:disabled { cursor: not-allowed; opacity: .48; }
+
+    .icon-control {
+      justify-content: flex-start;
+      gap: 19px;
+      padding-left: 12px;
+    }
+
+    .icon-orbit {
+      display: grid;
+      flex: 0 0 64px;
+      width: 64px;
+      height: 64px;
+      place-items: center;
+      border: 1px solid #ffffffa1;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #8194a258, #17202e82 70%);
+      box-shadow:
+        inset 0 1px 2px #ffffffbd,
+        inset 0 -2px 4px #07111acc,
+        0 0 10px #4dd8ff5c;
+    }
+
+    .icon-orbit svg, .search-icon svg, .check svg, .switch-knob svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.7;
+    }
+
+    .icon-label { flex: 1; text-align: center; }
+
+    .search-control {
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 16px 0 22px;
+      cursor: text;
+    }
+
+    .search-control input {
+      z-index: 1;
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #fff;
+      font-size: 1.1rem;
+      letter-spacing: -.02em;
+    }
+
+    .search-control input::placeholder { color: #f3f3f7; opacity: 1; }
+    .search-control:focus-within { outline: 3px solid #536dff; outline-offset: 4px; }
+    .search-control:focus-within input:focus-visible { outline: 0; }
+    .search-icon { display: grid; flex: 0 0 30px; place-items: center; }
+
+    .select-control {
+      justify-content: space-between;
+      padding-inline: 25px 14px;
+    }
+
+    .check {
+      display: grid;
+      width: 60px;
+      height: 60px;
+      place-items: center;
+      border: 1px solid #ffffff78;
+      border-radius: 15px;
+      background: linear-gradient(145deg, #47504e, #1d2724);
+      box-shadow: inset 0 1px 2px #ffffff7a, 0 0 10px #68e9a23d;
+      transition: background .2s, color .2s, box-shadow .2s;
+    }
+
+    .select-control[aria-pressed="false"] .check {
+      background: #ffffff10;
+      box-shadow: inset 0 1px 2px #ffffff45;
+      color: transparent;
+    }
+
+    .switch-control {
+      justify-content: space-between;
+      padding-inline: 24px 12px;
+    }
+
+    .switch-track {
+      display: flex;
+      align-items: center;
+      width: 108px;
+      height: 60px;
+      padding: 4px;
+      border: 1px solid #aeb8ff;
+      border-radius: 999px;
+      background: linear-gradient(110deg, #17235d, #4530aa 72%, #222b72);
+      box-shadow: inset 0 1px 4px #000a, 0 0 8px #8b74ff77;
+      transition: background .2s;
+    }
+
+    .switch-knob {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border: 1px solid #ffffff;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #fff, #dce5ff);
+      box-shadow: 0 1px 5px #fff, 0 0 12px #afbaff;
+      color: #6554c9;
+      transform: translateX(47px);
+      transition: transform .2s ease;
+    }
+
+    .switch-control[aria-checked="false"] .switch-track {
+      background: linear-gradient(110deg, #30333b, #5c5c65);
+    }
+
+    .switch-control[aria-checked="false"] .switch-knob {
+      color: transparent;
+      transform: translateX(0);
+    }
+
+    .glass-panel {
+      --glow: #647cff;
+      position: relative;
+      min-width: 0;
+      min-height: 246px;
+      padding: 27px 25px 22px;
+      overflow: hidden;
+      border: 1px solid #ffffffb3;
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, #ffffff30, transparent 24%),
+        linear-gradient(145deg, #272c36f2, #0d1119f5 70%, #191923f5);
+      box-shadow:
+        inset 0 2px 2px #ffffff83,
+        inset 0 -2px 4px #000b,
+        -7px 12px 6px #11131b52,
+        -14px 24px 20px #13152245,
+        0 19px 23px color-mix(in srgb, var(--glow) 40%, transparent);
+      color: #f7f7fc;
+      backdrop-filter: blur(16px);
+    }
+
+    .glass-panel::before {
+      position: absolute;
+      inset: 4px 8px auto;
+      height: 25%;
+      border-radius: 25px 25px 50% 50%;
+      background: linear-gradient(180deg, #ffffff6c, #ffffff17 38%, transparent);
+      content: "";
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    .glass-panel::after {
+      position: absolute;
+      right: 12%;
+      bottom: 2px;
+      left: 12%;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--glow);
+      box-shadow: 0 0 9px 3px var(--glow), 0 0 18px 5px var(--glow);
+      content: "";
+      pointer-events: none;
+    }
+
+    .tabs-panel { --glow: #9c70ff; }
+    .plan-panel { --glow: #4ddaff; }
+    .panel-title {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin: 0 0 23px;
+      font-size: 1.28rem;
+      font-weight: 520;
+      letter-spacing: -.025em;
+    }
+
+    .tab-list { display: grid; gap: 4px; }
+    .tab {
+      position: relative;
+      z-index: 1;
+      width: fit-content;
+      padding: 2px 5px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: #f6f6fb;
+      font-size: 1.2rem;
+      line-height: 1.55;
+      letter-spacing: -.025em;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .tab[aria-selected="true"] { text-shadow: 0 0 10px #c9b2ff; }
+    .tab[aria-selected="false"] { color: #c6c7d0; }
+    .tab:focus-visible { outline-color: #d3b8ff; outline-offset: 1px; }
+    .plan-panel .panel-title { margin-bottom: 32px; }
+    .plan-description {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 12px;
+      color: #c8c9d2;
+      font-size: .98rem;
+      line-height: 1.5;
+    }
+
+    .plan-status {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0;
+      color: #d7d8e0;
+      font-size: .9rem;
+    }
+
+    .plan-status strong { font-weight: 520; }
+    .plan-status .count { color: #fff; }
+    .glass-canvas {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .is-webgl::before { display: none; }
+    .is-webgl .glass, .is-webgl .glass-panel,
+    .is-webgl .icon-orbit, .is-webgl .check,
+    .is-webgl .switch-track, .is-webgl .switch-knob,
+    .is-webgl .select-control[aria-pressed="false"] .check,
+    .is-webgl .switch-control[aria-checked="false"] .switch-track {
+      border-color: transparent;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .is-webgl .glass::before, .is-webgl .glass::after,
+    .is-webgl .glass-panel::before, .is-webgl .glass-panel::after { display: none; }
+    .is-webgl .glass:hover, .is-webgl .glass:active { filter: none; transform: none; }
+    .is-webgl .glass-panel { overflow: visible; }
+    .is-webgl .glass { overflow: visible; }
+    .is-webgl .glass, .is-webgl .glass-panel { text-shadow: 0 1px 3px #000b; }
+    .is-webgl .switch-knob { color: #584dac; }
+    .is-webgl .switch-control[aria-checked="false"] .switch-knob { color: transparent; }
+    .renderer-status {
+      margin: 45px 0 0;
+      color: #363840;
+      font-size: .75rem;
+      line-height: 1.6;
+    }
+
+    [hidden] { display: none !important; }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 560px) {
+      .showcase {
+        min-height: 100svh;
+        padding: max(24px, env(safe-area-inset-top)) 22px max(28px, env(safe-area-inset-bottom));
+      }
+
+      .masthead { align-items: flex-start; margin-bottom: 34px; }
+      .masthead h1 { font-size: clamp(1.8rem, 8vw, 2.25rem); }
+      .masthead p { max-width: 120px; white-space: normal; text-align: right; line-height: 1.35; }
+      .component-grid { gap: 32px 16px; }
+      .glass { min-height: 78px; padding-inline: 14px; font-size: .92rem; }
+      .icon-control { gap: 8px; padding-left: 7px; }
+      .icon-orbit { flex-basis: 44px; width: 44px; height: 44px; }
+      .search-control { gap: 6px; padding-inline: 15px 10px; }
+      .search-control input { font-size: .9rem; }
+      .select-control { padding-inline: 15px 8px; }
+      .check { width: 42px; height: 42px; }
+      .switch-control { padding-inline: 15px 8px; }
+      .switch-track { width: 70px; height: 42px; }
+      .switch-knob { width: 32px; height: 32px; }
+      .switch-knob svg { width: 18px; height: 18px; }
+      .switch-control[aria-checked="true"] .switch-knob { transform: translateX(27px); }
+      .glass-panel { min-height: 180px; padding: 17px 14px 14px; border-radius: 24px; }
+      .panel-title { gap: 8px; margin-bottom: 14px; font-size: 1rem; }
+      .tab { font-size: .87rem; }
+      .plan-panel .panel-title { margin-bottom: 22px; }
+      .plan-description { font-size: .71rem; }
+      .plan-status { font-size: .68rem; }
+    }
+
+    @media (max-width: 370px) {
+      .showcase { padding-inline: 16px; }
+      .component-grid { column-gap: 12px; }
+      .glass { min-height: 72px; font-size: .83rem; }
+      .icon-orbit { flex-basis: 38px; width: 38px; height: 38px; }
+      .switch-track { width: 62px; }
+      .switch-control[aria-checked="true"] .switch-knob { transform: translateX(19px); }
+      .glass-panel { padding-inline: 11px; }
+      .plan-description { font-size: .66rem; }
+      .plan-status { font-size: .62rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="showcase">
+    <canvas class="glass-canvas" id="glass-canvas" aria-hidden="true"></canvas>
+    <header class="masthead">
+      <h1>liquid glass</h1>
+      <p>Liquid Glass UI Kit Showcase</p>
+    </header>
+
+    <div class="component-grid">
+      <button class="glass glass-primary" type="button">Start project</button>
+      <button class="glass glass-secondary" type="button">Secondary</button>
+
+      <button class="glass glass-icon icon-control" type="button" aria-label="Icon button">
+        <span class="icon-orbit" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <rect x="6" y="6" width="12" height="12" rx="1.5"></rect>
+            <path d="M9 3.5v2M15 3.5v2M9 18.5v2M15 18.5v2M3.5 9h2M3.5 15h2M18.5 9h2M18.5 15h2"></path>
+          </svg>
+        </span>
+        <span class="icon-label">Icon button</span>
+      </button>
+      <label class="glass glass-search search-control">
+        <input type="search" aria-label="Search" placeholder="Text field">
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 4.5 4.5"></path>
+          </svg>
+        </span>
+      </label>
+
+      <button class="glass glass-select select-control" type="button" aria-pressed="true">
+        <span>Select</span>
+        <span class="check" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="m4 12.5 5.2 5L20 6.8"></path></svg>
+        </span>
+      </button>
+      <button class="glass glass-switch switch-control" type="button" role="switch" aria-checked="true">
+        <span>Switch</span>
+        <span class="switch-track" aria-hidden="true">
+          <span class="switch-knob"><svg viewBox="0 0 24 24"><path d="m7 12 3.2 3.2L17.5 8"></path></svg></span>
+        </span>
+      </button>
+
+      <section class="glass-panel tabs-panel" aria-labelledby="tabs-title">
+        <h2 class="panel-title" id="tabs-title">
+          <span aria-hidden="true">‹</span>
+          <span>Tabs</span>
+        </h2>
+        <div class="tab-list" role="tablist" aria-label="Example tabs">
+          <button class="tab" id="tab-files" type="button" role="tab" aria-selected="true" aria-controls="tab-panel" tabindex="0">Find files...</button>
+          <button class="tab" id="tab-collaborator" type="button" role="tab" aria-selected="false" aria-controls="tab-panel" tabindex="-1">Add collaborator</button>
+        </div>
+        <span class="visually-hidden" id="tab-panel" role="tabpanel" aria-labelledby="tab-files">Selected tab: Find files...</span>
+      </section>
+
+      <section class="glass-panel plan-panel" aria-labelledby="plan-title">
+        <h2 class="panel-title" id="plan-title">Pro plan</h2>
+        <p class="plan-description">Focus ring, hover states,<br>disabled states</p>
+        <p class="plan-status"><span>Disabled states</span><strong class="count">3</strong></p>
+      </section>
+    </div>
+    <p class="renderer-status" id="renderer-status" role="status" hidden></p>
+  </main>
+  <script>
+    const select = document.querySelector(".select-control");
+    select.addEventListener("click", () => {
+      select.setAttribute("aria-pressed", String(select.getAttribute("aria-pressed") !== "true"));
+    });
+
+    const toggle = document.querySelector(".switch-control");
+    toggle.addEventListener("click", () => {
+      toggle.setAttribute("aria-checked", String(toggle.getAttribute("aria-checked") !== "true"));
+    });
+
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((item, itemIndex) => {
+          item.setAttribute("aria-selected", String(itemIndex === index));
+          item.tabIndex = itemIndex === index ? 0 : -1;
+        });
+        const panel = document.getElementById("tab-panel");
+        panel.setAttribute("aria-labelledby", tab.id);
+        panel.textContent = `Selected tab: ${tab.textContent}`;
+      });
+      tab.addEventListener("keydown", event => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        event.preventDefault();
+        const nextTab = tabs[(index + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+        nextTab.focus();
+        nextTab.click();
+      });
+    });
+
+    // The canvas supplies the material; the controls remain native, selectable HTML.
+    const vertexSource = `#version 300 es
+      in vec2 a_position;
+      void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+    `;
+
+    const fragmentSource = `#version 300 es
+      precision highp float;
+      const int OBJECTS = 12;
+      const float TILT = 0.42;
+      uniform vec2 u_resolution;
+      uniform vec2 u_size;
+      uniform vec2 u_light;
+      uniform vec4 u_rect[OBJECTS];
+      uniform vec4 u_shape[OBJECTS];
+      uniform vec3 u_colorA[OBJECTS];
+      uniform vec3 u_colorB[OBJECTS];
+      uniform float u_hover[OBJECTS];
+      uniform float u_press[OBJECTS];
+      out vec4 outColor;
+
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+      }
+
+      float roundRect(vec2 p, vec2 halfSize, float radius) {
+        vec2 q = abs(p) - halfSize + radius;
+        return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
+      }
+
+      float centerZ(int i) {
+        return u_shape[i].z + u_hover[i] * 0.025 - u_press[i] * 0.045;
+      }
+
+      vec3 center(int i) {
+        float z = centerZ(i);
+        return vec3(u_rect[i].xy + vec2(0.0, TILT * (z + u_shape[i].y)), z);
+      }
+
+      float surfaceSag(vec2 local, int i) {
+        vec2 normalized = local / u_rect[i].zw;
+        vec2 curvature = i == 6 || i == 7 ? vec2(0.030, 0.020) : vec2(0.075, 0.050);
+        return dot(curvature, normalized * normalized) * u_shape[i].w * (i >= 8 ? 0.35 : 1.0);
+      }
+
+      float glassDistance(vec3 p, int i) {
+        vec3 local = p - center(i);
+        vec2 halfSize = u_rect[i].zw;
+        float bevel = min(u_shape[i].y * 0.70, 0.125 * u_shape[i].w);
+        float radius = u_shape[i].x;
+        local.z += surfaceSag(local.xy, i);
+        float planar = roundRect(local.xy, halfSize - bevel, max(radius - bevel, 0.005));
+        vec2 q = vec2(planar, abs(local.z) - u_shape[i].y + bevel);
+        return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - bevel;
+      }
+
+      vec3 surfaceNormal(vec3 p, int i) {
+        const vec2 e = vec2(0.0012, -0.0012);
+        return normalize(
+          e.xyy * glassDistance(p + e.xyy, i) +
+          e.yyx * glassDistance(p + e.yyx, i) +
+          e.yxy * glassDistance(p + e.yxy, i) +
+          e.xxx * glassDistance(p + e.xxx, i)
+        );
+      }
+
+      float lightBox(vec2 p, vec2 position, vec2 size, float softness) {
+        vec2 d = abs(p - position) - size;
+        return 1.0 - smoothstep(-softness, softness, max(d.x, d.y));
+      }
+
+      vec3 studio(vec3 direction, float blur) {
+        vec3 color = mix(vec3(0.018, 0.022, 0.032), vec3(0.15, 0.18, 0.23),
+          smoothstep(-0.15, 0.95, direction.z));
+        if (direction.z > 0.02) {
+          vec2 uv = direction.xy / direction.z;
+          vec2 shift = u_light * 0.28;
+          vec2 tilted = mat2(0.985, -0.174, 0.174, 0.985) * uv;
+          float key = lightBox(tilted, vec2(-0.57, -0.85) + shift,
+            vec2(0.95, 0.15), 0.022 + blur);
+          float edge = lightBox(uv, vec2(0.19, -0.40) + shift * 0.5,
+            vec2(0.055, 0.65), 0.014 + blur);
+          float fill = lightBox(uv, vec2(-1.85, 0.20) + shift * 0.4,
+            vec2(0.10, 1.25), 0.028 + blur);
+          float lower = lightBox(uv, vec2(0.05, 2.25),
+            vec2(1.6, 0.085), 0.035 + blur);
+          color += vec3(13.5, 13.8, 14.6) * key;
+          color += vec3(11.0, 10.6, 12.0) * edge;
+          color += vec3(2.4, 3.0, 4.0) * fill;
+          color += vec3(1.6, 1.8, 2.4) * lower;
+          color += vec3(0.13, 0.16, 0.22) * exp(-length(uv - vec2(-0.1, -0.65)) * 1.8);
+        } else {
+          color = vec3(0.32, 0.34, 0.39);
+        }
+        return color;
+      }
+
+      vec3 tintAt(vec2 local, int i) {
+        float blend = smoothstep(-0.8, 0.85, local.x / u_rect[i].z);
+        return mix(u_colorA[i], u_colorB[i], blend);
+      }
+
+      vec3 floorMaterial(vec2 p) {
+        vec2 uv = p / u_size;
+        vec3 color = mix(vec3(0.71, 0.72, 0.74), vec3(0.53, 0.55, 0.59),
+          clamp(uv.y * 0.68 + uv.x * 0.22, 0.0, 1.0));
+        color += 0.048 * exp(-length((uv - vec2(0.75, 0.12)) * vec2(1.3, 0.8)));
+        for (int i = 0; i < 8; i++) {
+          vec2 c = center(i).xy;
+          vec2 halfSize = u_rect[i].zw;
+          float radius = u_shape[i].x;
+          vec2 lightDirection = vec2(0.75, -0.85) + u_light * 0.08;
+          vec2 shadowPosition = c - lightDirection * (centerZ(i) + u_shape[i].y) * 1.15;
+          float d = roundRect(p - shadowPosition, halfSize - 0.015, radius);
+          float contact = roundRect(p - c, halfSize - 0.012, radius);
+          float broad = 1.0 - smoothstep(-0.10, 0.36, d);
+          float penumbra = 1.0 - smoothstep(-0.025, 0.14, d);
+          float tight = 1.0 - smoothstep(-0.01, 0.055, contact);
+          color *= 1.0 - broad * 0.42;
+          color *= 1.0 - penumbra * 0.46;
+          color *= 1.0 - tight * 0.42;
+
+          vec2 causticPosition = c + vec2(-0.10, 0.15);
+          vec2 local = p - causticPosition;
+          float lens = roundRect(local, halfSize + vec2(0.008, 0.018), radius);
+          float lower = smoothstep(-halfSize.y, halfSize.y * 0.85, local.y);
+          float band = exp(-pow((lens - 0.06) / 0.045, 2.0));
+          float echo = exp(-pow((lens - 0.15) / 0.085, 2.0));
+          float spill = exp(-max(lens, 0.0) * 6.0) * smoothstep(-0.04, 0.035, lens);
+          vec3 tint = tintAt(local, i);
+          color += tint * (band * 0.16 + echo * 0.065 + spill * 0.09) * (0.04 + 0.96 * lower);
+        }
+        float grain = hash(p * 950.0) - 0.5;
+        return max(color + grain * 0.004, 0.0);
+      }
+
+      float traceEntry(vec3 origin, vec3 direction, int i) {
+        float t = max(0.0, (origin.z - centerZ(i) - u_shape[i].y - 0.02) / -direction.z);
+        for (int step = 0; step < 48; step++) {
+          float d = glassDistance(origin + direction * t, i);
+          if (d < 0.0007) return t;
+          t += max(d * 0.72, 0.0005);
+          if (origin.z + direction.z * t < centerZ(i) - u_shape[i].y - 0.015) break;
+        }
+        return 100.0;
+      }
+
+      float traceExit(vec3 origin, vec3 direction, int i) {
+        float t = 0.003;
+        for (int step = 0; step < 32; step++) {
+          float d = glassDistance(origin + direction * t, i);
+          if (d > -0.0007) return t;
+          t += max(-d * 0.8, 0.002);
+          if (t > 4.0) break;
+        }
+        return t;
+      }
+
+      vec3 backing(vec3 p, int i) {
+        vec2 local = (p.xy - center(i).xy) / u_rect[i].zw;
+        vec3 tint = tintAt(p.xy - center(i).xy, i);
+        float soft = exp(-pow((local.y + 0.62) * 2.5, 2.0));
+        vec3 dark = vec3(0.003, 0.0045, 0.008) + soft * vec3(0.009, 0.012, 0.017);
+        dark += tint * (0.006 + 0.016 * pow(abs(local.x), 5.0));
+        if (i == 1) dark += tint * (0.055 + 0.04 * local.x);
+        if (i == 4) dark += tint * 0.012;
+        if (i == 10) dark = tint * 0.18 + vec3(0.006, 0.008, 0.018);
+        if (i == 11) dark = vec3(0.70, 0.77, 0.91);
+        return dark;
+      }
+
+      vec3 shadeGlass(vec3 p, vec3 direction, int i) {
+        vec3 normal = surfaceNormal(p, i);
+        float micro = sin(p.x * 145.0 + p.y * 27.0) * sin(p.y * 163.0 - p.x * 19.0);
+        normal = normalize(normal + vec3(micro * 0.0007, micro * 0.0005, 0.0));
+        float facing = clamp(dot(-direction, normal), 0.0, 1.0);
+        float fresnel = 0.043 + 0.957 * pow(1.0 - facing, 5.0);
+        vec3 reflected = studio(reflect(direction, normal), 0.008);
+        vec3 inside = refract(direction, normal, 1.0 / 1.51);
+        vec3 start = p + inside * 0.002;
+        float exitDistance = traceExit(start, inside, i);
+        vec3 exitPoint = start + inside * exitDistance;
+        vec3 exitNormal = surfaceNormal(exitPoint, i);
+        vec3 tint = tintAt(p.xy - center(i).xy, i);
+        float thickness = exitDistance;
+        float materialScale = u_shape[i].w;
+        float plateZ = centerZ(i) + u_shape[i].y - 0.066 * materialScale * (i >= 8 ? 0.4 : 1.0);
+        float toPlate = (plateZ - surfaceSag(start.xy - center(i).xy, i) - start.z) / inside.z;
+        for (int step = 0; step < 3; step++) {
+          vec2 local = (start + inside * toPlate).xy - center(i).xy;
+          toPlate = (plateZ - surfaceSag(local, i) - start.z) / inside.z;
+        }
+        vec3 platePoint = start + inside * max(toPlate, 0.0);
+        float rim = (i >= 8 ? 0.025 : 0.105) * materialScale;
+        float plateDistance = roundRect(platePoint.xy - center(i).xy,
+          u_rect[i].zw - rim, max(u_shape[i].x - rim, 0.012));
+        vec3 transmitted;
+        if (toPlate >= 0.0 && toPlate < exitDistance && plateDistance < 0.0) {
+          transmitted = backing(platePoint, i);
+          float plateEdge = exp(-abs(plateDistance) * 38.0);
+          transmitted += tint * plateEdge * 0.22;
+          transmitted *= 1.0 - 0.25 * plateEdge;
+          thickness = toPlate;
+        } else {
+          vec3 outgoing = refract(inside, -exitNormal, 1.51);
+          float internalReflection = 0.0;
+          if (dot(outgoing, outgoing) < 0.01) {
+            outgoing = reflect(inside, -exitNormal);
+            internalReflection = 1.0;
+          }
+          if (outgoing.z < -0.01) {
+            vec2 floorPoint = exitPoint.xy - outgoing.xy * exitPoint.z / outgoing.z + normal.xy * 0.12 * materialScale;
+            vec2 dispersion = normal.xy * pow(1.0 - facing, 2.0) * 0.045;
+            transmitted = vec3(floorMaterial(floorPoint + dispersion).r,
+              floorMaterial(floorPoint).g, floorMaterial(floorPoint - dispersion).b);
+          } else {
+            transmitted = studio(outgoing, 0.035) * 0.34;
+          }
+          transmitted = mix(transmitted, studio(reflect(inside, -exitNormal), 0.018) * tint,
+            internalReflection * 0.58);
+          float innerFresnel = pow(1.0 - abs(dot(inside, exitNormal)), 3.0);
+          transmitted += studio(reflect(inside, -exitNormal), 0.012) * tint * innerFresnel * 0.045;
+          float bottomLight = exp(-pow((p.z - centerZ(i) + u_shape[i].y - 0.065 * materialScale) / (0.037 * materialScale), 2.0));
+          transmitted += tint * (0.065 + 0.32 * pow(1.0 - facing, 2.0) + bottomLight * 0.55);
+        }
+        vec3 absorption = mix(vec3(2.5), vec3(0.12), sqrt(tint));
+        vec3 beer = exp(-absorption * thickness * 1.5);
+        vec3 color = transmitted * beer * (1.0 - fresnel) + reflected * fresnel;
+        float lip = exp(-abs(glassDistance(p - vec3(0.0, 0.0, 0.024), i)) * 160.0);
+        color += tint * lip * 0.045;
+        return max(color, 0.0);
+      }
+
+      void main() {
+        vec2 screen = vec2(gl_FragCoord.x / u_resolution.x,
+          1.0 - gl_FragCoord.y / u_resolution.y) * u_size;
+        vec3 direction = normalize(vec3(0.0, -TILT, -1.0));
+        vec3 origin = vec3(screen + vec2(0.0, TILT * 3.0), 3.0);
+        float closest = 100.0;
+        int objectId = -1;
+        for (int i = 0; i < OBJECTS; i++) {
+          vec2 delta = abs(screen - u_rect[i].xy);
+          if (delta.x > u_rect[i].z + 0.04 || delta.y > u_rect[i].w + 0.27) continue;
+          float t = traceEntry(origin, direction, i);
+          if (t < closest) { closest = t; objectId = i; }
+        }
+        vec3 color = objectId >= 0
+          ? shadeGlass(origin + direction * closest, direction, objectId)
+          : floorMaterial(screen);
+        color = max(color, 0.0);
+        color = (color * (2.51 * color + 0.03)) / (color * (2.43 * color + 0.59) + 0.14);
+        color = pow(color, vec3(1.0 / 2.2));
+        color += (hash(gl_FragCoord.xy) - 0.5) / 255.0;
+        outColor = vec4(clamp(color, 0.0, 1.0), 1.0);
+      }
+    `;
+
+    const showcase = document.querySelector(".showcase");
+    const canvas = document.getElementById("glass-canvas");
+    const rendererStatus = document.getElementById("renderer-status");
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    let renderer;
+
+    function showRendererError(error) {
+      console.error("[liquid-glass] Optical material renderer unavailable", error);
+      showcase.classList.remove("is-webgl");
+      canvas.hidden = true;
+      rendererStatus.textContent = "WebGL rendering is unavailable. Showing the CSS material preview.";
+      rendererStatus.hidden = false;
+      renderer?.dispose();
+      renderer = undefined;
+    }
+
+    function createGlassRenderer() {
+      const gl = canvas.getContext("webgl2", {
+        alpha: false, antialias: false, depth: false, stencil: false,
+        powerPreference: "low-power", preserveDrawingBuffer: true,
+      });
+      if (!gl) throw new Error("WebGL 2 is not supported by this browser.");
+
+      function compile(type, source) {
+        const shader = gl.createShader(type);
+        if (!shader) throw new Error("Could not allocate a glass shader.");
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          const message = gl.getShaderInfoLog(shader);
+          gl.deleteShader(shader);
+          throw new Error(`Glass shader compilation failed: ${message}`);
+        }
+        return shader;
+      }
+
+      const program = gl.createProgram();
+      if (!program) throw new Error("Could not allocate the glass program.");
+      let vertex;
+      let fragment;
+      try {
+        vertex = compile(gl.VERTEX_SHADER, vertexSource);
+        fragment = compile(gl.FRAGMENT_SHADER, fragmentSource);
+        gl.attachShader(program, vertex);
+        gl.attachShader(program, fragment);
+        gl.linkProgram(program);
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+          throw new Error(`Glass program linking failed: ${gl.getProgramInfoLog(program)}`);
+        }
+      } catch (error) {
+        gl.deleteProgram(program);
+        throw error;
+      } finally {
+        if (vertex) gl.deleteShader(vertex);
+        if (fragment) gl.deleteShader(fragment);
+      }
+      gl.useProgram(program);
+      const buffer = gl.createBuffer();
+      if (!buffer) {
+        gl.deleteProgram(program);
+        throw new Error("Could not allocate the glass geometry.");
+      }
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const position = gl.getAttribLocation(program, "a_position");
+      gl.enableVertexAttribArray(position);
+      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+      const uniform = Object.fromEntries(
+        ["resolution", "size", "light", "rect", "shape", "colorA", "colorB", "hover", "press"]
+          .map(name => [name, gl.getUniformLocation(program, `u_${name}`)]),
+      );
+      const objects = [
+        [".glass-primary", 0.18, 0.22, [0.045, 0.12, 0.95], [0.52, 0.045, 0.65]],
+        [".glass-secondary", 0.18, 0.22, [0.90, 0.025, 0.35], [1.0, 0.34, 0.025]],
+        [".glass-icon", 0.18, 0.22, [0.025, 0.62, 1.0], [0.02, 0.78, 0.92]],
+        [".glass-search", 0.18, 0.22, [0.39, 0.37, 0.63], [0.75, 0.78, 0.94]],
+        [".glass-select", 0.18, 0.22, [0.95, 0.54, 0.025], [0.025, 0.80, 0.35]],
+        [".glass-switch", 0.18, 0.22, [0.035, 0.43, 0.98], [0.70, 0.035, 0.69]],
+        [".tabs-panel", 0.18, 0.22, [0.065, 0.27, 0.35], [0.52, 0.055, 0.78]],
+        [".plan-panel", 0.18, 0.22, [0.025, 0.62, 0.98], [0.59, 0.055, 0.42]],
+        [".icon-orbit", 0.065, 0.435, [0.055, 0.43, 0.64], [0.15, 0.38, 0.58]],
+        [".check", 0.055, 0.43, [0.14, 0.40, 0.22], [0.22, 0.52, 0.35]],
+        [".switch-track", 0.055, 0.43, [0.065, 0.11, 0.8], [0.30, 0.10, 0.82]],
+        [".switch-knob", 0.065, 0.50, [0.67, 0.72, 0.98], [0.85, 0.88, 1.0]],
+      ].map(([selector, depth, elevation, colorA, colorB]) => ({
+        element: document.querySelector(selector), depth, elevation, colorA, colorB,
+      }));
+      const rects = new Float32Array(objects.length * 4);
+      const shapes = new Float32Array(objects.length * 4);
+      const colorsA = new Float32Array(objects.flatMap(object => object.colorA));
+      const colorsB = new Float32Array(objects.flatMap(object => object.colorB));
+      const hover = new Float32Array(objects.length);
+      const press = new Float32Array(objects.length);
+      const light = [0, 0];
+      const targetLight = [0, 0];
+      let hovered = -1;
+      let pressed = -1;
+      let frame = 0;
+      let previousTime = 0;
+      let settleUntil = 0;
+      let disposed = false;
+      let visible = true;
+
+      function measure() {
+        const bounds = showcase.getBoundingClientRect();
+        const scale = Math.min(1, bounds.width / 736);
+        const ratio = Math.min(Math.max(devicePixelRatio || 1, 1.5), 2,
+          Math.sqrt(2400000 / (bounds.width * bounds.height)));
+        const width = Math.max(1, Math.round(bounds.width * ratio));
+        const height = Math.max(1, Math.round(bounds.height * ratio));
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width;
+          canvas.height = height;
+          gl.viewport(0, 0, width, height);
+        }
+        gl.uniform2f(uniform.resolution, width, height);
+        gl.uniform2f(uniform.size, bounds.width / 100, bounds.height / 100);
+        objects.forEach((object, index) => {
+          const rect = object.element.getBoundingClientRect();
+          const style = getComputedStyle(object.element);
+          const radius = Math.min(parseFloat(style.borderTopLeftRadius),
+            rect.width / 2, rect.height / 2);
+          rects.set([(rect.left - bounds.left + rect.width / 2) / 100,
+            (rect.top - bounds.top + rect.height / 2) / 100,
+            rect.width / 200, rect.height / 200], index * 4);
+          shapes.set([radius / 100, object.depth * scale, object.elevation * scale, scale], index * 4);
+        });
+        gl.uniform4fv(uniform.rect, rects);
+        gl.uniform4fv(uniform.shape, shapes);
+        const switchOn = toggle.getAttribute("aria-checked") === "true";
+        colorsA.set(switchOn ? objects[10].colorA : [0.14, 0.16, 0.21], 30);
+        colorsB.set(switchOn ? objects[10].colorB : [0.25, 0.27, 0.33], 30);
+        gl.uniform3fv(uniform.colorA, colorsA);
+        gl.uniform3fv(uniform.colorB, colorsB);
+      }
+
+      function draw(time) {
+        frame = 0;
+        if (disposed || !visible) return;
+        const delta = Math.min((time - previousTime) / 16.67, 4);
+        previousTime = time;
+        const ease = reducedMotion.matches ? 1 : 1 - Math.pow(0.68, delta);
+        let moving = time < settleUntil;
+        for (let i = 0; i < 8; i++) {
+          const nextHover = i === hovered && !reducedMotion.matches ? 1 : 0;
+          const nextPress = i === pressed ? 1 : 0;
+          hover[i] += (nextHover - hover[i]) * ease;
+          press[i] += (nextPress - press[i]) * ease;
+          moving ||= Math.abs(hover[i] - nextHover) > 0.005 || Math.abs(press[i] - nextPress) > 0.005;
+        }
+        for (let i = 0; i < 2; i++) {
+          light[i] += (targetLight[i] - light[i]) * ease;
+          moving ||= Math.abs(targetLight[i] - light[i]) > 0.002;
+        }
+        for (const [child, parent] of [[8, 2], [9, 4], [10, 5], [11, 5]]) {
+          hover[child] = hover[parent];
+          press[child] = press[parent];
+        }
+        measure();
+        gl.uniform2f(uniform.light, light[0], light[1]);
+        gl.uniform1fv(uniform.hover, hover);
+        gl.uniform1fv(uniform.press, press);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        if (moving && !document.hidden) requestDraw();
+      }
+
+      function requestDraw() {
+        if (!frame && !disposed && visible) {
+          if (document.hidden) draw(performance.now());
+          else frame = requestAnimationFrame(draw);
+        }
+      }
+
+      const listeners = new AbortController();
+      function listen(target, event, handler, options = {}) {
+        target.addEventListener(event, handler, { ...options, signal: listeners.signal });
+      }
+      listen(showcase, "pointermove", event => {
+        if (reducedMotion.matches || event.pointerType === "touch") return;
+        const bounds = showcase.getBoundingClientRect();
+        targetLight[0] = (event.clientX - bounds.left) / bounds.width - 0.5;
+        targetLight[1] = (event.clientY - bounds.top) / bounds.height - 0.5;
+        hovered = objects.findIndex(object => object.element === event.target.closest(".glass, .glass-panel"));
+        requestDraw();
+      }, { passive: true });
+      listen(showcase, "pointerleave", () => {
+        targetLight.fill(0);
+        hovered = -1;
+        requestDraw();
+      });
+      listen(showcase, "pointerdown", event => {
+        pressed = objects.findIndex(object => object.element === event.target.closest(".glass"));
+        requestDraw();
+      });
+      function release() { pressed = -1; requestDraw(); }
+      listen(window, "pointerup", release);
+      listen(window, "pointercancel", release);
+      listen(window, "blur", release);
+      listen(showcase, "keydown", event => {
+        if (event.key !== " " && event.key !== "Enter") return;
+        pressed = objects.findIndex(object => object.element === event.target.closest("button.glass"));
+        requestDraw();
+      });
+      listen(window, "keyup", event => {
+        if (event.key === " " || event.key === "Enter") release();
+      });
+      listen(showcase, "click", () => {
+        settleUntil = performance.now() + (reducedMotion.matches ? 0 : 260);
+        requestDraw();
+      });
+      listen(showcase, "transitionend", requestDraw);
+      listen(document, "visibilitychange", requestDraw);
+      listen(reducedMotion, "change", () => {
+        targetLight.fill(0);
+        hovered = -1;
+        requestDraw();
+      });
+      const resize = new ResizeObserver(requestDraw);
+      resize.observe(showcase);
+      const observer = new IntersectionObserver(entries => {
+        visible = entries[0].isIntersecting;
+        if (visible) requestDraw();
+      });
+      observer.observe(showcase);
+      listen(window, "resize", requestDraw, { passive: true });
+      function dispose() {
+        disposed = true;
+        cancelAnimationFrame(frame);
+        listeners.abort();
+        resize.disconnect();
+        observer.disconnect();
+        gl.deleteBuffer(buffer);
+        gl.deleteProgram(program);
+      }
+
+      showcase.classList.add("is-webgl");
+      canvas.hidden = false;
+      rendererStatus.hidden = true;
+      draw(performance.now());
+      const error = gl.getError();
+      if (error !== gl.NO_ERROR) {
+        dispose();
+        throw new Error(`WebGL drawing failed (${error}).`);
+      }
+      return { dispose };
+    }
+
+    function initializeRenderer() {
+      try {
+        renderer = createGlassRenderer();
+      } catch (error) {
+        showRendererError(error);
+      }
+    }
+
+    canvas.addEventListener("webglcontextlost", event => {
+      event.preventDefault();
+      showRendererError(new Error("The graphics context was lost."));
+    });
+    canvas.addEventListener("webglcontextrestored", initializeRenderer);
+    initializeRenderer();
+  </script>
+</body>
+</html>

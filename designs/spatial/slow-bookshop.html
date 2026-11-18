@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="느린 서가의 11월 큐레이션, 공간을 읽는 두 권의 책. 가상의 독립서점 HTML/CSS 시안.">
+  <title>느린 서가 — 공간을 읽는 달</title>
+  <style>
+    :root {
+      --paper: #eeece4;
+      --ink: #342421;
+      --wine: #682b32;
+      --muted: #71635b;
+      --line: #c6bdb0;
+      --sans: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1.5rem; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+    h1, h2, h3, p, figure { margin: 0; }
+    p { line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+    a { color: inherit; text-underline-offset: .35em; text-decoration-thickness: 1px; }
+    a:hover { color: var(--wine); }
+    a:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; }
+    img, svg { display: block; max-width: 100%; }
+    .page { max-width: 1700px; margin-inline: auto; }
+    .inset { padding-inline: 4%; }
+    .skip { position: absolute; top: 12px; left: 16px; z-index: 5; padding: 14px; background: var(--ink); color: var(--paper); transform: translateY(-180%); }
+    .skip:focus { transform: none; }
+    .masthead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 2rem; padding-block: 1.4rem; }
+    .brand { display: inline-flex; min-height: 44px; align-items: center; gap: .9rem; text-decoration: none; }
+    .brand strong { font-size: 1.0625rem; font-weight: 650; letter-spacing: -.06em; }
+    .brand span { padding-left: .9rem; border-left: 1px solid var(--line); font-size: .6875rem; color: var(--muted); }
+    nav { display: flex; flex-wrap: wrap; gap: .25rem 2rem; }
+    nav a { display: inline-flex; min-height: 44px; align-items: center; font-size: .75rem; text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+
+    .hero { isolation: isolate; padding-top: .8rem; }
+    .hero-topline { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1.5rem; font-size: .6875rem; color: var(--muted); }
+    .hero-topline span:first-child { color: var(--wine); }
+    h1 { margin: .005em 0 0 -.055em; font-family: var(--serif); font-size: clamp(7rem, 37.4vw, 39.7rem); font-weight: 400; line-height: 1; letter-spacing: -.082em; color: var(--wine); }
+    .hero-layout { position: relative; display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); align-items: end; gap: 1.5rem; margin-top: -29vw; }
+    .hero-copy { align-self: end; padding-block: min(29vw, 493px) 5.8rem; }
+    .hero-copy h2 { font-size: clamp(1.6rem, 1.15rem + 1vw, 2.2rem); line-height: 1.55; font-weight: 450; letter-spacing: -.065em; word-break: keep-all; overflow-wrap: anywhere; }
+    .hero-copy p { margin-top: 1.35rem; max-width: 20rem; color: var(--muted); font-size: .8125rem; }
+    .text-link { display: inline-flex; align-items: center; gap: 1.1rem; min-height: 44px; margin-top: 1.25rem; font-size: .8125rem; }
+    .text-link span { font-size: 1.1rem; }
+    .book-scene { position: relative; margin-left: -10%; margin-right: -2%; }
+    .book-scene > svg { width: 100%; height: auto; overflow: visible; }
+    .book-scene figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .4rem 1rem; margin: -1rem 5% 1.6rem 10%; font-size: .625rem; line-height: 1.8; color: var(--muted); }
+    .hero-bottom { display: flex; justify-content: space-between; gap: 1rem 2rem; padding-block: 1.3rem; border-top: 1px solid var(--line); font-size: .6875rem; line-height: 1.8; }
+    .hero-bottom span:last-child { color: var(--muted); text-align: right; }
+
+    .selection { padding-block: 5.5rem 5rem; }
+    .section-label { font-size: .75rem; color: var(--muted); }
+    .selection-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; margin-top: 2rem; margin-bottom: 3rem; }
+    .selection-heading h2 { font-family: "AppleMyungjo", "Batang", serif; font-size: clamp(2.4rem, 1.5rem + 3.2vw, 4.8rem); font-weight: 400; line-height: 1.35; letter-spacing: -.08em; word-break: keep-all; overflow-wrap: anywhere; }
+    .selection-heading p { max-width: 24rem; justify-self: end; padding-bottom: .3rem; font-size: .875rem; color: var(--muted); }
+    .book-entry { border-top: 1px solid var(--line); }
+    .book-entry:last-child { border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    .book-entry summary { display: grid; grid-template-columns: .32fr 1.1fr 1fr auto; align-items: center; gap: 1.5rem; padding-block: 1.6rem; }
+    .book-number { font-family: var(--serif); font-size: clamp(2.5rem, 4vw, 4.2rem); font-weight: 400; line-height: 1.15; letter-spacing: -.075em; color: var(--wine); }
+    .book-name { display: block; font-size: 1.2rem; font-weight: 500; letter-spacing: -.055em; }
+    .book-kind { display: block; margin-top: .55rem; font-size: .6875rem; color: var(--muted); line-height: 1.8; }
+    .book-description { max-width: 22rem; font-size: .8125rem; line-height: 1.8; color: var(--muted); word-break: keep-all; overflow-wrap: anywhere; }
+    .read-label { display: inline-flex; align-items: center; gap: 1.2rem; min-height: 44px; font-size: .6875rem; white-space: nowrap; }
+    .read-symbol { font-size: 1.6rem; font-weight: 300; }
+    .when-open { display: none; }
+    details[open] .when-open { display: inline; }
+    details[open] .when-closed { display: none; }
+    .book-entry summary:hover .book-name { color: var(--wine); text-decoration: underline; text-underline-offset: .3em; }
+    .book-detail { margin-left: 14%; max-width: 44rem; padding-bottom: 2rem; font-size: .875rem; }
+    .book-detail p + p { margin-top: .8rem; }
+    .book-detail .sample-note { color: var(--muted); font-size: .75rem; }
+
+    .journal { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); min-height: 620px; background: var(--wine); color: var(--paper); }
+    .journal-photo { min-width: 0; min-height: 100%; overflow: hidden; }
+    .journal-photo img { width: 100%; height: 100%; min-height: 620px; object-fit: cover; object-position: 45% center; filter: saturate(.35); }
+    .journal-text { padding: 3.5rem 11% 3rem; display: flex; flex-direction: column; justify-content: space-between; gap: 3rem; }
+    .journal-text .section-label { color: #dfc5bd; }
+    .journal h2 { margin-top: 2rem; font-size: clamp(2rem, 1.5rem + 1.5vw, 3.4rem); font-weight: 400; line-height: 1.45; letter-spacing: -.075em; word-break: keep-all; overflow-wrap: anywhere; }
+    .journal-text > div:last-child > p { max-width: 24rem; color: #e7d5ce; font-size: .8125rem; }
+    .journal .text-link { margin-top: 1rem; }
+    .journal a:hover { color: #fff; }
+    .photo-caption { padding-top: .9rem; font-size: .625rem; line-height: 1.9; color: var(--muted); }
+    .visit { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 3rem; padding-block: 5rem; }
+    .visit h2 { margin-top: 1.8rem; font-size: clamp(1.8rem, 1.2rem + 1.8vw, 3rem); font-weight: 400; line-height: 1.45; letter-spacing: -.07em; word-break: keep-all; overflow-wrap: anywhere; }
+    .visit-info { align-self: end; padding-bottom: .2rem; }
+    .hours { font-size: .875rem; }
+    .visit-note { max-width: 28rem; margin-top: .7rem; color: var(--muted); font-size: .75rem; }
+    .colophon { border-top: 1px solid var(--line); padding-block: 1rem; }
+    .colophon summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 44px; font-size: .75rem; }
+    .colophon summary::after { content: "+"; font-size: 1.4rem; }
+    .colophon[open] summary::after { content: "−"; }
+    .colophon p { max-width: 56rem; margin-top: 1rem; font-size: .75rem; color: var(--muted); }
+    .footer-title { margin-left: -.055em; font-family: var(--serif); font-size: clamp(5rem, 24vw, 25.5rem); line-height: 1.2; letter-spacing: -.082em; color: var(--wine); }
+    .footer-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; padding-block: .5rem 2rem; font-size: .6875rem; color: var(--muted); }
+    .footer-meta a { display: inline-flex; align-items: center; min-height: 44px; }
+
+    @media (min-width: 1700px) { .hero-layout { margin-top: -493px; } }
+    @media (max-width: 1050px) {
+      .hero-copy { padding-bottom: 3rem; }
+      .hero-copy h2 { font-size: 1.65rem; }
+      .book-scene { margin-left: -15%; }
+      .book-entry summary { grid-template-columns: .25fr 1fr 1fr auto; gap: 1rem; }
+      .journal { min-height: 520px; }
+      .journal-photo img { min-height: 520px; }
+      .journal-text { padding: 2.5rem 9%; }
+    }
+    @media (max-width: 740px) {
+      .inset { padding-inline: 5%; }
+      .masthead { padding-block: .8rem; gap: .25rem 1rem; }
+      .brand span { display: none; }
+      nav { gap: .25rem 1rem; }
+      nav a { font-size: .6875rem; }
+      .hero { padding-top: 1rem; }
+      .hero-topline { font-size: .625rem; }
+      h1 { margin-top: .08em; font-size: 37.4vw; }
+      .hero-layout { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: -17vw; }
+      .book-scene { grid-row: 1; margin: 0 -3%; }
+      .book-scene figcaption { margin: -.5rem 7% 0; }
+      .book-scene figcaption span:last-child { display: none; }
+      .hero-copy { padding-block: 2rem 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
+      .hero-copy h2 { font-size: clamp(1.3rem, 1rem + 1.5vw, 1.7rem); }
+      .hero-copy p { margin-top: 0; font-size: .75rem; align-self: center; }
+      .hero-copy .text-link { grid-column: 1 / -1; margin-top: 0; justify-self: start; font-size: .75rem; }
+      .hero-bottom { font-size: .625rem; padding-block: 1rem; }
+      .selection { padding-block: 3rem; }
+      .selection-heading { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: 1.5rem; margin-bottom: 2rem; }
+      .selection-heading h2 { font-size: clamp(2.2rem, 1.5rem + 3vw, 3rem); }
+      .selection-heading p { justify-self: start; max-width: 27rem; font-size: .8125rem; }
+      .book-entry summary { grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: .5rem 1rem; padding-block: 1.3rem; }
+      .book-number { font-size: 2.3rem; grid-row: 1 / 3; align-self: start; }
+      .book-description { grid-column: 2; font-size: .75rem; }
+      .read-label { grid-column: 3; grid-row: 1 / 3; gap: 0; }
+      .read-label > span:not(.read-symbol) { display: none; }
+      .book-name { font-size: 1.0625rem; }
+      .book-kind { margin-top: .35rem; }
+      .book-detail { margin-left: 3.5rem; font-size: .8125rem; }
+      .journal { grid-template-columns: minmax(0, 1fr); }
+      .journal-photo { min-height: auto; }
+      .journal-photo img { min-height: 0; height: auto; aspect-ratio: 1.05; object-position: 50% 50%; }
+      .journal-text { padding: 2.5rem 7%; gap: 2rem; }
+      .journal h2 { margin-top: 1.5rem; font-size: 2.2rem; }
+      .journal-text > div:last-child > p { max-width: 32rem; }
+      .photo-caption { font-size: .625rem; }
+      .visit { grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-block: 3rem; }
+      .visit h2 { margin-top: 1.4rem; font-size: 2rem; }
+      .footer-title { font-size: 26vw; }
+    }
+    @media (max-width: 380px) {
+      .masthead { align-items: start; }
+      nav { gap: .25rem .75rem; }
+      .hero-copy { grid-template-columns: minmax(0, 1fr); }
+      .hero-copy p { max-width: 20rem; }
+      .hero-topline span:last-child { display: none; }
+    }
+    @media (forced-colors: active) {
+      .hero-bottom, .book-entry, .colophon { border-color: CanvasText; }
+      a:focus-visible, summary:focus-visible { outline-color: Highlight; }
+    }
+    @media print {
+      .skip, nav, .text-link, .read-label { display: none; }
+      .hero-layout { margin-top: -7rem; }
+      .hero-copy { padding-top: 0; }
+      .selection, .visit { padding-block: 2rem; }
+      .journal { break-inside: avoid; }
+      .journal-photo img { min-height: 0; }
+      .footer-title { font-size: 8rem; }
+    }
+  </style>
+</head>
+<body id="top">
+  <a class="skip" href="#main">본문으로 건너뛰기</a>
+  <div class="page">
+    <header class="masthead inset">
+      <a class="brand" href="#top" aria-label="느린 서가, 처음으로"><strong>느린 서가</strong><span>책과 생활 사이</span></a>
+      <nav aria-label="주요 메뉴"><a href="#shelf">이달의 책</a><a href="#journal">서가의 기록</a><a href="#visit">방문 안내</a></nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="hero inset" aria-labelledby="title">
+        <div class="hero-topline"><span>11월의 서가 / 공간을 읽는 달</span><span>독립서점 · 느린 서가</span></div>
+        <h1 id="title" lang="en" aria-label="Seoga, 느린 서가">Seoga.</h1>
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <h2>읽는 일에도,<br>머무는 자리가 필요해요.</h2>
+            <p>창 너머의 풍경에서, 매일 걷는 골목까지.<br>이번 달에는 우리를 둘러싼 공간을<br>조금 다르게 보는 책을 펼칩니다.</p>
+            <a class="text-link" href="#shelf">이달의 두 권 살펴보기 <span aria-hidden="true">↓</span></a>
+          </div>
+          <figure class="book-scene">
+            <svg viewBox="0 0 1000 870" role="img" aria-labelledby="scene-title scene-desc">
+              <title id="scene-title">공간을 읽는 두 권, 집의 바깥과 걷는 시선</title>
+              <desc id="scene-desc">큰 서가 제호 앞으로 겹치는 두 권의 사진집. 올리브색 산책 기록집 위에 건축 사진을 담은 아이보리색 양장본이 기울어져 있다. 책등, 종이 단면, 표지의 빛과 그림자를 직접 그린 SVG 목업.</desc>
+              <defs>
+                <linearGradient id="olive-cover" x2="1" y2=".2"><stop stop-color="#606951"/><stop offset=".08" stop-color="#7c8566"/><stop offset=".13" stop-color="#727c5e"/><stop offset=".7" stop-color="#8d9675"/><stop offset="1" stop-color="#778260"/></linearGradient>
+                <linearGradient id="ivory-cover" x2="1" y2=".1"><stop stop-color="#bdb6a3"/><stop offset=".03" stop-color="#f8f5e9"/><stop offset=".065" stop-color="#e4dece"/><stop offset=".085" stop-color="#f5f1e4"/><stop offset=".65" stop-color="#f1ecde"/><stop offset="1" stop-color="#dcd5c3"/></linearGradient>
+                <linearGradient id="paper-edge" x2="0" y2="1"><stop stop-color="#9f9783"/><stop offset=".2" stop-color="#d9d4c5"/><stop offset=".6" stop-color="#ede9df"/><stop offset="1" stop-color="#b2aa95"/></linearGradient>
+                <linearGradient id="cover-light" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".12"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#211b13" stop-opacity=".18"/></linearGradient>
+                <pattern id="page-lines" width="5" height="3" patternUnits="userSpaceOnUse"><path d="M0 .5H5" stroke="#847d6b" stroke-opacity=".3" stroke-width=".5"/></pattern>
+                <filter id="soft-shadow" x="-.4" y="-.4" width="1.8" height="1.8"><feGaussianBlur stdDeviation="17"/></filter>
+                <filter id="contact-shadow" x="-.4" y="-.4" width="1.8" height="1.8"><feGaussianBlur stdDeviation="5"/></filter>
+                <filter id="cover-grain" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" seed="11"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".055"/></feComponentTransfer><feBlend in="SourceGraphic" mode="multiply"/></filter>
+                <clipPath id="cover-photo"><rect x="29" y="205" width="367" height="292"/></clipPath>
+                <clipPath id="walking-photo"><rect x="27" y="245" width="306" height="194"/></clipPath>
+              </defs>
+              <ellipse cx="517" cy="774" rx="361" ry="43" fill="#534938" opacity=".16" filter="url(#soft-shadow)"/>
+              <g transform="matrix(.95 -.29 .3 .9 66 302)">
+                <rect x="11" y="18" width="368" height="474" fill="#322f24" opacity=".28" filter="url(#soft-shadow)"/>
+                <path d="M0 470H360L374 456V-2L360 0Z" fill="#46503c"/>
+                <path d="M6 464H359L369 454V4H359V453H6Z" fill="url(#paper-edge)"/>
+                <path d="M6 464H359L369 454V4H359V453H6Z" fill="url(#page-lines)"/>
+                <rect width="360" height="455" rx="2" fill="url(#olive-cover)" filter="url(#cover-grain)"/>
+                <path d="M19 0V455" stroke="#3a4536" stroke-opacity=".4"/>
+                <path d="M21 0V455" stroke="#d3d7bc" stroke-opacity=".24"/>
+                <text x="35" y="43" fill="#e9e9d7" font-size="10" font-family="Helvetica Neue, sans-serif">느린 서가 산책 기록 / 02</text>
+                <g fill="#f3f0de" font-family="AppleMyungjo, Batang, serif" font-size="54" letter-spacing="-4">
+                  <text x="30" y="121">걷는</text><text x="30" y="182">시선</text>
+                </g>
+                <path d="M178 83H325M178 95H325M178 107H288" stroke="#d0d4b8" stroke-width=".8" opacity=".6"/>
+                <g clip-path="url(#walking-photo)">
+                  <image href="../shared/assets/reference-farnsworth-house.jpg" x="-161" y="112" width="695" height="463" preserveAspectRatio="xMidYMid slice" style="filter:grayscale(1) sepia(.35) contrast(.8)"/>
+                  <rect x="27" y="245" width="306" height="194" fill="#65774d" opacity=".24" style="mix-blend-mode:multiply"/>
+                </g>
+                <path d="M0 0H360V455H0Z" fill="url(#cover-light)"/>
+              </g>
+              <g transform="matrix(.93 .17 -.12 .95 382 82)">
+                <rect x="14" y="22" width="430" height="598" rx="2" fill="#332b20" opacity=".35" filter="url(#soft-shadow)"/>
+                <rect x="6" y="14" width="430" height="594" fill="#28231b" opacity=".18" filter="url(#contact-shadow)"/>
+                <path d="M0 591L13 610H444V13L430 0Z" fill="#a59c87"/>
+                <path d="M8 589L18 604H437V14L430 7V589Z" fill="url(#paper-edge)"/>
+                <path d="M8 589L18 604H437V14L430 7V589Z" fill="url(#page-lines)"/>
+                <path d="M0 589L13 610H444V605H17L8 589Z" fill="#d2c8b3"/>
+                <rect width="430" height="591" rx="2" fill="url(#ivory-cover)" filter="url(#cover-grain)"/>
+                <path d="M25 0V591" stroke="#9e9582" stroke-opacity=".28"/>
+                <path d="M28 0V591" stroke="#fff9ee" stroke-opacity=".8"/>
+                <text x="45" y="43" fill="#554d41" font-size="10" font-family="Helvetica Neue, sans-serif">느린 서가 공간 기록 / 01</text>
+                <g fill="#332f27" font-family="AppleMyungjo, Batang, serif" font-size="60" letter-spacing="-5">
+                  <text x="41" y="117">집의</text><text x="41" y="184">바깥</text>
+                </g>
+                <g fill="#554d41" font-family="Helvetica Neue, Apple SD Gothic Neo, sans-serif" font-size="10">
+                  <text x="292" y="132">벽과 창 너머,</text><text x="292" y="149">풍경이 되는 집</text>
+                </g>
+                <g clip-path="url(#cover-photo)">
+                  <image href="../shared/assets/reference-farnsworth-house.jpg" x="-27" y="178" width="510" height="340" preserveAspectRatio="xMidYMid slice" style="filter:saturate(.55)"/>
+                </g>
+                <path d="M44 526H396" stroke="#b8af9e" stroke-width=".8"/>
+                <text x="44" y="554" fill="#554d41" font-size="10" font-family="Helvetica Neue, Apple SD Gothic Neo, sans-serif">공간을 읽는 달</text>
+                <text x="321" y="555" fill="#332f27" font-family="Georgia, serif" font-size="22" letter-spacing="-1">Seoga.</text>
+                <path d="M0 0H430V591H0Z" fill="url(#cover-light)"/>
+              </g>
+              <g transform="translate(776 685) rotate(13)">
+                <path d="M0 0H66V153L33 139 0 153Z" fill="#682b32"/>
+                <text x="33" y="25" text-anchor="middle" fill="#efe9dc" font-family="Georgia, serif" font-size="12">Seoga.</text>
+                <path d="M17 46H49M17 49H49" stroke="#ac7c7b" stroke-width=".6"/>
+                <text x="33" y="84" text-anchor="middle" fill="#efe9dc" font-family="Apple SD Gothic Neo, sans-serif" font-size="9">읽던 자리</text>
+                <text x="33" y="101" text-anchor="middle" fill="#efe9dc" font-family="Apple SD Gothic Neo, sans-serif" font-size="9">그대로</text>
+              </g>
+            </svg>
+            <figcaption><span>이달의 책 / 공간 기록과 산책 기록</span><span>가상 도서 · 직접 제작한 표지와 목업</span></figcaption>
+          </figure>
+        </div>
+        <div class="hero-bottom"><span>두 권의 책, 서로 다른 시선.<br>11월에는 공간을 읽습니다.</span><span>가상의 독립서점과 창작 도서로 구성한 시안<br>실제 매장·판매 도서가 아닙니다.</span></div>
+      </section>
+
+      <section class="selection inset" id="shelf" aria-labelledby="shelf-title">
+        <p class="section-label">이달의 두 권</p>
+        <div class="selection-heading">
+          <h2 id="shelf-title">집의 바깥에서,<br>나의 안쪽으로.</h2>
+          <p>어떤 집은 풍경을 바꾸고,<br>어떤 길은 생각을 바꿉니다.<br>익숙한 장소를 새롭게 읽는 두 가지 방법.</p>
+        </div>
+        <details class="book-entry">
+          <summary>
+            <span class="book-number" aria-hidden="true">01</span>
+            <span><span class="book-name">집의 바깥</span><span class="book-kind">공간 기록 · 느린 서가 편집실</span></span>
+            <span class="book-description">벽과 창 너머, 풍경이 되는 집을 바라봅니다.</span>
+            <span class="read-label"><span class="when-closed">소개 읽기</span><span class="when-open">소개 접기</span><span class="read-symbol when-closed" aria-hidden="true">+</span><span class="read-symbol when-open" aria-hidden="true">−</span></span>
+          </summary>
+          <div class="book-detail"><p>집은 어디까지일까요. 벽이 끝나는 곳일 수도, 창으로 보이는 나무까지일 수도 있습니다. 건물의 외형보다 그 주변에 남겨진 공간을 따라 읽는 가상의 사진집입니다.</p><p>표지 사진의 판스워스 하우스는 미스 반 데어 로에가 설계한 실제 건축물입니다. 이 시안의 서점이나 편집실이 설계한 건물이 아닙니다.</p><p class="sample-note">시안용 창작 도서입니다. 건축 사진의 출처와 이용 조건은 하단 제작 기록에 표기했습니다.</p></div>
+        </details>
+        <details class="book-entry">
+          <summary>
+            <span class="book-number" aria-hidden="true">02</span>
+            <span><span class="book-name">걷는 시선</span><span class="book-kind">산책 기록 · 느린 서가 편집실</span></span>
+            <span class="book-description">같은 길에서도 매번 다른 장면을 만납니다.</span>
+            <span class="read-label"><span class="when-closed">소개 읽기</span><span class="when-open">소개 접기</span><span class="read-symbol when-closed" aria-hidden="true">+</span><span class="read-symbol when-open" aria-hidden="true">−</span></span>
+          </summary>
+          <div class="book-detail"><p>목적지 없이 걷는 동안 눈에 들어온 것들을 기록합니다. 계단에 드리운 그림자, 나뭇잎 사이로 보이는 창, 누군가 잠시 앉았다 간 자리. 익숙한 길의 낯선 표정을 모은 가상의 산책 기록집입니다.</p><p>마음에 드는 페이지를 펼친 뒤 오늘 걸었던 길을 떠올려 보세요. 책갈피 뒤에 작은 장면 하나를 적어 두어도 좋겠습니다.</p><p class="sample-note">실제 판매 도서가 아닌 디자인 시안용 창작 도서입니다.</p></div>
+        </details>
+      </section>
+
+      <section class="journal" id="journal" aria-labelledby="journal-title">
+        <figure class="journal-photo"><img src="../shared/assets/reference-farnsworth-house.jpg" width="1920" height="1280" loading="lazy" alt="나무와 유리 벽 사이로 자연을 끌어들인 판스워스 하우스의 흰 구조와 계단"></figure>
+        <div class="journal-text">
+          <div><p class="section-label">서가의 기록 / 11월</p><h2 id="journal-title">풍경을 들이는 집.<br>생각을 들이는 책.</h2></div>
+          <div><p>건축 사진 한 장을 오래 보고 있으면, 어느새 그곳에서 보낼 시간을 상상하게 됩니다. 이번 달에는 공간을 설명하는 책보다 공간에 머물게 하는 책을 골랐습니다.</p><a class="text-link" href="#visit">서가에서 보내는 시간</a></div>
+        </div>
+      </section>
+      <p class="photo-caption inset">사진: Paul R. Burley / 판스워스 하우스 / CC BY-SA 4.0 · 표지와 본문에 크롭·색 조정하여 사용. 사진 및 그 편집 표현은 동일 라이선스를 따릅니다. <a href="#credits">출처와 제작 기록</a></p>
+
+      <section class="visit inset" id="visit" aria-labelledby="visit-title">
+        <div><p class="section-label">방문 안내</p><h2 id="visit-title">읽다 멈춰도 좋은,<br>당신의 다음 자리.</h2></div>
+        <div class="visit-info"><p class="hours">화–일 12:00–19:00 · 월요일은 쉬어갑니다.</p><p class="visit-note">창가에는 책을 읽을 작은 자리가 있습니다.<br>운영 시간은 시안용 설정이며, 실제 매장 위치나 예약 서비스는 연결하지 않았습니다.</p></div>
+      </section>
+    </main>
+
+    <footer class="inset">
+      <details class="colophon" id="credits">
+        <summary>사진 출처 · 제작 기록</summary>
+        <p>느린 서가와 두 권의 도서는 이 화면을 위한 가상의 기획입니다. Seoga는 서가의 로마자 제호입니다. 책의 형태·표지 조판·재질·책갈피는 직접 작성한 SVG이며 사진 촬영물이 아닙니다. 상단 제호와 책을 한 지면에서 중첩하고, 양장본의 책등·종이 단면·접촉 그림자를 표현했습니다.</p>
+        <p>사진: Paul R. Burley, <a href="https://commons.wikimedia.org/wiki/File:Farnsworth_House_Plano-9983.jpg">「Farnsworth House Plano-9983」</a> / <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. 기존 로컬 축소본을 표지와 본문에서 크롭·채도 조절·색 중첩했습니다. 사진 및 그 편집 표현은 CC BY-SA 4.0으로 제공합니다. 실제 건물은 미스 반 데어 로에의 판스워스 하우스이며 가상 서점의 실적·추천·후원을 뜻하지 않습니다.</p>
+        <p>CSS와 SVG는 HTML 안에 있습니다. 사진을 표시하려면 <code>assets/reference-farnsworth-house.jpg</code>를 HTML 옆의 상대 경로에 함께 보관하세요. 외부 폰트·스크립트·자동 네트워크 요청은 없습니다. 사진의 상세 권리 기록은 <a href="../references/reference-studies.md#assets">기존 자산별 출처 문서</a>에서도 확인할 수 있습니다.</p>
+      </details>
+      <p class="footer-title" lang="en" aria-hidden="true">Seoga.</p>
+      <div class="footer-meta"><p>느린 서가 · 책과 생활 사이<br>가상의 독립서점 / HTML·CSS 디자인 시안</p><a href="#top">맨 위로</a></div>
+    </footer>
+  </div>
+</body>
+</html>

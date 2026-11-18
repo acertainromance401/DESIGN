@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -8,6 +8,64 @@ import { Script } from "node:vm";
 import { loadVisualCatalog } from "../dist/visuals.js";
 
 const visuals = await loadVisualCatalog();
+
+test("four reference studies preserve navigation and resolve local files without remote asset dependencies", async () => {
+  const guide = visuals.readFile("reference-studies.md").text;
+  assert.equal(visuals.entries.filter(entry => entry.guide === "reference-studies.md").length, 4);
+  for (const pin of [
+    "2uPWsOly0", "rpVxQeE2Y", "5QxaBMmEE", "11rNsm3Cz", "6e8LIKEwn",
+    "4FZ9Y9pif", "549u7jhtp", "6ynQt7GmE", "393duN9JQ", "3adZCKnMV",
+  ]) assert.ok(guide.includes(`https://pin.it/${pin}`), pin);
+  for (const id of ["reference-house", "reference-object", "reference-exhibition", "reference-sport"]) {
+    const result = visuals.get({ id, includeSource: true });
+    const html = result.source;
+    assert.match(html, /<html lang="ko">/u);
+    assert.match(html, /가상/u);
+    assert.match(html, /<style>/u);
+    assert.match(html, /@media \(max-width: 700px\)/u);
+    assert.doesNotMatch(html, /[↗↘↖↙]|<script|src="https?:|border-left|animation:|@import/u);
+    for (const [, tag] of html.matchAll(/(<[^>]+\bhref="https?:[^>]+>)/gu)) {
+      assert.match(tag, /^<a /u, "only user-activated attribution links may be remote");
+    }
+    assert.equal([...html.matchAll(/<h1(?:\s[^>]*)?>/gu)].length, 1);
+    assert.equal([...html.matchAll(/aria-current="page"/gu)].length, 1);
+    assert.match(html, /:focus-visible/u);
+    for (const other of ["house", "object", "exhibition", "sport"]) {
+      assert.ok(html.includes(`href="./reference-${other}.html"`));
+    }
+    for (const [, target] of html.matchAll(/(?:src|href)="(\.\/[^"#]+)(?:#[^"]*)?"/gu)) {
+      await readFile(new URL(target, new URL(`../${result.path}`, import.meta.url)));
+    }
+    for (const [, target] of html.matchAll(/url\("([^"]+)"\)/gu)) {
+      assert.ok(target.startsWith("../shared/assets/"), target);
+      await readFile(new URL(target, new URL(`../${result.path}`, import.meta.url)));
+    }
+    assert.ok(visuals.search({ query: id }).results.some(entry => entry.id === id));
+  }
+  assert.equal(visuals.search({ query: "레퍼런스 조합", limit: 10 }).results.filter(entry => entry.id.startsWith("reference-")).length, 4);
+});
+
+test("reference typography and substituted photographs ship with their own license notices", async () => {
+  const guide = visuals.readFile("reference-studies.md").text;
+  const house = visuals.get({ id: "reference-house", includeSource: true }).source;
+  const exhibition = visuals.get({ id: "reference-exhibition", includeSource: true }).source;
+  assert.match(house, /Paul R\. Burley/u);
+  assert.match(house, /https:\/\/creativecommons\.org\/licenses\/by-sa\/4\.0\//u);
+  assert.match(guide, /CC BY-SA 4\.0/u);
+  assert.match(guide, /SIL OFL 1\.1/u);
+  assert.match(exhibition, /@font-face\s*\{[^}]*font-weight: 900/u);
+  assert.match(exhibition, /font-family: "Be Vietnam Pro"/u);
+  assert.doesNotMatch(visuals.get({ id: "reference-object", includeSource: true }).source, /Georgia|Times New Roman/u);
+  const sport = visuals.get({ id: "reference-sport", includeSource: true }).source;
+  assert.match(sport, /clip-path="url\(#player\)"/u);
+  assert.match(sport, /<clipPath id="ball"[^>]*><ellipse/u);
+  assert.match(sport, /<image[^>]+clip-path="url\(#ball\)"/u);
+  const font = await readFile(new URL("../designs/shared/assets/be-vietnam-pro-black.ttf", import.meta.url));
+  assert.equal(font.subarray(0, 4).toString("hex"), "00010000", "bundled font must be TrueType, not a download error");
+  assert.match(await readFile(new URL("../designs/shared/assets/be-vietnam-pro-OFL.txt", import.meta.url), "utf8"), /SIL OPEN FONT LICENSE Version 1\.1/u);
+  const photo = await readFile(new URL("../designs/shared/assets/reference-farnsworth-house.jpg", import.meta.url));
+  assert.equal(photo.subarray(0, 2).toString("hex"), "ffd8", "bundled photograph must be JPEG");
+});
 
 test("three boxing references have distinct portable SVG drafts and documented links", () => {
   const guide = visuals.readFile("boxing-references.md").text;
@@ -31,10 +89,10 @@ test("sports collage uses a bundled photograph and documents its license and ori
   const html = visuals.get({ id: "sports-collage", includeSource: true }).source;
   assert.doesNotMatch(html, /[↗↘↖↙]|<script|(?:src|href)="https?:/u);
   assert.match(html, /clip-path="url\(#player\)"/u);
-  const sources = [...html.matchAll(/(?:src|href)="(\.\/assets\/[^"]+)"/gu)];
+  const sources = [...html.matchAll(/(?:src|href)="(\.\.\/shared\/assets\/[^"]+)"/gu)];
   assert.equal(sources.length, 4);
   for (const [, path] of sources) {
-    const asset = await readFile(new URL(`../docs/${path}`, import.meta.url));
+    const asset = await readFile(new URL(path, new URL("../designs/posters/sports-collage.html", import.meta.url)));
     assert.equal(asset.subarray(0, 3).toString("hex"), "ffd8ff");
   }
   assert.match(visuals.readFile("sports-collage.md").text, /CC0/u);
@@ -144,16 +202,22 @@ test("editorial effects stop immediately and respect motion, visibility and poin
 });
 
 test("visual examples remain separate, compact by default and searchable in Korean/English", () => {
-  assert.equal(visuals.list().exampleCount, 11);
-  assert.equal(visuals.files.size, 16);
+  assert.equal(visuals.list().exampleCount, 21);
+  assert.equal(visuals.files.size, 27);
   assert.ok(visuals.search({ query: "검정 포스터 레퍼런스" }).results.some(({ id }) => id === "black-editorial"));
   assert.ok(visuals.search({ query: "검정 모던 미니멀" }).results.some(({ id }) => id === "black-minimal"));
-  for (const { id } of visuals.entries) {
+  for (const { id, distribution } of visuals.entries) {
     const compact = visuals.get({ id });
     assert.equal(compact.source, null);
     assert.equal(compact.platform, "web");
     assert.ok(compact.limitations.length);
-    assert.match(visuals.get({ id, includeSource: true }).source, /^<!doctype html>/iu);
+    const detail = visuals.get({ id, includeSource: true });
+    if (distribution === "bundled" || detail.sourceAvailable) {
+      assert.match(detail.source, /^<!doctype html>/iu);
+    } else {
+      assert.equal(detail.source, null);
+      assert.match(detail.sourceNotice, /LOCAL_ONLY_SOURCE_UNAVAILABLE/u);
+    }
   }
   for (const query of ["리플", "ripple", "햅틱", "쉬머"]) {
     assert.ok(visuals.search({ query }).results.some(({ id }) => id === "screen-effects"));
@@ -186,6 +250,11 @@ test("bundled guidance links are portable and missing/invalid files fail explici
   t.after(() => rm(directory, { recursive: true, force: true }));
   const root = pathToFileURL(`${directory}/`);
   await assert.rejects(loadVisualCatalog(root), /ENOENT/u);
-  await writeFile(join(directory, "boxing-overhead.html"), "");
+  await mkdir(join(directory, "content"), { recursive: true });
+  await writeFile(join(directory, "content/design-reuse.json"), JSON.stringify(visuals.reuse));
+  await mkdir(join(directory, "scripts"), { recursive: true });
+  for (const file of visuals.reuse.supportFiles) await writeFile(join(directory, file), "export {};\n");
+  await mkdir(join(directory, "designs/characters"), { recursive: true });
+  await writeFile(join(directory, visuals.entries[0].path), "");
   await assert.rejects(loadVisualCatalog(root), /Invalid or empty visual file/u);
 });

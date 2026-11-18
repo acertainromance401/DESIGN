@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>후반전 — PLAY. / 레퍼런스 스터디 04</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { color-scheme: light; --paper: #e9e3d1; --red: #b52e21; --ink: #28251f; }
+    body { margin: 0; background: #d6d1c5; color: var(--ink); font-family: Arial, "Apple SD Gothic Neo", sans-serif; }
+    a { color: inherit; text-underline-offset: 6px; }
+    a:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+    .skip { position: absolute; top: -100px; left: 20px; z-index: 10; padding: 14px; background: var(--paper); }
+    .skip:focus { top: 10px; }
+    .study-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 26px; padding: 8px 3.5%; background: #f4f2e9; font-size: 13px; }
+    .study-nav span { margin-right: auto; }
+    .study-nav a { display: inline-flex; min-height: 44px; align-items: center; text-decoration: none; }
+    .study-nav [aria-current] { text-decoration: underline; font-weight: 700; }
+    main { max-width: 1000px; margin: auto; padding: 28px 20px 0; }
+    .poster { position: relative; aspect-ratio: 736 / 1042; background: var(--paper); isolation: isolate; overflow: hidden; container-type: inline-size; }
+    .paper-grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 4; pointer-events: none; opacity: .14; mix-blend-mode: multiply; }
+    h1 { position: absolute; top: -2%; left: 3%; right: 3%; margin: 0; font-family: Impact, "Arial Narrow", sans-serif; font-size: 46cqw; font-weight: 400; line-height: 1; letter-spacing: -.055em; color: var(--red); transform: scaleY(1.7); transform-origin: top left; white-space: nowrap; }
+    .player { position: absolute; z-index: 2; left: 12%; top: 24%; width: 78%; height: 68%; overflow: visible; filter: grayscale(1) sepia(.22) contrast(1.14) brightness(.84); }
+    .ground { position: absolute; left: 29%; top: 88%; width: 60%; height: 5%; background: radial-gradient(ellipse, #625c4e65, transparent 70%); transform: rotate(-6deg); }
+    .words { position: absolute; top: 58%; left: 5%; right: 5%; display: flex; justify-content: space-between; z-index: 3; color: var(--red); font-size: clamp(8px, 1.8cqw, 18px); font-weight: 700; }
+    .edition { position: absolute; bottom: 3%; left: 6%; right: 6%; display: flex; gap: 20px; justify-content: space-between; align-items: end; color: var(--red); font-size: clamp(8px, 1.35cqw, 14px); line-height: 1.8; }
+    .edition strong { font-size: clamp(12px, 3.4cqw, 34px); letter-spacing: -.07em; }
+    .edition p { margin: 0; }
+    .caption { margin: 18px 0 30px; font-size: 12px; line-height: 1.8; }
+    details { border-top: 1px solid #aba394; padding: 18px 0; font-size: 14px; line-height: 1.9; }
+    summary { min-height: 44px; cursor: pointer; }
+    details p { max-width: 780px; }
+    footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 18px 0 32px; font-size: 12px; line-height: 1.8; }
+    footer a { display: inline-flex; min-height: 44px; align-items: center; }
+    @media (max-width: 700px) {
+      .study-nav { gap: 4px 18px; padding: 10px 5%; }
+      .study-nav span { flex-basis: 100%; }
+      main { padding: 16px 3% 0; }
+      .caption { font-size: 12px; margin-bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 이동</a>
+  <nav class="study-nav" aria-label="레퍼런스 시안 비교"><span>레퍼런스 스터디 / 04</span><a href="./reference-house.html">건축</a><a href="./reference-object.html">조명</a><a href="./reference-exhibition.html">편집</a><a href="./reference-sport.html" aria-current="page">스포츠</a></nav>
+  <main id="main">
+    <article class="poster" aria-labelledby="title">
+      <h1 id="title" lang="en">PLAY.</h1>
+      <div class="ground" aria-hidden="true"></div>
+      <svg class="player" viewBox="400 90 410 590" role="img" aria-labelledby="player-title player-desc">
+        <title id="player-title">공을 향해 발을 뻗은 축구 선수</title>
+        <desc id="player-desc">CC0 경기 사진에서 인물과 공을 수동 윤곽으로 잘라 제목 앞에 겹쳤다. 실제 팀의 홍보물이 아니다.</desc>
+        <defs>
+          <clipPath id="player" clipPathUnits="userSpaceOnUse">
+            <path d="M556 173L552 153L558 125L579 110L590 102L598 111L610 105L622 118L636 121L644 140L634 160L626 186L617 207L642 222L664 240L687 258L710 281L726 303L744 326L769 353L787 375L792 381L777 382L760 366L745 347L728 327L710 307L693 293L677 285L664 290L649 286L637 285L630 306L627 338L624 369L615 389L638 409L655 433L674 458L693 490L710 512L731 534L748 563L754 594L766 626L785 648L781 660L763 666L739 660L722 647L707 622L694 601L686 575L673 551L653 532L629 512L608 492L588 461L568 437L568 473L558 510L551 538L547 572L539 596L537 616L528 640L515 650L497 646L495 633L505 615L509 592L509 565L507 541L506 506L501 475L491 448L488 419L496 394L483 387L482 358L478 345L465 343L446 332L432 320L423 306L419 289L425 272L436 254L455 236L477 220L499 206L522 196L541 191L550 182ZM468 291L482 300L481 284Z"/>
+          </clipPath>
+          <clipPath id="ball" clipPathUnits="userSpaceOnUse"><ellipse cx="728" cy="550" rx="44" ry="44"/></clipPath>
+        </defs>
+        <image href="../shared/assets/sports-soccer-cc0.jpg" width="1000" height="714.2857" clip-path="url(#player)"/>
+        <!-- Keep the ball separate from the self-intersecting player contour. -->
+        <image href="../shared/assets/sports-soccer-cc0.jpg" width="1000" height="714.2857" clip-path="url(#ball)"/>
+      </svg>
+      <div class="words" aria-hidden="true"><span>THE GAME.</span><span>THE MOMENT.</span><span>THE MOVEMENT.</span></div>
+      <div class="edition"><strong>후반전</strong><p>사진 한 장을 읽는 스포츠 지면<br>Keith / CC0 · 가상 편집물</p><p>FOOTBALL<br>PHOTO STUDY / 01</p></div>
+      <svg class="paper-grain" aria-hidden="true" focusable="false"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="3" seed="9"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#grain)" opacity=".55"/></svg>
+    </article>
+    <p class="caption">포스터 문구: 경기 · 순간 · 움직임. 사진: Keith / CC0. 인물·공을 수동 절단하고 흑백·세피아 처리했습니다.<br>종이색 배경 위에 큰 적색 압축 활자를 놓고, 잘라낸 인물을 그 앞에 겹쳤습니다. 실제 인물·팀의 추천이나 후원을 뜻하지 않습니다.</p>
+    <details><summary>원본과 맞춘 부분 · 다른 부분</summary><p>주 기준은 10 복싱 포스터입니다. 기존 사각 사진 구획과 옆글·숫자 배치를 없애고, 세로 포스터·폭을 채운 긴 적색 활자·중앙에서 아래로 이어지는 인물 컷아웃·종이 바탕의 중첩 구조를 맞췄습니다.</p><p>원본 서체는 확인하지 못했습니다. 세로로 긴 압축 활자는 로컬 Impact와 세로 비례 조절로 근사했습니다. 원본 사진·문구·브랜드는 사용하지 않았고, 축구 사진의 수동 마스크는 정밀한 머리카락 절단이 아닙니다. <a href="../posters/sports-collage.md">사진 출처·권리 안내</a></p></details>
+    <footer><span>가상 스포츠 포스터 / 실제 경기 보도·모집 아님<br>assets/sports-soccer-cc0.jpg를 함께 보관하세요.</span><a href="./reference-studies.md">원본 비교와 폰트 확인 기록</a></footer>
+  </main>
+</body>
+</html>

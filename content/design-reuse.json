@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "supportFiles": ["scripts/prepare-birthday-model.mjs", "scripts/prepare-birthday-vendor.mjs"],
+  "families": [
+    { "id": "editorial", "title": "편집·포트폴리오·작업 도구", "summary": "활자 위계, 열린 지면, 검색과 목록·상세 상태를 분리해 활용한다." },
+    { "id": "references", "title": "레퍼런스 구성 연구", "summary": "건축·제품·전시·스포츠의 구도와 재질을 연구한 최소 완성도 비교 시안." },
+    { "id": "posters", "title": "포스터·스포츠 그래픽", "summary": "SVG 일러스트, 사진 컷아웃, 종이 질감, 강한 활자와 조명을 조합한다." },
+    { "id": "palettes", "title": "팔레트·분위기 비교", "summary": "8개 고정 배색과 6개 화면의 18개 전환 배색. 총 26개 조합." },
+    { "id": "effects", "title": "화면 효과·광학 재질", "summary": "32개 수동 실행 효과와 WebGL 광학 유리 컨트롤을 구분한다." },
+    { "id": "spatial", "title": "공간·서점·극장", "summary": "2D SVG 깊이 표현과 실제 WebGL 3D 장면의 차이를 비교한다." },
+    { "id": "characters", "title": "절차적 캐릭터·ASCII", "summary": "SDF 입체 생성과 문자 아틀라스 후처리의 두 패스 렌더링." },
+    { "id": "celebration", "title": "이벤트·오디오·상태 흐름", "summary": "3D 케이크, 호흡 입력, 효과음과 편지·엔딩 전환. 개인 자산은 로컬 전용." }
+  ],
+  "platforms": [
+    {
+      "id": "web", "title": "웹·개인 홈페이지",
+      "requirements": ["정적 HTTP 서버와 시맨틱 HTML/CSS/ES 모듈", "GPU 시안은 WebGL 2 기능 검사와 실패 안내", "생일 마이크는 HTTPS 또는 localhost 및 사용자 권한·제스처 필요"],
+      "workflow": ["구도·팔레트·상태 로직 중 필요한 부분만 기존 컴포넌트에 통합한다.", "sourceFiles의 상대 경로를 유지하고 assets의 라이선스·배포 상태를 확인한다.", "개인 홈페이지의 실제 소개·작업 데이터로 교체하고 가상 실적·주문 기능을 그대로 사용하지 않는다.", "정적 콘텐츠와 키보드 조작을 먼저 연결하고 GPU·모션은 점진 향상으로 추가한다."],
+      "validation": ["360px·태블릿·데스크톱에서 넘침·확대·읽기 순서 확인", "키보드·터치·포커스·동작 줄이기·GPU 미지원 확인", "Network에서 로컬 모듈·폰트·이미지의 404 및 외부 요청 확인"],
+      "limits": ["HTML 반환은 브라우저 실행이나 배포 완료가 아니다.", "JS 모듈 시안은 file://에서 실행하지 않는다."],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API", "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia"]
+    },
+    {
+      "id": "swiftui", "title": "Swift·SwiftUI 앱",
+      "requirements": ["Xcode 프로젝트, 대상 OS와 지원 기기 범위 결정", "Text·Layout·Shape·Canvas·네이티브 Control 우선", "SwiftUI Metal shader 효과는 iOS 17/macOS 14 이상 분기, Liquid Glass는 iOS/macOS 26 이상 분기"],
+      "workflow": ["CSS 값을 의미 Color·Font·Spacing 토큰으로 매핑하고 Dynamic Type·안전 영역을 반영한다.", "DOM 상태를 Observable 모델과 Button·Toggle·Picker·DisclosureGroup 등 네이티브 조작에 연결한다.", "2D 그래픽은 Shape/Canvas로 다시 그리고 복잡한 필터만 layerEffect/distortionEffect로 분리한다.", "공간 장면은 RealityKit, 다중 패스 후처리는 MTKView로 분리한다. WKWebView는 웹을 유지하는 별도 선택이지 네이티브 변환이 아니다."],
+      "validation": ["VoiceOver·Dynamic Type 최대 크기·키보드·Reduce Motion·Reduce Transparency 확인", "최소 OS에서 availability 분기·정적 재질 대안 확인", "실기기에서 Instruments로 CPU/GPU·메모리·스크롤 측정"],
+      "limits": ["시안 HTML을 SwiftUI 코드로 자동 변환하지 않는다.", "SwiftUI layerEffect는 전달된 래스터 레이어를 샘플링하며 임의의 뒤쪽 네이티브 뷰나 3D 장면을 자동 캡처하지 않는다."],
+      "references": ["https://developer.apple.com/documentation/swiftui", "https://developer.apple.com/documentation/swiftui/view/layereffect(_:maxsampleoffset:isenabled:)", "https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views"]
+    },
+    {
+      "id": "metal", "title": "Apple Metal·MetalKit",
+      "requirements": ["Metal 지원 기기와 MTLDevice 생성 실패 처리", "MTKView·MTKViewDelegate·command queue·pipeline state", "GLSL ES를 MSL로 재작성하고 render target·uniform·sampler 수명 설계"],
+      "workflow": ["SwiftUI에서는 UIViewRepresentable/NSViewRepresentable로 MTKView를 호스팅하고 조작 UI는 네이티브로 유지한다.", "ASCII는 저해상도 장면 텍스처 → 문자 아틀라스 합성으로 두 패스를 명시한다.", "유리는 뒤 배경 텍스처·물체 rect/shape uniform → 광학 fragment 패스로 재구성한다.", "픽셀 좌표·UV Y축·열 우선 행렬·정렬/padding·색 공간·premultiplied alpha를 비교한다.", "화면 숨김·scenePhase 비활성·Reduce Motion에서 draw를 중단하고 drawable 크기 변경과 자원 해제를 처리한다."],
+      "validation": ["Metal API Validation·GPU Frame Capture로 패스 의존·texture usage·경계 검사", "16.7ms/60fps 또는 33.3ms/30fps 중 목표를 정해 실기기 측정", "저전력·열·메모리 압박·GPU 불가 시 정적 대안 확인"],
+      "limits": ["현재 저장소에는 이 시안들의 .metal 구현이 없다. 제공하는 것은 이식 설계다.", "Metal 4 전용 기능은 필요 조건이 아니다. 실제 사용 기능에 맞는 SDK·OS·GPU family를 선택한다."],
+      "references": ["https://developer.apple.com/documentation/metal", "https://developer.apple.com/documentation/metalkit/mtkview"]
+    },
+    {
+      "id": "realitykit", "title": "RealityKit·공간/3D 앱",
+      "requirements": ["RealityKit과 대상 OS에서 지원하는 RealityView 또는 ARView 선택", "권리가 확인된 USD/USDZ 모델과 PBR 텍스처", "Reality Composer Pro 등 현재 Xcode 도구에서 변환·재질 호환성 확인"],
+      "workflow": ["Three.js scene graph를 Entity·ModelEntity·카메라·조명으로 다시 구성한다.", "GLB를 그대로 네이티브 자산으로 취급하지 않고 USDZ 변환 후 축·단위·roughness·normal·alpha를 검수한다.", "책 목업·극장 좌석은 실제 메시가 없으므로 원본 SVG에서 모델링 또는 2D 평면 방식을 선택한다.", "SwiftUI overlay로 목록·설명·상태와 접근 가능한 조작을 제공한다."],
+      "validation": ["실기기에서 모델 크기·원점·피벗·재질·광원과 로드 실패 확인", "공간 이동·재중심화·가림·정적 대안·멀미 확인", "자산 크기·LOD·텍스처·엔티티 수 예산 측정"],
+      "limits": ["WebGL ShaderMaterial·레이마칭은 RealityKit 재질로 자동 이전되지 않는다.", "AR 카메라 기능을 실제로 사용하는 경우에만 카메라 권한과 AR 세션을 추가한다."],
+      "references": ["https://developer.apple.com/documentation/realitykit", "https://developer.apple.com/documentation/usd"]
+    },
+    {
+      "id": "spritekit", "title": "SpriteKit·2D 게임 에셋",
+      "requirements": ["SpriteKit scene·노드·터치/키보드 입력", "PNG/텍스처 아틀라스 또는 SKShader로 변환", "폰트·사운드·원화의 게임 재배포 권리"],
+      "workflow": ["SVG 도형·마스크를 목표 배율 PNG로 래스터화하고 알파·패딩·피벗을 정의한다.", "텍스트는 SKLabelNode/SwiftUI로 분리해 번역·접근성 경로를 유지한다.", "입자·등불·비는 SKEmitterNode 또는 SKShader로 재작성한다. UI 상태는 게임 상태와 분리한다."],
+      "validation": ["2x/3x 배율과 아틀라스 가장자리 번짐·premultiplied alpha 확인", "노드 수·draw call·텍스처 메모리·프레임 시간 측정", "오디오 중단·일시정지·앱 백그라운드 전환 확인"],
+      "limits": ["SDF 캐릭터는 메시·본·스프라이트 시트가 아니다. 프레임 캡처/베이크 또는 셰이더 이식이 필요하다."],
+      "references": ["https://developer.apple.com/documentation/spritekit"]
+    },
+    {
+      "id": "unity", "title": "Unity 게임·UI·셰이더",
+      "requirements": ["프로젝트 Unity 버전과 Built-in/URP/HDRP 렌더 파이프라인 확정", "UI Toolkit 또는 uGUI와 별도 게임 상태 모델", "권리 확인 자산·HLSL/Shader Graph·RenderTexture"],
+      "workflow": ["지면은 UI Toolkit/uGUI로 재구성하고 도형은 Sprite/메시로 추출한다.", "ASCII는 scene RenderTexture와 glyph atlas를 fullscreen pass로 연결한다. URP/HDRP별 확장 지점이 다르므로 기존 파이프라인을 따른다.", "유리 굴절에는 배경 color texture와 투명 오브젝트 정렬을 설계한다.", "GLB는 승인된 importer 또는 DCC 변환 경로를 선정하고 단위·재질·텍스처를 검수한다."],
+      "validation": ["목표 플랫폼 빌드에서 shader variant·색 공간·깊이/투명 정렬 확인", "Profiler·Frame Debugger로 CPU/GPU·draw call·메모리 측정", "패드·키보드·터치·UI 포커스·일시정지 확인"],
+      "limits": ["WebGL/GLSL 코드는 Unity 셰이더가 아니다. 렌더 파이프라인별 재작성이 필요하다."],
+      "references": ["https://docs.unity3d.com/Manual/Shaders.html", "https://docs.unity3d.com/Manual/UIElements.html"]
+    },
+    {
+      "id": "godot", "title": "Godot 게임·그래픽",
+      "requirements": ["Godot 버전·Forward+/Mobile/Compatibility 렌더러 결정", "Control/Theme·SubViewport·ShaderMaterial", "재배포 가능한 glTF·PNG·폰트·오디오"],
+      "workflow": ["지면은 Control Container와 Theme로, 2D 효과는 canvas_item shader로 분리한다.", "ASCII는 SubViewport 장면 → ViewportTexture → 문자 아틀라스 후처리로 구성한다.", "유리는 screen texture의 복사 시점·BackBufferCopy와 렌더러 제약을 확인한다.", "3D는 glTF를 가져와 재질·광원·카메라를 Godot 장면으로 다시 연결한다."],
+      "validation": ["선택 렌더러와 내보내기 대상에서 screen/depth texture 지원 확인", "늘어난 창·고해상도·입력 포커스와 GPU 시간을 측정", "리소스 import 오류와 오디오/권한 실패를 표시"],
+      "limits": ["GLSL과 유사해도 Godot shader의 내장 변수·샘플러·좌표 규약으로 변경해야 한다."],
+      "references": ["https://docs.godotengine.org/en/stable/tutorials/shaders/index.html", "https://docs.godotengine.org/en/stable/tutorials/assets_pipeline/importing_3d_scenes/index.html"]
+    },
+    {
+      "id": "unreal", "title": "Unreal Engine 게임·재질",
+      "requirements": ["프로젝트 엔진 버전·대상 RHI·모바일/데스크톱 렌더 경로 결정", "UMG/Slate·Material Editor·Post Process Material", "검증된 메시/텍스처/사운드 import 경로와 권리"],
+      "workflow": ["지면을 UMG 위젯과 스타일로 재구성하고 SVG는 지원 플러그인 확인 또는 PNG/메시로 변환한다.", "ASCII는 SceneCapture2D/RenderTarget 또는 Post Process 입력과 glyph atlas를 결합한다.", "유리는 Translucency/Refraction 재질로 다시 설계하고 모바일에서 대체 재질을 제공한다.", "캐릭터 SDF를 Skeletal Mesh로 오해하지 말고 shader·베이크 sprite·신규 모델링 중 선택한다."],
+      "validation": ["패키지 빌드에서 재질 compile·렌더 경로·투명도·Lumen 설정 차이 확인", "GPU Visualizer/Unreal Insights로 GPU·메모리·프레임 예산 측정", "UMG 포커스·게임패드·해상도 스케일·정적 대안 확인"],
+      "limits": ["Three.js 조명/물성·웹 애니메이션을 Blueprint나 Material로 자동 변환하지 않는다."],
+      "references": ["https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-motion-graphics-ui-designer-umg", "https://dev.epicgames.com/documentation/en-us/unreal-engine/post-process-materials-in-unreal-engine"]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "css-layout", "title": "반응형 편집·유동 타이포", "keywords": ["grid", "flex", "clamp", "typography", "여백", "타이포", "개인 홈페이지"],
+      "what": "Grid/Flex·상대 단위·clamp와 미디어 쿼리로 활자·이미지의 위계와 재배치를 만든다.",
+      "web": "색·간격·타입을 토큰으로 추출하고 실제 문구 길이에 맞게 breakpoint를 다시 정한다.",
+      "apple": "SwiftUI Layout/Grid/ViewThatFits·Text·Dynamic Type으로 재구성한다. 픽셀 고정 크기를 그대로 이식하지 않는다.",
+      "game": "UI Toolkit/uGUI·Godot Control·UMG 또는 SpriteKit 노드에 앵커·해상도 스케일·폰트 메트릭을 다시 정의한다.",
+      "checks": ["긴 한국어·번역·큰 글씨·좁은 화면에서 겹침과 잘림 확인"],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout"]
+    },
+    {
+      "id": "svg-illustration", "title": "SVG 벡터·그라데이션·깊이", "keywords": ["svg", "vector", "일러스트", "도형", "책", "좌석", "포스터"],
+      "what": "path·gradient·pattern·그룹 변환으로 제품과 공간을 2D에서 직접 그린다. 실제 3D 메시와 다르다.",
+      "web": "viewBox와 ID 참조를 유지하고 symbol로 추출할 때 gradient/filter ID 충돌을 방지한다.",
+      "apple": "단순 path는 Shape/Canvas로 재작성하거나 PDF/PNG 자산으로 변환한다. SVG 필터의 Asset Catalog 지원을 가정하지 않는다.",
+      "game": "목표 해상도 PNG·sprite atlas 또는 메시로 변환한다. 그림자·빛은 베이크할 부분과 실시간 재질을 분리한다.",
+      "checks": ["뷰박스·스케일·stroke·투명도·필터 잘림·대체 설명 확인"],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/SVG"]
+    },
+    {
+      "id": "image-masking", "title": "사진 크롭·SVG 컷아웃·마스크", "keywords": ["clip", "mask", "cutout", "photo", "사진", "콜라주", "인물"],
+      "what": "동일 사진을 다른 크기로 재사용하고 clipPath와 전경 마스크로 활자 앞뒤를 나눈다.",
+      "web": "원본 사진·크롭 위치·마스크 path를 함께 추출한다. 수동 윤곽을 자동 배경 제거로 설명하지 않는다.",
+      "apple": "Image의 scaledToFill·clipped·mask/Shape를 사용하고 화면 비율별 크롭을 조정한다.",
+      "game": "알파 PNG 또는 mask texture로 베이크하고 atlas padding·alpha blending을 확인한다.",
+      "checks": ["원본 해상도·크롭·초상권·상표권·사진 라이선스와 편집 고지 확인"],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/SVG/Element/clipPath"]
+    },
+    {
+      "id": "procedural-texture", "title": "노이즈·종이·절차적 텍스처", "keywords": ["grain", "noise", "paper", "turbulence", "종이", "그레인", "직물"],
+      "what": "SVG feTurbulence·blend·반복 패턴 또는 Canvas로 종이·직물·카펫의 미세 변화를 만든다.",
+      "web": "노이즈의 seed·scale·opacity를 분리하고 읽기 대비와 필터 비용을 제한한다.",
+      "apple": "정적 텍스처를 베이크하거나 Canvas/Metal noise로 재작성한다. 앱 전체에 실시간 필터를 무조건 적용하지 않는다.",
+      "game": "tileable texture·normal/roughness map으로 분리하고 mipmap·색 공간·타일 반복을 검수한다.",
+      "checks": ["축소 모아레·움직임·대비·텍스처 메모리 확인"],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feTurbulence"]
+    },
+    {
+      "id": "design-tokens", "title": "의미 색상 토큰·배색 전환", "keywords": ["palette", "theme", "color", "배색", "팔레트", "테마"],
+      "what": "배경·본문·보조색·강조색을 CSS custom property로 분리하고 동일한 역할에 팔레트를 바꿔 적용한다.",
+      "web": "변수를 프로젝트 토큰으로 매핑한다. 분위기 전환 UI와 실제 설정 저장 기능은 별개다.",
+      "apple": "Color asset/의미 Color 집합으로 구성하고 다크 모드·고대비·시스템 테마 우선순위를 결정한다.",
+      "game": "Theme/ScriptableObject/Data Asset 등 프로젝트의 팔레트 데이터로 저장하고 상태색은 별도로 유지한다.",
+      "checks": ["본문·보조 정보·포커스·선택·오류의 대비와 비색상 단서 확인"],
+      "references": ["https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html"]
+    },
+    {
+      "id": "dom-state", "title": "시맨틱 컨트롤·검색·상태 관리", "keywords": ["search", "filter", "details", "tabs", "dialog", "검색", "상태", "키보드"],
+      "what": "네이티브 HTML 조작과 JS 상태를 연결해 검색·선택·펼침·탭·모달을 시연한다.",
+      "web": "ARIA와 실제 상태·포커스를 동기화하고 데모 데이터·메모리 상태를 제품 저장 기능으로 오해하지 않는다.",
+      "apple": "Observable 상태와 Button·Toggle·Picker·List·DisclosureGroup·sheet를 연결한다. DOM 이벤트를 직접 번역하지 않는다.",
+      "game": "UI 이벤트를 게임 상태 모델로 연결하고 포커스·패드 탐색·pause 중 입력 정책을 정한다.",
+      "checks": ["키보드·포커스 복귀·빈 결과·중복 동작·상태 전환 확인"],
+      "references": ["https://www.w3.org/WAI/ARIA/apg/"]
+    },
+    {
+      "id": "motion-lifecycle", "title": "모션·포인터·렌더 수명", "keywords": ["animation", "waapi", "raf", "motion", "시차", "리플", "동작 줄이기"],
+      "what": "CSS/WAAPI/requestAnimationFrame과 사용자 모션 설정·가시성·정지 제어를 연결한다. 시안마다 지원 범위가 다르다.",
+      "web": "초기 내용은 보존하고 visibility/IntersectionObserver·일시정지·dispose를 필요한 렌더러에 연결한다.",
+      "apple": "withAnimation·TimelineView·scenePhase·accessibilityReduceMotion을 사용하고 상태 변경과 장식 모션을 분리한다.",
+      "game": "엔진 update/tween·pause·노드 수명으로 이전하고 장면 종료 시 타이머·입자·오디오를 해제한다.",
+      "checks": ["중간 중단·재개·숨김 탭·백그라운드·큰 delta time·Reduce Motion 확인"],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion"]
+    },
+    {
+      "id": "css-light-state", "title": "CSS 상태 기반 조명·막 전환", "keywords": ["property", "has", "curtain", "lighting", "조명", "극장"],
+      "what": "@property --house와 :has(#house-lights:checked)로 하나의 수치가 SVG 광원·막·제목 상태를 함께 바꾼다.",
+      "web": "조명 상태를 하나의 토큰으로 유지하고 미지원 브라우저의 즉시 전환·기본 장면을 확인한다.",
+      "apple": "Observable lightProgress와 Animatable Shape/Canvas로 상태를 공유한다. 실제 3D 조명은 RealityKit/Metal로 별도 구현한다.",
+      "game": "하나의 animation/tween parameter로 light intensity·curtain transform·UI alpha를 동기화한다.",
+      "checks": ["빠른 토글·중간 역전·모션 감소·제목 읽기 가능성 확인"],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/CSS/@property", "https://developer.mozilla.org/en-US/docs/Web/CSS/:has"]
+    },
+    {
+      "id": "webgl-sdf", "title": "WebGL 2·SDF 레이마칭", "keywords": ["sdf", "glsl", "raymarch", "webgl", "metal", "셰이더", "절차적"],
+      "what": "GLSL ES 3.00 fragment shader에서 거리 함수와 광선 진행으로 픽셀을 생성한다. 메시·본·물리 정보가 없다.",
+      "web": "scene 거리 함수·카메라·uniform·step budget을 추출하고 WebGL 2·shader compile 실패를 표시한다.",
+      "apple": "MSL float 타입·sampler·texture·uniform 레이아웃으로 다시 작성하고 MTKView 패스를 구성한다.",
+      "game": "Unity HLSL·Godot shader·Unreal Material/Custom 노드로 재작성한다. 충돌·리깅은 별도 모델이 필요하다.",
+      "checks": ["ray step·해상도·precision·윤곽 aliasing·GPU 시간·컨텍스트 손실 확인"],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext", "https://developer.apple.com/documentation/metal"]
+    },
+    {
+      "id": "ascii-postprocess", "title": "저해상도 FBO·ASCII 문자 아틀라스", "keywords": ["ascii", "glyph", "atlas", "fbo", "문자", "캐릭터", "후처리"],
+      "what": "저해상도 장면의 밝기를 계산해 Canvas로 실제 커버리지를 정렬한 glyph atlas를 셀마다 샘플링한다.",
+      "web": "SCENE_SHADER → framebuffer texture → ASCII_SHADER의 두 패스를 유지한다. 문자 크기와 DPR은 분리한다.",
+      "apple": "MTLTexture 저해상도 render target과 glyph atlas를 두 번째 fragment 패스에 전달한다. CoreText/CoreGraphics 또는 미리 베이크한 atlas를 사용한다.",
+      "game": "RenderTexture/SubViewport/RenderTarget과 후처리 재질로 분리한다. atlas는 nearest sampling과 명시적 셀 종횡비를 쓴다.",
+      "checks": ["격자 320×180·총 36,000셀 이하, 출력 DPR 최대 1.5·2048×1536 상한 보존", "실제 폰트가 달라지면 glyph 커버리지를 다시 정렬"],
+      "references": ["https://developer.apple.com/documentation/metal/mtltexture"]
+    },
+    {
+      "id": "optical-glass", "title": "굴절·Fresnel·흡수·유리 재질", "keywords": ["glass", "refraction", "fresnel", "liquid", "유리", "굴절", "metal"],
+      "what": "SDF 형태의 입사·출사 굴절, Fresnel 반사와 투과 흡수로 유리 표면을 합성한다. CSS blur만의 효과가 아니다.",
+      "web": "DOM rect/shape를 uniform으로 측정해 canvas 재질과 실제 HTML 컨트롤을 정렬한다. CSS 대안을 유지한다.",
+      "apple": "시스템 조작은 iOS/macOS 26+ glassEffect를 우선 검토한다. 동일 광학 연구는 배경 텍스처를 입력하는 Metal 패스로 별도 재작성한다.",
+      "game": "배경 color texture·normal·두께·IOR·roughness를 가진 굴절 재질로 재설계한다. 투명 정렬·모바일 비용을 확인한다.",
+      "checks": ["밝고 어두운 배경에서 글자 대비·포커스 확인", "굴절 품질과 시스템 Liquid Glass의 동등성을 주장하지 않음"],
+      "references": ["https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views"]
+    },
+    {
+      "id": "three-pbr", "title": "Three.js·PBR 조명·장면", "keywords": ["three", "pbr", "roughness", "shadow", "3d", "케이크", "극장"],
+      "what": "scene graph·카메라·재질·광원으로 실제 3D 장면을 렌더링한다. 생일 r180과 극장 내장 r187은 별도 런타임이다.",
+      "web": "버전별 엔진·loader를 혼합하지 않는다. 색 공간·tone mapping·shadow·dispose·품질 조절을 함께 이전한다.",
+      "apple": "RealityKit Entity/재질/광원으로 재구성하거나 필요 시 직접 Metal을 선택한다. Three.js 코드는 Swift API가 아니다.",
+      "game": "엔진 재질·광원 단위·노출·그림자 품질을 다시 맞춘다. 웹 렌더와 완전 동일한 화면을 보장하지 않는다.",
+      "checks": ["로드 실패·메모리·shader compile·GPU 미지원·정적 대안 확인"],
+      "references": ["https://threejs.org/docs/", "https://developer.apple.com/documentation/realitykit"]
+    },
+    {
+      "id": "gltf-assets", "title": "Blender→GLB·모바일 자산 최적화", "keywords": ["glb", "gltf", "blender", "mesh", "usdz", "에셋", "모델", "최적화"],
+      "what": "원본 모델을 보존하고 메시 decimation·텍스처 축소·JPEG 압축으로 모바일 GLB를 만든다.",
+      "web": "GLTFLoader와 상대 texture 경로를 유지한다. 현재 cake-mobile.glb는 텍스처 포함 GLB다.",
+      "apple": "권리 확인 뒤 USDZ로 변환하고 축·단위·PBR 채널·법선을 검수한다. GLB가 RealityKit에서 그대로 로드된다고 가정하지 않는다.",
+      "game": "엔진 importer/변환 경로를 선택하고 LOD·collision·피벗·scale·mipmap·압축 포맷을 별도로 만든다.",
+      "checks": ["기존 모델 예산 46,000 triangles·4MiB 이내; 기록된 실제 값 44,999 triangles·2,530,632 bytes", "base color 최대 2048, 나머지 최대 1024; 원본 SHA-256 보존"],
+      "references": ["https://registry.khronos.org/glTF/", "https://developer.apple.com/documentation/usd"]
+    },
+    {
+      "id": "web-audio", "title": "Web Audio·호흡 분석·재생 정책", "keywords": ["audio", "fft", "rms", "microphone", "소리", "음원", "마이크", "호흡"],
+      "what": "RMS와 700–9000Hz 에너지 비율로 호흡을 추정하고 사용자 제스처에서 음악·박수 재생을 준비한다.",
+      "web": "getUserMedia·AudioContext의 권한/자동재생 실패를 알리고 버튼 대안을 유지한다. 측정 데이터는 녹음·업로드하지 않는다.",
+      "apple": "AVAudioEngine input tap과 Accelerate/vDSP 분석, AVAudioSession·현재 권한 API·NSMicrophoneUsageDescription을 구성한다. 앱별 audio session 정책·인터럽트를 처리한다.",
+      "game": "엔진 microphone buffer의 RMS/FFT와 상태 모델을 연결하고 기기별 noise floor를 재보정한다. 마이크 없이 버튼으로 진행할 수 있게 한다.",
+      "checks": ["700ms 보정, noise×2.8와 0.03 중 큰 RMS 문턱·airRatio>0.06·400ms 유지의 현재 로직 확인", "권한 거부·잡음·박수 오탐·재생 실패·장면 종료 시 트랙/오디오 해제"],
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API", "https://developer.apple.com/documentation/avfaudio/avaudioengine"]
+    }
+  ],
+  "assets": [
+    { "id": "house-photo", "paths": ["designs/shared/assets/reference-farnsworth-house.jpg"], "distribution": "bundled", "rights": "Paul R. Burley, CC BY-SA 4.0. 크롭·채도·전경 마스크 편집에 해당 라이선스와 표시·동일조건 의무를 검토한다. 프로젝트 코드 전체가 자동으로 같은 라이선스가 된다는 뜻은 아니다.", "replacement": "동일조건 공유가 맞지 않는 프로젝트는 권리가 확인된 자체 건축 사진으로 교체한다." },
+    { "id": "sports-photo", "paths": ["designs/shared/assets/sports-soccer-cc0.jpg"], "distribution": "bundled", "rights": "기존 출처 문서상 CC0. 초상권·상표권·팀/선수의 후원 허락까지 보장하지 않는다.", "replacement": "제품·광고에 사용하려면 모델 릴리스와 상표를 확인하거나 자체 이미지로 교체한다." },
+    { "id": "exhibition-font", "paths": ["designs/shared/assets/be-vietnam-pro-black.ttf", "designs/shared/assets/be-vietnam-pro-OFL.txt"], "distribution": "bundled", "rights": "Be Vietnam Pro 900, SIL OFL 1.1. 폰트와 라이선스 고지를 함께 배포한다.", "replacement": "대체 폰트 사용 시 행 길이·두께·줄바꿈을 다시 조정한다." },
+    { "id": "birthday-private", "paths": ["designs/celebration/assets/birthday/cake-mobile.glb", "designs/celebration/assets/birthday/sea-turtle.webp", "designs/celebration/assets/birthday/ending-photo.jpg", "designs/celebration/assets/birthday/letter-paper.webp", "designs/celebration/assets/birthday/letter-paper.avif", "designs/celebration/assets/birthday/leberch-happy-birthday-581704.mp3", "designs/celebration/assets/birthday/pwlpl-applause-sound-effect-521104.mp3"], "distribution": "local-only", "rights": "사용자 제공 사진·원화·편지지·음원·Meshy 모델의 재배포 권리 미확인. 로컬에 보존하며 npm에 포함하지 않는다. MIT 저장소 라이선스를 적용하지 않는다.", "replacement": "자체 모델·사진·음원으로 교체하고 원본 권리와 파생물 배포 조건을 확인한다. 개인 편지·이름도 배포 전에 교체한다." },
+    { "id": "birthday-runtime", "paths": ["designs/celebration/assets/birthday/vendor/LICENSE", "designs/celebration/assets/birthday/fonts/OFL.txt", "designs/celebration/assets/birthday/fonts/pretendard-variable.woff2"], "distribution": "local-only", "rights": "Three.js r180은 MIT, Pretendard는 포함된 SIL OFL 고지를 따른다. 개인 시안 폴더와 함께 npm 제외하며 재사용 시 각 고지를 별도 보관한다.", "replacement": "외부 프로젝트에서 승인된 Three.js 버전·loader 또는 네이티브 렌더러와 라이선스 확인 폰트를 사용한다." }
+  ],
+  "guidePaths": {
+    "reference-studies.md": "designs/references/reference-studies.md",
+    "boxing-references.md": "designs/posters/boxing-references.md",
+    "sports-collage.md": "designs/posters/sports-collage.md",
+    "color-combinations.md": "designs/palettes/color-combinations.md",
+    "mood-examples.md": "designs/palettes/mood-examples.md",
+    "screen-effects.md": "designs/effects/screen-effects.md"
+  },
+  "designs": [
+    {
+      "id": "aesthetic-notes", "family": "editorial", "path": "designs/editorial/aesthetic.html", "legacyPath": "docs/aesthetic.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "css-layout", "location": "designs/editorial/aesthetic.html", "application": "한국어 활자·간격 표본과 수정 메모를 비정형 지면으로 배치한다. JS 없는 정적 화면이다." }],
+      "reusableParts": ["작업 노트의 읽기 순서·글자 크기·간격 표본", "개인 홈페이지의 작업 과정 소개 구도"],
+      "native": "SwiftUI Text와 Layout으로 메모와 표본을 구성한다. 원문과 사용자 언어를 보존하고 고정 픽셀을 Dynamic Type 크기로 바꾼다.",
+      "game": "게임 내 개발 일지·크레디트 UI의 활자 위계로 활용한다. 텍스트를 이미지로 굳히지 않는다.",
+      "requirements": ["외부 폰트·스크립트 없는 정적 HTML/CSS"],
+      "checks": ["긴 한국어와 200% 확대에서 메모·표본 순서 확인"]
+    },
+    {
+      "id": "black-editorial", "family": "editorial", "path": "designs/editorial/black-editorial.html", "legacyPath": "docs/black-editorial.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "css-layout", "location": "designs/editorial/black-editorial.html", "application": "큰 번호·가는 제목·수평 구획으로 포트폴리오의 작업 순서를 만든다." }, { "id": "dom-state", "location": "designs/editorial/black-editorial.html", "application": "details/summary로 작업 설명을 펼친다." }, { "id": "motion-lifecycle", "location": "designs/editorial/black-editorial.html", "application": "WAAPI 진입·펼침, 포인터 반응과 효과 끄기·가시성·동작 줄이기를 연결한다." }],
+      "reusableParts": ["개인 포트폴리오의 목록·작업 설명", "효과 설정과 포인터 반응 수명 관리"],
+      "native": "List 또는 ScrollView의 열린 행과 DisclosureGroup으로 재구성한다. Pointer hover는 보조 기능으로 두고 Reduce Motion에서 정적 상태를 유지한다.",
+      "game": "작업/퀘스트 목록·크레디트에 위계를 활용하고 hover 대신 패드 focus 상태를 동등하게 제공한다.",
+      "requirements": ["정적 HTML과 인라인 JS; 외부 의존성 없음"],
+      "checks": ["효과 끄기·숨김·모션 감소 시 실행 중 애니메이션 취소 확인"]
+    },
+    {
+      "id": "black-minimal", "family": "editorial", "path": "designs/editorial/black-minimal.html", "legacyPath": "docs/black-minimal.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "css-layout", "location": "designs/editorial/black-minimal.html", "application": "차콜 계층과 목록·상세 패널로 파일 보관함을 구성한다." }, { "id": "dom-state", "location": "designs/editorial/black-minimal.html", "application": "검색·선택·페이지 내 고정을 메모리 상태로 시연하며 미리보기는 CSS 도형이다." }],
+      "reusableParts": ["검색 → 선택 → 상세의 상태 분리", "개인 홈페이지의 작업 자료 탐색 UI"],
+      "native": "NavigationSplitView/List와 검색 상태를 연결하고 실제 파일 접근은 FileImporter·보안 범위 URL 등 별도 요구사항으로 구현한다.",
+      "game": "인벤토리/에셋 브라우저의 목록·상세 패턴으로 사용하고 게임 저장 데이터는 별도로 연결한다.",
+      "requirements": ["HTML/CSS와 인라인 JS; 서버·파일 시스템 접근 없음"],
+      "checks": ["검색 빈 결과·선택 변경·고정 해제·좁은 화면 확인"]
+    },
+    {
+      "id": "reference-house", "family": "references", "path": "designs/references/reference-house.html", "legacyPath": "docs/reference-house.html", "distribution": "bundled", "sourceFiles": [], "assetIds": ["house-photo"],
+      "technologies": [{ "id": "css-layout", "location": "designs/references/reference-house.html", "application": "가는 초대형 영문 제목·작은 설명·여백 비율을 만든다." }, { "id": "image-masking", "location": "designs/references/reference-house.html", "application": "건축 사진 크롭과 전경 마스크를 제목 앞뒤로 겹친다." }],
+      "reusableParts": ["공간 소개·개인 건축 포트폴리오의 사진/활자 중첩", "전경·후경 분리 구도"],
+      "native": "ZStack의 Image/Text/마스크로 구성하고 사진 편집 라이선스를 유지한다. 실제 3D 공간이 필요한 경우 별도 모델을 준비한다.",
+      "game": "메뉴 배경의 parallax 레이어로 추출할 수 있다. 사진이 게임 환경 메시가 되지는 않는다.",
+      "requirements": ["공유 건축 사진과 출처 문서"],
+      "checks": ["제목과 피사체의 가림·모바일 크롭·출처 고지 확인"]
+    },
+    {
+      "id": "reference-object", "family": "references", "path": "designs/references/reference-object.html", "legacyPath": "docs/reference-object.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "svg-illustration", "location": "designs/references/reference-object.html", "application": "SVG 도형·그라데이션·clipPath로 큰 조명 제품의 비례와 반사를 그린다." }, { "id": "procedural-texture", "location": "designs/references/reference-object.html", "application": "feTurbulence로 재질의 미세 변화를 보조한다." }, { "id": "design-tokens", "location": "designs/references/reference-object.html", "application": "주황 동계색의 명도 차이로 제품과 작은 흰 제목을 구분한다." }],
+      "reusableParts": ["제품 실루엣·동계색 명암", "제품 소개/아이템 상세 배치"],
+      "native": "2D는 Canvas/Shape 또는 베이크 이미지로 사용한다. 회전 가능한 조명은 RealityKit 메시와 실제 PBR 재질을 새로 만든다.",
+      "game": "아이템 아이콘·상점 배경으로 PNG를 베이크하거나 모델링 후 엔진 재질로 재구성한다.",
+      "requirements": ["외부 자산 없는 인라인 SVG; 제조·판매 기능 없음"],
+      "checks": ["작은 제목 대비·그라데이션 banding·필터 잘림 확인"]
+    },
+    {
+      "id": "reference-exhibition", "family": "references", "path": "designs/references/reference-exhibition.html", "legacyPath": "docs/reference-exhibition.html", "distribution": "bundled", "sourceFiles": [], "assetIds": ["sports-photo", "exhibition-font"],
+      "technologies": [{ "id": "css-layout", "location": "designs/references/reference-exhibition.html", "application": "반반 이미지/활자와 대형 목록에 로컬 Be Vietnam Pro 900 @font-face를 적용한다." }, { "id": "image-masking", "location": "designs/references/reference-exhibition.html", "application": "기존 축구 사진을 크게 크롭해 대체 인물 이미지로 사용한다." }, { "id": "procedural-texture", "location": "designs/references/reference-exhibition.html", "application": "SVG 노이즈·명암으로 은색 재질 이미지를 만든다." }],
+      "reusableParts": ["전시/편집 스튜디오 홈페이지의 이미지·목록 비율", "로컬 서체와 저작권 고지 패키징"],
+      "native": "폰트를 앱에 등록하고 Font.custom과 크기 조정 기준을 정한다. 은색 재질은 2D 이미지 또는 Canvas로 추출한다.",
+      "game": "크레디트·챕터 선택 UI의 대형 타입을 활용하고 폰트 임베딩 고지를 포함한다.",
+      "requirements": ["공유 사진·TTF·OFL 고지"],
+      "checks": ["폰트 로드 실패·긴 목록·줄바꿈·사진 권리 확인"]
+    },
+    {
+      "id": "reference-sport", "family": "references", "path": "designs/references/reference-sport.html", "legacyPath": "docs/reference-sport.html", "distribution": "bundled", "sourceFiles": [], "assetIds": ["sports-photo"],
+      "technologies": [{ "id": "image-masking", "location": "designs/references/reference-sport.html", "application": "player/ball clipPath로 사진 속 인물과 공을 큰 적색 활자 앞에 겹친다." }, { "id": "procedural-texture", "location": "designs/references/reference-sport.html", "application": "종이색·노이즈·blend로 포스터 질감을 만든다." }, { "id": "css-layout", "location": "designs/references/reference-sport.html", "application": "로컬 Impact 계열로 세로 포스터의 압축 활자를 근사한다." }],
+      "reusableParts": ["스포츠 포스터의 제목·인물·배경 레이어", "챕터/경기 소개용 세로 지면"],
+      "native": "레이어를 ZStack으로 옮기고 Impact 미설치·대체 폰트의 폭 차이를 검수한다.",
+      "game": "텍스트 없는 배경·알파 인물·타이틀을 분리한 atlas/위젯으로 만든다.",
+      "requirements": ["공유 CC0 사진; 로컬 서체에 따라 인상 차이"],
+      "checks": ["수동 마스크 경계·작은 출처·제목 잘림 확인"]
+    },
+    {
+      "id": "boxing-overhead", "family": "posters", "path": "designs/posters/boxing-overhead.html", "legacyPath": "docs/boxing-overhead.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "svg-illustration", "location": "designs/posters/boxing-overhead.html", "application": "붉은 로프·청회색 매트·작은 인물을 오버헤드 SVG 구도로 그린다." }, { "id": "procedural-texture", "location": "designs/posters/boxing-overhead.html", "application": "고정 SVG turbulence로 매트/인쇄 질감을 보조한다." }],
+      "reusableParts": ["탑다운 경기장 배경", "원근·작은 인물과 큰 활자의 대비"],
+      "native": "Canvas 또는 PDF/PNG 지면으로 사용한다. 상호작용 링은 좌표·충돌 모델을 별도 정의한다.",
+      "game": "탑다운 링을 바닥/로프/인물로 분리해 스프라이트화한다. 그림의 경계가 충돌체는 아니다.",
+      "requirements": ["외부 사진 없는 SVG 시안"],
+      "checks": ["뷰박스·로프/인물 레이어·작은 문자 확인"]
+    },
+    {
+      "id": "boxing-vintage", "family": "posters", "path": "designs/posters/boxing-vintage.html", "legacyPath": "docs/boxing-vintage.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "svg-illustration", "location": "designs/posters/boxing-vintage.html", "application": "가드 자세 인물과 붉은 대형 글자를 독자적인 SVG로 구성한다." }, { "id": "procedural-texture", "location": "designs/posters/boxing-vintage.html", "application": "종이색·고정 turbulence·blend로 인쇄 질감을 만든다." }],
+      "reusableParts": ["빈티지 메뉴/타이틀 배경", "인물 실루엣과 제한 팔레트"],
+      "native": "Canvas 또는 배경 이미지로 쓰고 정보 텍스트를 네이티브로 분리한다.",
+      "game": "표지·아이템 카드의 종이 텍스처로 베이크한다. 인물 애니메이션은 별도 제작한다.",
+      "requirements": ["정적 SVG; 하단 막대는 스캔 바코드 아님"],
+      "checks": ["질감이 본문 대비를 낮추지 않는지 확인"]
+    },
+    {
+      "id": "boxing-arena", "family": "posters", "path": "designs/posters/boxing-arena.html", "legacyPath": "docs/boxing-arena.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "svg-illustration", "location": "designs/posters/boxing-arena.html", "application": "군중·팔을 든 인물·청록 스포트라이트를 SVG 명암 레이어로 겹친다." }],
+      "reusableParts": ["승리/결과 화면의 실루엣·빛 구도", "어두운 세로 포스터"],
+      "native": "ZStack/Canvas에서 빛과 인물을 분리한다. 실제 볼류메트릭 광원이 아니다.",
+      "game": "승리 장면의 레이어 배경으로 사용하거나 신규 3D 장면의 조명 레퍼런스로 활용한다.",
+      "requirements": ["외부 자산 없는 정적 SVG"],
+      "checks": ["암부에서 인물/제목 식별·좁은 화면 확인"]
+    },
+    {
+      "id": "sports-collage", "family": "posters", "path": "designs/posters/sports-collage.html", "legacyPath": "docs/sports-collage.html", "distribution": "bundled", "sourceFiles": [], "assetIds": ["sports-photo"],
+      "technologies": [{ "id": "image-masking", "location": "designs/posters/sports-collage.html", "application": "같은 사진을 전체·얼굴·인물 윤곽으로 재사용하고 수동 SVG clipPath로 프레임 밖 인물을 만든다." }, { "id": "css-layout", "location": "designs/posters/sports-collage.html", "application": "흰 여백과 사진 구획의 크기 차이로 스포츠 지면을 편집한다." }],
+      "reusableParts": ["사진 기반 개인 홈페이지의 콜라주", "경기 로딩/소개 화면의 분할 구도"],
+      "native": "Image 크롭과 Shape mask로 재구성하거나 투명 PNG를 제작한다.",
+      "game": "크롭된 사진/인물 레이어를 atlas로 묶고 UI 텍스트는 분리한다.",
+      "requirements": ["공유 CC0 사진과 출처 문서"],
+      "checks": ["인물 윤곽·과도한 확대·초상권/상표권 확인"]
+    },
+    {
+      "id": "high-energy", "family": "posters", "path": "designs/posters/high-energy.html", "legacyPath": "docs/high-energy.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "css-layout", "location": "designs/posters/high-energy.html", "application": "초대형 10K 숫자·수평 구획·CSS 트랙 도형으로 야간 러닝 이벤트를 구성한다." }, { "id": "design-tokens", "location": "designs/posters/high-energy.html", "application": "주황·먹색·라임을 역할별 면과 글자에 배분한다." }],
+      "reusableParts": ["이벤트 랜딩의 숫자 위계", "트랙 모티프·제한 팔레트"],
+      "native": "Text와 Shape/Canvas로 트랙을 만들고 실제 참가 신청 상태는 별도 구현한다.",
+      "game": "레이싱/스포츠 타이틀 UI에 색·트랙 모티프를 적용한다.",
+      "requirements": ["정적 HTML/CSS; 가상 행사"],
+      "checks": ["강조색 대비·숫자 잘림·실제 모집 정보와 구분"]
+    },
+    {
+      "id": "color-combinations", "family": "palettes", "path": "designs/palettes/color-combinations.html", "legacyPath": "docs/color-combinations.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "design-tokens", "location": "designs/palettes/color-combinations.html", "application": "같은 산책 기록 화면을 8개 팔레트로 반복해 색 역할·면적의 차이를 비교한다." }],
+      "reusableParts": ["8개 역할 기반 팔레트", "같은 콘텐츠로 테마를 비교하는 방법"],
+      "native": "배색을 의미 Color 집합으로 옮기고 시스템 테마·고대비 변형을 추가한다.",
+      "game": "레벨/메뉴 테마 데이터로 추출하되 경고·성공 상태색은 구분한다.",
+      "requirements": ["정적 HTML/CSS; 색 코드와 용도는 동반 문서"],
+      "checks": ["보조 글자·포커스·기능색의 대비 재측정"]
+    },
+    {
+      "id": "mood-examples", "family": "palettes", "path": "designs/palettes/mood-examples.html", "legacyPath": "docs/mood-examples.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "design-tokens", "location": "designs/palettes/mood-examples.html", "application": "독서·음악·여행·전시·도구·카페 6개 화면마다 3개 팔레트를 선택한다." }, { "id": "dom-state", "location": "designs/palettes/mood-examples.html", "application": "색 선택 UI만 상태를 바꾸며 재생·예약·주문은 구현하지 않는다." }],
+      "reusableParts": ["18개 배색과 화면 목적에 따른 역할 배분", "설정/테마 미리보기"],
+      "native": "Picker와 테마 상태를 연결하고 실제 음악/주문 동작은 별도 서비스에 연결한다.",
+      "game": "바이옴/메뉴 분위기 팔레트로 사용하고 단순 색 교체와 장면 구조 차이를 구분한다.",
+      "requirements": ["인라인 JS; 데이터·저장 백엔드 없음"],
+      "checks": ["선택 상태의 비색상 단서·각 화면별 대비 확인"]
+    },
+    {
+      "id": "screen-effects", "family": "effects", "path": "designs/effects/screen-effects.html", "legacyPath": "docs/screen-effects.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "motion-lifecycle", "location": "designs/effects/screen-effects.html", "application": "32개 demos를 수동 실행·초기화·정지하며 리플·틸트·스프링 근사·쉬머를 비교한다." }, { "id": "dom-state", "location": "designs/effects/screen-effects.html", "application": "dialog.showModal과 실행 컨트롤·상태 안내를 제공한다." }, { "id": "procedural-texture", "location": "designs/effects/screen-effects.html", "application": "SVG noise와 CSS backdrop-filter 등 배경·재질 효과를 비교한다." }],
+      "reusableParts": ["효과별 작은 실행 단위와 중단/초기화 계약", "32개 구현과 문서상 추가 19개 검토 항목의 구분"],
+      "native": "네이티브 transition·spring·sheet·Material을 먼저 사용한다. 2D 필터만 SwiftUI Shader로 분리하고 햅틱은 지원 기기에서 별도 구현한다.",
+      "game": "상태 변화·피드백에 필요한 효과만 tween/particle/shader로 재작성한다.",
+      "requirements": ["32개 효과만 실행 시연; 추가 19종 전체 구현 아님"],
+      "checks": ["반복 실행·중단·초기화·모달 포커스·동작 줄이기 확인"]
+    },
+    {
+      "id": "liquid-glass", "family": "effects", "path": "designs/effects/liquid-glass.html", "legacyPath": "liquid-glass.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "webgl-sdf", "location": "designs/effects/liquid-glass.html", "application": "fragmentSource의 roundRect·곡면과 12개 물체 uniform으로 유리 형상을 계산한다." }, { "id": "optical-glass", "location": "designs/effects/liquid-glass.html", "application": "굴절률 1.51, Fresnel 반사·출사 굴절·흡수와 접촉 그림자를 합성한다." }, { "id": "dom-state", "location": "designs/effects/liquid-glass.html", "application": "canvas는 장식이고 실제 button/input/switch/tab이 조작과 접근성을 담당한다." }, { "id": "motion-lifecycle", "location": "designs/effects/liquid-glass.html", "application": "DOM rect 측정·ResizeObserver·IntersectionObserver·포인터 상태로 필요한 프레임만 렌더한다." }],
+      "reusableParts": ["DOM 조작과 GPU 재질의 분리", "SDF 곡면·굴절·반사 함수", "CSS 재질 대안·에러 상태"],
+      "native": "일반 앱 조작은 glassEffect와 네이티브 컨트롤을 우선한다. 광학 비교 연구는 MTKView에 배경 텍스처·rect/shape·hover/press uniform을 전달해 MSL로 재구현한다.",
+      "game": "게임 UI 재질로 가져갈 때 배경 color texture를 명시하고 투명 정렬·두께·굴절 비용을 측정한다.",
+      "requirements": ["WebGL 2, CSS fallback; 외부 의존성 없음", "시연 select/switch/tab 외 버튼·입력은 실제 서비스 기능 아님"],
+      "checks": ["GPU 실패 시 CSS preview와 상태 안내·키보드 조작 유지", "스크롤/리사이즈 후 DOM과 유리 정렬 확인"]
+    },
+    {
+      "id": "slow-bookshop", "family": "spatial", "path": "designs/spatial/slow-bookshop.html", "legacyPath": "docs/slow-bookshop.html", "distribution": "bundled", "sourceFiles": [], "assetIds": ["house-photo"],
+      "technologies": [{ "id": "svg-illustration", "location": "designs/spatial/slow-bookshop.html", "application": "겹친 책의 표지·책등·종이 단면·접촉 그림자를 SVG로 그려 2.5D 깊이를 만든다." }, { "id": "image-masking", "location": "designs/spatial/slow-bookshop.html", "application": "건축 사진을 책 표지 clipPath와 본문 사진에 재사용한다." }, { "id": "dom-state", "location": "designs/spatial/slow-bookshop.html", "application": "details/summary로 책 소개를 키보드로 펼친다." }, { "id": "css-layout", "location": "designs/spatial/slow-bookshop.html", "application": "대형 Seoga. 제호와 책 목업을 겹친 뒤 좁은 화면에서 재배치한다." }],
+      "reusableParts": ["책/앨범 목업의 종이·접촉 그림자 레이어", "서점·개인 독서 홈페이지의 큐레이션 구성"],
+      "native": "2D는 SwiftUI ZStack/Canvas로, 회전 가능한 책은 별도 모델링한 RealityKit 엔티티로 구현한다.",
+      "game": "책 아이템 아이콘·도감 UI로 베이크하거나 표지 텍스처와 신규 책 메시로 분리한다.",
+      "requirements": ["공유 건축 사진; 인라인 CSS/SVG; JS 없음"],
+      "checks": ["책/제호 중첩·모바일 순서·사진 라이선스 확인"]
+    },
+    {
+      "id": "midnight-cinema", "family": "spatial", "path": "designs/spatial/midnight-cinema.html", "legacyPath": "docs/midnight-cinema.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "svg-illustration", "location": "designs/spatial/midnight-cinema.html", "application": "오른쪽 계단 위 시점의 객석·머리·광선·먼지를 SVG로 직접 그린다." }, { "id": "css-light-state", "location": "designs/spatial/midnight-cinema.html", "application": "@property --house와 :has(#house-lights:checked)가 막·벽등·제목 상태를 함께 바꾼다." }, { "id": "procedural-texture", "location": "designs/spatial/midnight-cinema.html", "application": "그라데이션·노이즈·마스크로 어두운 좌석과 영사 빛을 표현한다." }],
+      "reusableParts": ["하나의 조명 진행도로 연결한 화면 상태", "객석·스크린·비상구·통로등의 실제 광원 위계"],
+      "native": "SwiftUI state 하나로 Canvas의 조명·막·제목을 동기화한다. 상영 목록과 좌석 정보는 네이티브 텍스트로 유지한다.",
+      "game": "2D 극장 배경을 레이어로 베이크하고 조명/막 상태를 tween으로 연결한다.",
+      "requirements": ["외부 이미지·폰트·스크립트 없음; 현대 CSS 지원"],
+      "checks": ["조명 토글·모션 감소·작은 일정/좌석 텍스트 확인"]
+    },
+    {
+      "id": "midnight-cinema-3d", "family": "spatial", "path": "designs/spatial/midnight-cinema-3d.html", "legacyPath": "docs/midnight-cinema-3d.html", "distribution": "bundled", "sourceFiles": [], "assetIds": [],
+      "technologies": [{ "id": "three-pbr", "location": "designs/spatial/midnight-cinema-3d.html", "application": "내장 Three.js r187(MIT)의 3D 좌석·머리·스크린·조명·그림자로 SVG 장면을 대체한다." }, { "id": "procedural-texture", "location": "designs/spatial/midnight-cinema-3d.html", "application": "직물·카펫·봉제선과 roughness 맵을 코드로 생성한다. 참고 극장 사진은 런타임 자산이 아니다." }, { "id": "motion-lifecycle", "location": "designs/spatial/midnight-cinema-3d.html", "application": "포인터 시차·프레임 지연 시 해상도 감소·동작 줄이기 정지 화면·SVG 대안을 제공한다." }, { "id": "css-light-state", "location": "designs/spatial/midnight-cinema-3d.html", "application": "기존 조명 스위치를 실시간 장면의 막과 조명 상태에 연결한다." }],
+      "reusableParts": ["실제 광원 기준의 극장 장면 구성", "연기 속 영사 빛 레이마칭·직물 재질", "적응 해상도와 SVG fallback"],
+      "native": "장면은 RealityKit으로 다시 모델링한다. 레이마칭 연무와 후처리의 동일 재현이 필요하면 별도 Metal 렌더 경로를 설계한다.",
+      "game": "좌석/관객 반복 인스턴스·직물 roughness·volumetric beam을 목표 엔진에 맞게 구현하고 조명 단위와 노출을 다시 맞춘다.",
+      "requirements": ["WebGL 2; 엔진이 HTML에 포함되어 외부 요청 없음", "생일 시안의 r180 loader와 혼합하지 않음"],
+      "checks": ["SVG fallback·조명 전환·GPU frame time·해상도 하향 확인"]
+    },
+    {
+      "id": "ascii-character", "family": "characters", "path": "designs/characters/ascii-character.html", "legacyPath": "ascii-character.html", "distribution": "bundled", "sourceFiles": ["designs/characters/assets/ascii/renderer.js"], "assetIds": [],
+      "technologies": [{ "id": "webgl-sdf", "location": "designs/characters/assets/ascii/renderer.js", "application": "SCENE_SHADER의 ellipsoid/box/capsule·scene·normalAt가 후드·망토·등불을 생성하고 최대 88 step으로 레이마칭한다." }, { "id": "ascii-postprocess", "location": "designs/characters/assets/ascii/renderer.js", "application": "makeAtlas가 문자 픽셀 커버리지를 정렬하고 ASCII_SHADER가 FBO 장면 밝기·문자 크기·팔레트·빗금 글리프를 합성한다." }, { "id": "motion-lifecycle", "location": "designs/characters/assets/ascii/renderer.js", "application": "AnimationClock·가시성·ResizeObserver·dispose/컨텍스트 손실로 정지/재개·출력 예산을 관리한다." }],
+      "reusableParts": ["절차적 캐릭터 거리 함수", "2패스 문자화 렌더 파이프라인", "드래그/키보드 회전·비·걷기·문자 크기 제어"],
+      "native": "MTKView에서 저해상도 MTLTexture 장면과 glyph atlas 합성 패스를 구현하고 SwiftUI 컨트롤로 uniform을 전달한다. 모델 파일은 존재하지 않는다.",
+      "game": "캐릭터 shader 자체 또는 장면 전체 ASCII 후처리로 분리해 활용한다. 리깅/충돌이 필요하면 별도 메시를 만들거나 프레임을 베이크한다.",
+      "requirements": ["HTTP·ES 모듈·WebGL 2; 외부 이미지·모델·CDN 없음"],
+      "checks": ["최대 36,000셀·출력 상한·DPR 독립 격자·pause/visibility 시 시간 점프 방지", "GL 오류와 키보드·터치 대안 확인"]
+    },
+    {
+      "id": "birthday", "family": "celebration", "path": "designs/celebration/birthday.html", "legacyPath": "birthday.html", "distribution": "local-only", "sourceFiles": ["designs/celebration/assets/birthday/cake-scene.js", "designs/celebration/assets/birthday/candle-lighting.js", "designs/celebration/assets/birthday/blow-detector.js", "designs/celebration/assets/birthday/celebration.js", "designs/celebration/assets/birthday/background-music.js", "designs/celebration/assets/birthday/applause.js"], "assetIds": ["birthday-private", "birthday-runtime"],
+      "technologies": [{ "id": "three-pbr", "location": "designs/celebration/assets/birthday/cake-scene.js", "application": "r180 GLTFLoader·PBR·ACES tone mapping과 모델 표면 raycast로 케이크 위 촛불 세 개를 배치한다." }, { "id": "gltf-assets", "location": "scripts/prepare-birthday-model.mjs", "application": "Blender 원본은 보존하고 GLB를 44,999 triangles·약 2.41MiB로 최적화한다." }, { "id": "web-audio", "location": "designs/celebration/assets/birthday/blow-detector.js", "application": "analyzeBreath/BlowDetector가 RMS·대역 에너지·잡음 보정·유지 시간으로 촛불 끄기를 판단한다." }, { "id": "dom-state", "location": "designs/celebration/assets/birthday/celebration.js", "application": "인트로 → 케이크 → 편지 → 엔딩 상태와 재시도·history·포커스·권한 오류를 관리한다." }, { "id": "motion-lifecycle", "location": "designs/celebration/assets/birthday/celebration.js", "application": "Canvas confetti·렌더/오디오·마이크 수명을 장면 상태와 연결한다." }],
+      "reusableParts": ["호흡 감지의 보정/유지 시간 알고리즘", "버튼 대안이 있는 권한 기반 이벤트 흐름", "GLB 최적화 파이프라인·촛불 조명 상태", "음악 자동재생 실패 안내·박수 재생 수명"],
+      "native": "RealityKit 케이크/촛불과 SwiftUI 화면 상태를 연결하고 AVAudioEngine/vDSP로 호흡을 분석한다. 마이크 권한·거부·오디오 인터럽트·백그라운드 해제를 구현한다.",
+      "game": "권리 확인 모델·음원을 먼저 교체하고 엔진 오디오 분석·입자·장면 상태로 이식한다. 마이크 없이 버튼으로 진행할 경로를 유지한다.",
+      "requirements": ["로컬 시안 전용: 개인 HTML·모듈·모델·사진·음원·폰트·vendor 전체 npm 제외", "로컬 HTTP/HTTPS·WebGL 2·import map; 마이크는 secure context와 사용자 권한 필요"],
+      "checks": ["권한 거부·마이크 해제·잡음 오탐·중복 클릭·후발 비동기 결과 확인", "GLB·편지지·사진 예산과 화면 흐름 기존 테스트 유지", "개인 이름·편지·사진·음원·모델의 외부 배포 전 교체/허락 확인"]
+    }
+  ]
+}

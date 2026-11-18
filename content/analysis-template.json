@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "replace-with-reference-id",
+  "title": "분석할 디자인의 이름",
+  "summary": "아직 조사하지 않은 초안. 예시를 확인한 뒤 요약을 작성한다.",
+  "status": "draft",
+  "createdAt": "2026-11-17",
+  "updatedAt": "2026-11-17",
+  "source": {
+    "type": "other",
+    "location": "분석할 URL 또는 자료 경로를 입력",
+    "description": "원본과 로컬 재현 시안을 구분한다. 사용자가 제공한 예시는 전체 디자인 선호로 기록하고 제공일·별도 지정한 선호 범위를 남긴다. AI가 고른 예시와 혼동하지 않는다."
+  },
+  "keywords": [],
+  "evidence": [],
+  "color": {
+    "summary": "색감 분석 전",
+    "palette": [{ "role": "배경", "value": null, "certainty": "unknown", "evidenceIds": [] }],
+    "findings": [{ "focus": "color.palette-roles", "topic": "조사 상태", "observation": "아직 색을 확인하지 않았다.", "certainty": "unknown", "evidenceIds": [] }],
+    "reuse": []
+  },
+  "layout": {
+    "summary": "레이아웃 분석 전",
+    "findings": [{ "topic": "조사 상태", "observation": "아직 배치·글자 구성·비율을 확인하지 않았다.", "certainty": "unknown", "evidenceIds": [] }],
+    "reuse": []
+  },
+  "typography": {
+    "summary": "폰트 분석 전",
+    "fonts": [{
+      "role": "전체",
+      "declaredFamilies": [],
+      "renderedFamily": null,
+      "weight": null,
+      "identification": "unknown",
+      "evidenceIds": [],
+      "notes": "소스나 이미지의 서체 특징을 확인하기 전이다.",
+      "license": "출처·라이선스 미확인"
+    }],
+    "findings": [{ "topic": "조사 상태", "observation": "정확한 서체를 아직 확인하지 않았다.", "certainty": "unknown", "evidenceIds": [] }],
+    "reuse": []
+  },
+  "elements": {
+    "text-placement": { "summary": "제목·본문·자막의 배치와 읽는 순서", "findings": [], "reuse": [] },
+    "subject-composition": { "summary": "인물·오브젝트의 위치, 상대 크기, 크롭과 여백", "findings": [], "reuse": [] },
+    "lighting": { "summary": "광원처럼 보이는 위치와 방향, 하이라이트, 그림자와 명암", "findings": [], "reuse": [] },
+    "motion": { "summary": "움직이는 요소, 변화 순서와 유지되는 구성", "findings": [], "reuse": [] },
+    "texture": { "summary": "표면의 반복 단위, 질감과 경계 처리", "findings": [], "reuse": [] },
+    "interaction": { "summary": "입력·탐색·상태 변화·접근성·복구", "findings": [], "reuse": [] }
+  },
+  "preferenceSignals": [],
+  "limitations": ["초안이다. 확인하지 않은 색·배치·폰트는 확정하지 않는다. 사용자가 제공한 예시의 전체 디자인 선호와 개별 분석 항목의 확인 수준은 구분한다."]
+}

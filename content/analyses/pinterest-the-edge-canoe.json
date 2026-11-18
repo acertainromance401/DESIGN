@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-the-edge-canoe",
+  "title": "The Edge — 제목 쪽으로 넘어오는 카누",
+  "summary": "따뜻한 종이색과 오렌지 타이틀 아래에 짙은 청록 수면을 둔다. 위에서 내려다본 카누의 선수가 사진 위쪽 경계를 넘어와 두 영역을 연결한다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": {
+    "type": "url",
+    "location": "https://www.pinterest.com/pin/1138003399621985780/",
+    "description": "2026-11-18 사용자가 제공한 전체 디자인 선호 레퍼런스. Pinterest의 공개 포스터 JPEG에서 관찰했으며 원본 편집 파일과 개별 선호 이유는 확인하지 않았다."
+  },
+  "keywords": ["사용자 선호 레퍼런스", "The Edge", "오렌지", "청록", "컨덴스드 타이포", "카누", "프레임 돌출", "에디토리얼 포스터"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/fa/39/16/fa391618359e0f9257680fd6d89382ab.jpg", "description": "736×920px 공개 JPEG. 제목·본문·사진의 경계, 카누와 패들, 수면과 바탕의 표면 차이를 관찰했다." },
+    { "id": "raster-samples", "kind": "image", "location": "https://i.pinimg.com/736x/fa/39/16/fa391618359e0f9257680fd6d89382ab.jpg", "description": "좌상단 원점 기준 (617,392), (160,160), (540,557), (555,730) 중심 11×11px의 RGB 채널별 중앙값. 종이와 물 영역은 위치마다 달라진다." }
+  ],
+  "color": {
+    "summary": "따뜻한 베이지와 오렌지 제목, 차갑고 어두운 청록 사진이 대비된다. 사진 속 카누의 갈색·주황 기가 제목과 색온도를 공유한다.",
+    "palette": [
+      { "role": "종이처럼 보이는 밝은 바탕", "value": "#EBD9CB", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "제목의 오렌지", "value": "#F7863D", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "수면의 청록", "value": "#256978", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "수면의 낮은 명도 부분", "value": "#24444C", "certainty": "estimated", "evidenceIds": ["raster-samples"] }
+    ],
+    "findings": [
+      { "focus": "color.temperature-saturation", "topic": "따뜻한 지면과 차가운 수면", "observation": "베이지 바탕과 오렌지 제목은 따뜻하고 아래의 청록 수면은 그보다 차갑다. 카누의 나무색은 위쪽 오렌지를 사진 영역으로 이어준다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["사진 자체의 색온도로 차이를 만들고, 제목과 피사체에서 온도를 작게 되돌려 두 영역을 연결한다."]
+  },
+  "layout": {
+    "summary": "상단 메타정보, 대형 제목, 짧은 카피, 하단 사진이 중심축을 공유하지만 카누의 선수가 블록 사이를 가로지른다.",
+    "findings": [
+      { "focus": "layout.hierarchy", "topic": "제목과 큰 사진", "observation": "제목은 상단 폭을 넓게 채우고, 하단에는 좌우 여백을 둔 큰 사진 사각형이 있다. 작은 날짜·판차와 하단 정보가 두 큰 요소를 보조한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "focus": "layout.layering", "topic": "카누만 사진 경계를 넘어감", "observation": "수면 사진은 직사각형 상단에서 끊기지만 카누의 선수가 사진 밖으로 솟아, 중간 카피 일부와 제목의 하단에 겹친다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["피사체의 방향이 제목과 이미지를 이어줄 때만 일부를 겹친다. 전달이 필요한 카피는 겹침 밖에 둔다."]
+  },
+  "typography": {
+    "summary": "굵고 키가 큰 압축형 대문자 제목과 훨씬 작은 산세리프 보조 정보가 극단적인 크기 차이를 만든다.",
+    "fonts": [
+      { "role": "대문자 제목", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "굵고 폭이 좁은 디스플레이 산세리프로 보인다. 이미지에서 실제 서체명이나 압축 방식은 확인할 수 없다.", "license": "서체 출처·라이선스 미확인" }
+    ],
+    "findings": [
+      { "focus": "typography.weight-style", "topic": "굵은 압축형 제목과 작은 라벨", "observation": "제목은 높은 세로획과 낮은 글자 너비로 넓은 색면처럼 보인다. 메타정보와 짧은 카피는 작고 가는 획으로 대비된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["실제 제목 길이에서 압축형 자형의 식별성을 확인한다. 짧은 대문자 인상만 보고 본문까지 같은 스타일로 맞추지 않는다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "보트가 중심부 작은 카피를 실제로 가리는 편집이다.",
+      "findings": [
+        { "focus": "text-placement.readability", "topic": "카피의 국소 가림", "observation": "제목은 전체 단어를 알아볼 수 있지만, 제목 아래의 작은 카피는 선수가 앞을 지나며 줄 중간이 끊긴다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+      ],
+      "reuse": ["필수 카피는 가려지지 않는 별도 영역에 둔다."]
+    },
+    "subject-composition": {
+      "summary": "수직 카누의 중심축과 패들의 사선이 수면 장면의 구조를 만든다.",
+      "findings": [
+        { "focus": "subject-composition.viewpoint", "topic": "거의 수직으로 내려다본 구도", "observation": "카누의 내부와 패들이 위에서 보이고, 패들 주변의 원형 물결이 중앙 피사체의 양쪽으로 펼쳐진다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+      ],
+      "reuse": ["위에서 본 피사체의 실루엣이 명확할 때 이를 지면의 정렬축과 연결해 본다."]
+    },
+    "texture": {
+      "summary": "바탕은 종이 같은 얼룩과 미세한 결, 사진은 물결의 선과 톤을 보여준다.",
+      "findings": [
+        { "focus": "texture.material", "topic": "종이처럼 보이는 표면", "observation": "베이지 바탕의 밝기와 얼룩이 고르지 않아 종이 같은 인상이 난다. 실제 종이·필터 사용 여부는 알 수 없다.", "certainty": "estimated", "evidenceIds": ["pin-preview"] }
+      ],
+      "reuse": ["인쇄물 인상이 필요한 맥락에 한해 바탕의 결을 절제하고 작은 글자 뒤에서는 잡음을 줄인다."]
+    }
+  },
+  "preferenceSignals": [
+    { "key": "subject-crosses-graphic-boundary", "focus": "layout.layering", "direction": "prefer", "basis": "inferred", "interpretation": "카누가 사진의 틀을 넘는 편집이 제목과 사진을 한 장면으로 묶는 매력에 기여했을 수 있다.", "contextKey": "image-led-editorial-poster", "context": "실루엣과 방향이 분명한 피사체가 있는 사진 중심 포스터.", "application": "선수처럼 방향이 명확한 한 부분만 사진 경계 위로 드러낸다. 구체적인 사각형·피사체는 바꿀 수 있다.", "tradeoff": "예시의 카피 가림을 그대로 가져오지 않는다. 본문과 제목을 작은 화면에서도 각각 읽을 수 있어야 한다.", "evidenceIds": ["pin-preview"] },
+    { "key": "warm-paper-cool-image", "focus": "color.temperature-saturation", "direction": "prefer", "basis": "inferred", "interpretation": "따뜻한 종이색과 차갑고 깊은 사진 사이의 온도 차가 장면을 또렷하게 만들었을 수 있다.", "contextKey": "image-led-editorial-poster", "context": "차가운 톤이 이미 있는 사진을 따뜻한 지면과 결합하는 편집.", "application": "바탕을 보조색으로 두고 사진의 저명도 청록을 살린다. 오렌지나 샘플 HEX는 필수 조건이 아니다.", "tradeoff": "사진과 글이 함께 뜨거워 보이거나 제목이 바탕과 분리되지 않으면 밝기와 채도를 다시 조절한다.", "evidenceIds": ["pin-preview"] }
+  ],
+  "limitations": ["정지 JPEG에서 확인되는 모양만 기록했다. 서체 파일, 합성 방식, 실제 재질·광원, 바코드의 기능, 움직임·반응형은 미확인이다. 원본 이미지는 저장하지 않았다."]
+}

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>링 위의 시간 — 오버헤드 시안</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #101416; color: #e4e6db; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; }
+    main { width: min(100%, 800px); margin: auto; padding: 20px; }
+    .label, footer { display: flex; justify-content: space-between; gap: 20px; font-size: 11px; line-height: 1.8; }
+    .label { margin-bottom: 12px; color: #bec4bd; }
+    .poster { position: relative; aspect-ratio: 4 / 5; background: #061118; isolation: isolate; overflow: hidden; }
+    .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .type { position: absolute; top: 27%; left: 17%; width: 66%; transform: rotate(-32deg); color: #1b3537; }
+    .type p { font-size: clamp(10px, 1.9vw, 15px); letter-spacing: .06em; margin: 0 0 18px; }
+    h1 { font-size: clamp(52px, 11vw, 90px); font-weight: 900; line-height: 1.08; letter-spacing: -.06em; margin: 0; }
+    .date { position: absolute; top: 37%; right: 12%; transform: rotate(-32deg); color: #a91e16; font-size: clamp(15px, 3vw, 24px); font-weight: 800; line-height: 1.2; }
+    .bottom-info { position: absolute; bottom: 3.5%; left: 7%; right: 7%; display: flex; justify-content: space-between; gap: 15px; font-size: clamp(9px, 1.6vw, 12px); line-height: 1.7; }
+    .bottom-info p { margin: 0; }
+    .bottom-info b { display: block; font-size: clamp(12px, 2.5vw, 18px); }
+    footer { margin-top: 14px; align-items: start; color: #bec4bd; }
+    footer p { margin: 0; }
+    a { color: inherit; text-underline-offset: 4px; min-height: 44px; display: inline-flex; align-items: center; }
+    a:focus-visible { outline: 2px solid #e4e6db; outline-offset: 4px; }
+    @media (max-width: 500px) { main { padding: 12px; } footer { flex-wrap: wrap; } .type p { margin-bottom: 12px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="label"><span>01 / 위에서 본 링</span><span>가상 복싱 연습회</span></div>
+    <article class="poster" aria-labelledby="title">
+      <svg class="scene" viewBox="0 0 800 1000" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id="mat"><stop stop-color="#b7c4c2"/><stop offset=".7" stop-color="#7b9091"/><stop offset="1" stop-color="#30474d"/></radialGradient>
+          <linearGradient id="rope" x2="0" y2="1"><stop stop-color="#fc6044"/><stop offset=".5" stop-color="#b42a20"/><stop offset="1" stop-color="#641919"/></linearGradient>
+          <radialGradient id="skin"><stop stop-color="#b87c55"/><stop offset=".7" stop-color="#825338"/><stop offset="1" stop-color="#352924"/></radialGradient>
+          <filter id="grain"><feTurbulence baseFrequency=".65" numOctaves="3" seed="6"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".10"/></feComponentTransfer><feBlend in="SourceGraphic" mode="multiply"/></filter>
+          <filter id="shadow"><feGaussianBlur stdDeviation="11"/></filter>
+        </defs>
+        <rect width="800" height="1000" fill="#061118"/>
+        <path d="M 80 115 L 720 115 L 755 867 L 45 867 Z" fill="url(#mat)" filter="url(#grain)"/>
+        <path d="M 100 135 L 700 135 L 730 845 L 70 845 Z" fill="none" stroke="#748a8d" stroke-width="1"/>
+        <ellipse cx="622" cy="735" rx="83" ry="119" fill="#031318" opacity=".7" filter="url(#shadow)"/>
+        <g transform="translate(605 696) rotate(-32)">
+          <path d="M-29 34 Q-66 54-55 88 L-25 114 Q-8 120 6 98 L25 68 Q28 35-29 34" fill="#121b24"/>
+          <path d="M-39 75 L-60 124 Q-67 141-47 149 L-17 118" fill="#202b32"/>
+          <path d="M27 62 L56 108 Q62 127 44 134 L6 96" fill="#141e25"/>
+          <path d="M-35-42 Q-64-21-49 33 Q-11 60 28 27 Q49-6 29-40 Q5-58-35-42" fill="url(#skin)"/>
+          <path d="M-34-37 Q-72-54-71-85 L-58-100 L-40-79 L-19-55 M28-38 Q56-55 56-83 L44-102 L25-83 L14-54" fill="none" stroke="#a46a46" stroke-width="24" stroke-linecap="round"/>
+          <path d="M-69-77 Q-87-100-70-117 Q-50-128-38-108 L-36-86 Z" fill="url(#rope)" stroke="#571b1a" stroke-width="3"/>
+          <path d="M28-84 Q20-111 39-120 Q61-127 69-108 L66-88 Z" fill="url(#rope)" stroke="#571b1a" stroke-width="3"/>
+          <ellipse cx="-3" cy="-40" rx="26" ry="29" fill="#1e2220"/>
+          <path d="M-22-49 Q-6-64 16-48" fill="none" stroke="#3e4139" stroke-width="5"/>
+          <path d="M-24-8 Q-6 4 13-6 M-9 5 L-8 28" fill="none" stroke="#5f3b2c" stroke-width="3"/>
+        </g>
+        <g fill="none" stroke="url(#rope)" stroke-width="8">
+          <path d="M45 105 Q400 132 755 105 L765 874 Q400 853 35 874 Z"/>
+          <path d="M50 126 Q400 154 750 126 L756 850 Q400 831 44 850 Z"/>
+          <path d="M56 150 Q400 175 744 150 L746 825 Q400 807 54 825 Z"/>
+        </g>
+        <g fill="#101c24" stroke="#c9412a" stroke-width="3">
+          <path d="M30 91 L71 107 L81 178 L48 168 Z"/><path d="M768 91 L730 107 L720 178 L755 168 Z"/>
+          <path d="M22 812 L58 825 L64 890 L21 913 Z"/><path d="M745 825 L780 812 L778 913 L738 890 Z"/>
+        </g>
+        <g stroke="#131c20" stroke-width="18"><path d="M390 113 L390 171 M390 816 L390 870 M49 480 L72 480 M729 480 L758 480"/></g>
+      </svg>
+      <div class="type"><p>작은 체육관 / 열린 연습</p><h1 id="title">링 위의<br>시간</h1></div>
+      <div class="date">11.28<br>19:30</div>
+      <div class="bottom-info"><p><b>토요일 공개 연습</b>서울 · 가상 장소</p><p>자세 / 풋워크 / 가벼운 스파링<br>실제 모집이 아닌 디자인 예시</p></div>
+    </article>
+    <footer><p>붉은 로프 · 청회색 매트 · 비스듬한 지면 구성.<br>인물과 링은 직접 그린 SVG입니다.</p><a href="./boxing-references.md#overhead">참고·제작 안내</a></footer>
+  </main>
+</body>
+</html>

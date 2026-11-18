@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>담 — 낮은 빛, 긴 저녁 / 레퍼런스 스터디 02</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { color-scheme: light; --orange: #f47e06; --ink: #000; --cream: #fff3df; }
+    body { margin: 0; background: var(--orange); color: var(--ink); font-family: Arial, "Helvetica Neue", "Apple SD Gothic Neo", sans-serif; }
+    a { color: inherit; text-underline-offset: 6px; }
+    a:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+    .skip { position: absolute; left: 20px; top: -100px; z-index: 10; padding: 14px; background: var(--cream); }
+    .skip:focus { top: 10px; }
+    .study-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 26px; padding: 8px 3.5%; background: #f4f2e9; font-size: 13px; }
+    .study-nav span { margin-right: auto; }
+    .study-nav a { min-height: 44px; display: inline-flex; align-items: center; text-decoration: none; }
+    .study-nav [aria-current] { text-decoration: underline; font-weight: 700; }
+    .product-stage { background: linear-gradient(0deg, #713000b0, #71300000 28%), linear-gradient(90deg, #62260080, #62260070 30%, #62260000 52%), radial-gradient(ellipse at 63% 43%, #ff9808 0, #e66c04 48%, #99400c 100%); }
+    .masthead { padding: clamp(16px, 2.1vw, 30px) 4%; display: flex; justify-content: space-between; gap: 24px; align-items: center; }
+    .wordmark { font-size: 24px; font-weight: 700; line-height: 1; letter-spacing: -.04em; color: #fff; }
+    .masthead p { margin: 0; font-size: 13px; line-height: 1.8; text-align: right; }
+    .masthead a { min-height: 44px; display: inline-flex; align-items: center; font-size: 13px; color: var(--ink); }
+    .object-hero { position: relative; display: grid; grid-template-columns: 1fr 1.65fr .45fr; align-items: center; height: 40vw; max-height: 680px; padding: 0 4% 24px; }
+    .copy { position: relative; z-index: 1; color: #fff; }
+    .eyebrow { margin: 0 0 22px; font-size: 12px; }
+    h1 { font-size: clamp(30px, 3.8vw, 65px); font-weight: 700; letter-spacing: -.055em; line-height: .98; margin: 0; }
+    .intro { max-width: 250px; margin: 24px 0 22px; font-size: 14px; line-height: 1.8; word-break: keep-all; }
+    .copy a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; }
+    .object { margin: -45px -8% 0 -14%; position: relative; }
+    .object svg { display: block; width: 100%; height: auto; max-height: min(44vw, 748px); }
+    .product-spec { align-self: center; text-align: right; color: var(--ink); font-size: 12px; line-height: 1.8; }
+    .product-spec strong { display: block; font-size: 28px; line-height: 1; margin-bottom: 10px; font-weight: 400; }
+    .stage-caption { display: flex; justify-content: space-between; gap: 24px; padding: 0 4% 28px; color: #fff; font-size: 12px; line-height: 1.8; }
+    .paper { background: var(--cream); padding: 72px 5% 80px; }
+    .object-note { display: grid; grid-template-columns: 1fr 1fr; gap: 12%; }
+    .object-note h2 { margin: 0; font-weight: 400; font-size: clamp(30px, 4vw, 54px); line-height: 1.35; letter-spacing: -.065em; word-break: keep-all; }
+    .object-note p { margin: 0 0 28px; font-size: 16px; line-height: 1.9; word-break: keep-all; }
+    dl { margin: 0; }
+    dl div { display: flex; justify-content: space-between; gap: 22px; padding: 15px 0; border-top: 1px solid #b5a893; font-size: 14px; line-height: 1.7; }
+    dd { margin: 0; text-align: right; }
+    .closing { margin-top: 60px; display: flex; justify-content: space-between; align-items: end; gap: 30px; }
+    .closing b { font-size: clamp(68px, 14vw, 170px); font-weight: 700; line-height: 1; letter-spacing: -.075em; }
+    .closing p { max-width: 280px; font-size: 13px; line-height: 1.9; }
+    details { margin-top: 60px; border-top: 1px solid #b5a893; padding-top: 16px; font-size: 14px; line-height: 1.9; }
+    summary { cursor: pointer; min-height: 44px; }
+    details p { max-width: 760px; }
+    footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 28px; font-size: 12px; line-height: 1.8; }
+    footer a { min-height: 44px; display: inline-flex; align-items: center; }
+    @media (min-width: 1700px) { main { max-width: 1700px; margin: auto; } }
+    @media (max-width: 700px) {
+      .study-nav { gap: 4px 18px; padding: 10px 5%; }
+      .study-nav span { flex-basis: 100%; }
+      .wordmark { font-size: 24px; }
+      .masthead { padding: 20px 5%; }
+      .masthead p { max-width: 115px; font-size: 11px; }
+      .product-stage { background: linear-gradient(0deg, #713000b0, #71300000 28%), linear-gradient(90deg, #622600b0, #62260085 42%, #62260000 80%), radial-gradient(ellipse at 63% 43%, #ff9808 0, #e66c04 48%, #99400c 100%); }
+      .masthead a { color: #fff; }
+      .object-hero { grid-template-columns: 1fr 1.15fr; height: auto; max-height: none; padding: 30px 5% 10px; }
+      h1 { font-size: clamp(27px, 6.5vw, 44px); }
+      .eyebrow { margin-bottom: 16px; font-size: 11px; }
+      .intro { font-size: 12px; margin-top: 18px; max-width: 180px; }
+      .object { margin: -25px -10% 0 -26%; }
+      .object svg { max-height: none; }
+      .product-spec { grid-column: 2; padding: 20px 0; font-size: 11px; }
+      .product-spec strong { font-size: 22px; }
+      .stage-caption { padding: 18px 5% 24px; font-size: 11px; }
+      .paper { padding-top: 48px; padding-bottom: 32px; }
+      .object-note { grid-template-columns: 1fr; gap: 32px; }
+      .closing { align-items: start; }
+      .closing p { max-width: 180px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 이동</a>
+  <nav class="study-nav" aria-label="레퍼런스 시안 비교"><span>레퍼런스 스터디 / 02</span><a href="./reference-house.html">건축</a><a href="./reference-object.html" aria-current="page">조명</a><a href="./reference-exhibition.html">편집</a><a href="./reference-sport.html">스포츠</a></nav>
+  <main id="main">
+    <div class="product-stage">
+    <header class="masthead"><span class="wordmark">DAM.</span><a href="#object-note">형태 · 소재</a><p>조명 오브제<br>가상 제품 시안</p></header>
+    <section class="object-hero" aria-labelledby="title">
+      <div class="copy"><p class="eyebrow">탁상 조명 / 담 01</p><h1 id="title" lang="en">One lamp.<br>Warm light.</h1><p class="intro">넓은 갓 아래, 책상 위에만 남는 빛.<br>하나의 색 안에서 형태를 봅니다.</p><a href="#object-note">형태와 색 살펴보기</a></div>
+      <figure class="object">
+        <svg viewBox="0 0 850 900" role="img" aria-labelledby="lamp-title lamp-desc">
+          <title id="lamp-title">황토빛 금속 조명</title>
+          <desc id="lamp-desc">넓고 낮은 갓과 가는 기둥, 둥근 받침으로 이루어진 가상의 조명. 주황색 바탕과 같은 계열의 재질을 SVG로 표현했다.</desc>
+          <defs>
+            <linearGradient id="shade" x2="1" y2=".15"><stop stop-color="#743622"/><stop offset=".19" stop-color="#b65c39"/><stop offset=".44" stop-color="#eea36c"/><stop offset=".57" stop-color="#da8453"/><stop offset=".83" stop-color="#ba633e"/><stop offset="1" stop-color="#73341f"/></linearGradient>
+            <linearGradient id="edge" x2="0" y2="1"><stop stop-color="#edb381"/><stop offset=".5" stop-color="#8b4028"/><stop offset="1" stop-color="#512c1e"/></linearGradient>
+            <linearGradient id="stem" x2="1" y2="0"><stop stop-color="#633520"/><stop offset=".3" stop-color="#d99461"/><stop offset=".48" stop-color="#f1bc86"/><stop offset=".72" stop-color="#a8643d"/><stop offset="1" stop-color="#593220"/></linearGradient>
+            <linearGradient id="foot" x2=".8" y2="1"><stop stop-color="#dd9863"/><stop offset=".37" stop-color="#b47249"/><stop offset=".8" stop-color="#6e3d29"/><stop offset="1" stop-color="#542e20"/></linearGradient>
+            <radialGradient id="under"><stop stop-color="#ffedba"/><stop offset=".5" stop-color="#dfae75"/><stop offset="1" stop-color="#9c5733"/></radialGradient>
+            <radialGradient id="shadow"><stop stop-color="#67321d" stop-opacity=".55"/><stop offset="1" stop-color="#67321d" stop-opacity="0"/></radialGradient>
+            <filter id="lamp-grain"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="3" seed="12"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".055"/></feComponentTransfer><feBlend in="SourceGraphic" mode="multiply"/></filter>
+            <clipPath id="shade-clip"><path d="M159 364C187 270 265 177 421 160C577 177 654 270 682 364Q421 397 159 364Z"/></clipPath>
+          </defs>
+          <ellipse cx="455" cy="812" rx="340" ry="67" fill="url(#shadow)"/>
+          <path d="M488 760C565 790 610 753 684 808" fill="none" stroke="#773e29" stroke-width="5"/>
+          <ellipse cx="421" cy="766" rx="144" ry="35" fill="#5d3324"/>
+          <path d="M277 756Q288 712 421 708Q552 713 565 756V767Q421 811 277 767Z" fill="url(#foot)"/>
+          <ellipse cx="421" cy="756" rx="144" ry="35" fill="url(#foot)"/>
+          <path d="M408 340H435V735Q421 744 408 735Z" fill="url(#stem)"/>
+          <path d="M415 387V713" stroke="#f4c18b" stroke-width="2" opacity=".5"/>
+          <ellipse cx="421" cy="367" rx="261" ry="48" fill="url(#edge)"/>
+          <ellipse cx="421" cy="369" rx="240" ry="32" fill="url(#under)"/>
+          <ellipse cx="421" cy="377" rx="42" ry="17" fill="#f3d9a1"/>
+          <path d="M159 364C187 270 265 177 421 160C577 177 654 270 682 364Q421 397 159 364Z" fill="url(#shade)"/>
+          <g clip-path="url(#shade-clip)" filter="url(#lamp-grain)"><path d="M150 140H690V406H150Z" fill="url(#shade)"/></g>
+          <path d="M159 364Q421 397 682 364" fill="none" stroke="#e8aa73" stroke-width="3"/>
+          <path d="M262 278Q321 193 420 171" fill="none" stroke="#f4bc82" stroke-width="2" opacity=".5"/>
+          <ellipse cx="421" cy="161" rx="17" ry="5" fill="#ba774c"/>
+        </svg>
+      </figure>
+      <aside class="product-spec" aria-label="제품 스터디 정보"><strong>01</strong>탁상 조명<br>황토빛 금속 표현<br>SVG 비례 연구</aside>
+    </section>
+    <div class="stage-caption"><span>같은 색의 배경과 오브제.<br>다른 것은 빛을 받는 면.</span><span>레퍼런스 07의 좌·중앙·우 배치 연구<br>실제 판매품 아님</span></div>
+    </div>
+    <section class="paper" id="object-note" aria-labelledby="note-title">
+      <div class="object-note"><h2 id="note-title">색을 더하기보다,<br>같은 색을 깊게.</h2><div><p>배경과 오브제를 주황·황토색 한 계열로 묶고, 빛을 받는 면과 그늘진 면만 다르게 그렸습니다. 밝은 종이색의 다음 지면에서 눈이 잠시 쉬도록 했습니다.</p><dl><div><dt>형태</dt><dd>넓은 갓 · 가는 기둥</dd></div><div><dt>표면 표현</dt><dd>빛과 그림자의 금속색</dd></div><div><dt>시안 범위</dt><dd>제품 비례와 색감 실험</dd></div></dl></div></div>
+      <div class="closing"><b>담.</b><p>설명이 제품보다 커지지 않도록.<br>하나의 사물을 오래 보는 페이지.</p></div>
+      <details><summary>원본과 맞춘 부분 · 다른 부분</summary><p>주 기준은 07 주황색 패딩 화면입니다. 기존 명조 제목을 없애고 작은 흰색 산세리프 제목을 왼쪽에, 제품을 중앙에, 짧은 정보를 오른쪽에 뒀습니다. 제목보다 제품이 커야 하는 원본의 위계를 유지합니다.</p><p>주황은 기존의 탁한 벽돌색에서 채도 높은 귤색으로 바꿨습니다. 배경의 명암은 원본의 색면 관계를 참고하며 흰 본문이 놓이는 왼쪽은 더 어둡게 유지합니다. 원본 서체명은 확인하지 못해 Arial 계열을 사용했습니다. 제품·브랜드·카피와 알약 버튼은 복제하지 않았습니다.</p></details>
+      <footer><p>가상의 조명 브랜드 · 실제 판매·주문 기능 없음<br>색과 금속 질감은 SVG 표현이며 실제 제품 사양이 아닙니다.</p><a href="./reference-studies.md">10개 레퍼런스 분석 노트</a></footer>
+    </section>
+  </main>
+</body>
+</html>

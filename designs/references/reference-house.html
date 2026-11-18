@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>FORMA — 건축 관찰 / 레퍼런스 스터디 01</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { color-scheme: light; --paper: #f2f3ee; --ink: #111512; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: Arial, "Helvetica Neue", "Apple SD Gothic Neo", sans-serif; }
+    a { color: inherit; text-underline-offset: 6px; }
+    a:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+    .skip { position: absolute; top: -100px; left: 20px; z-index: 8; padding: 14px; background: var(--paper); }
+    .skip:focus { top: 10px; }
+    .study-nav { padding: 8px 3.5%; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 26px; background: #e7e9e3; font-size: 13px; }
+    .study-nav span { margin-right: auto; }
+    .study-nav a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; }
+    .study-nav [aria-current] { text-decoration: underline; font-weight: 700; }
+    main { max-width: 1700px; margin: auto; }
+    .hero { position: relative; aspect-ratio: 1.13; isolation: isolate; overflow: hidden; background: #e8eee8; container-type: inline-size; }
+    .hero-meta { position: absolute; left: 4%; right: 4%; top: 2.5%; display: flex; justify-content: space-between; gap: 24px; align-items: start; font-size: 12px; line-height: 1.8; z-index: 4; }
+    .hero-meta a { display: inline-flex; min-height: 44px; align-items: center; }
+    .hero-meta span:last-child { text-align: right; }
+    h1 { position: absolute; left: 2.5%; top: 7%; margin: 0; font-size: 35cqw; font-weight: 400; letter-spacing: -.075em; line-height: .95; z-index: 2; }
+    .house-photo { position: absolute; top: 23%; left: 0; width: 100%; height: auto; display: block; filter: saturate(.62); mask-image: linear-gradient(transparent, #000 27%); }
+    .house-front { z-index: 3; mask-image: none; clip-path: polygon(0 28%, 31% 6%, 88% 43%, 88% 73%, 100% 89%, 100% 100%, 0 100%); }
+    .hero-caption { position: absolute; left: 4%; right: 4%; bottom: 3%; display: flex; justify-content: space-between; gap: 20px; z-index: 5; font-size: 12px; line-height: 1.8; }
+    .hero-caption span { background: #f2f3eef0; padding: 7px 10px; }
+    .essay { padding: 64px 4% 72px; }
+    .essay-lead { display: flex; justify-content: space-between; gap: 30px; align-items: start; }
+    h2 { font-size: clamp(32px, 5.2vw, 82px); font-weight: 400; letter-spacing: -.055em; line-height: 1.08; margin: 0; max-width: 1030px; }
+    h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
+    .essay-lead small { font-size: 12px; white-space: nowrap; padding-top: 12px; }
+    .essay-bottom { display: grid; grid-template-columns: 1fr 1.7fr; align-items: end; gap: 12%; margin-top: 52px; }
+    .essay-bottom p { font-size: 15px; line-height: 1.9; margin: 0; word-break: keep-all; }
+    .essay-bottom img { display: block; width: 100%; height: auto; aspect-ratio: 1.9; object-fit: cover; object-position: 70% 55%; filter: saturate(.5); }
+    .source { margin: 18px 4% 32px; font-size: 12px; line-height: 1.9; }
+    details { margin: 0 4%; border-top: 1px solid #b8bdb5; padding-top: 16px; font-size: 14px; line-height: 1.9; }
+    summary { cursor: pointer; min-height: 44px; }
+    details p { max-width: 850px; word-break: keep-all; }
+    footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 26px 4% 40px; font-size: 12px; line-height: 1.8; }
+    footer a { display: inline-flex; min-height: 44px; align-items: center; }
+    @media (max-width: 700px) {
+      .study-nav { gap: 4px 18px; padding: 10px 5%; }
+      .study-nav span { flex-basis: 100%; }
+      .hero-meta { font-size: 10px; top: 2%; }
+      .hero-meta span:last-child { max-width: 110px; }
+      h1 { top: 13%; }
+      .house-photo { top: 31%; }
+      .hero { aspect-ratio: .95; }
+      .hero-caption { font-size: 10px; bottom: 4%; }
+      .hero-caption span { padding: 4px 6px; }
+      .hero-caption span:last-child { display: none; }
+      .essay { padding: 36px 5% 40px; }
+      .essay-lead { display: block; }
+      h2 { font-size: clamp(28px, 7.5vw, 48px); }
+      .essay-lead small { display: block; margin-top: 20px; }
+      .essay-bottom { grid-template-columns: 1fr; gap: 28px; margin-top: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 이동</a>
+  <nav class="study-nav" aria-label="레퍼런스 시안 비교"><span>레퍼런스 스터디 / 01</span><a href="./reference-house.html" aria-current="page">건축</a><a href="./reference-object.html">조명</a><a href="./reference-exhibition.html">편집</a><a href="./reference-sport.html">스포츠</a></nav>
+  <main id="main">
+    <section class="hero" aria-labelledby="title">
+      <header class="hero-meta"><span>FORMA / 건축 관찰<br>사진과 활자 스터디</span><a href="#essay">공간 노트</a><span>가상 편집 브랜드<br>사진: Farnsworth House</span></header>
+      <h1 id="title" lang="en">Forma</h1>
+      <img class="house-photo" src="../shared/assets/reference-farnsworth-house.jpg" width="1920" height="1280" alt="나무 사이로 보이는 판스워스 하우스의 흰 구조, 큰 유리창과 계단">
+      <img class="house-photo house-front" src="../shared/assets/reference-farnsworth-house.jpg" width="1920" height="1280" alt="" aria-hidden="true">
+      <div class="hero-caption"><span>01 / 자연과 유리 사이</span><span>사진 속 건물은 시안 브랜드의 설계 실적이 아닙니다.</span></div>
+    </section>
+    <section class="essay" id="essay" aria-labelledby="essay-title">
+      <div class="essay-lead"><h2 id="essay-title" lang="en">A house, a landscape,<br>and the space <em>in between.</em></h2><small>공간 노트 / 01</small></div>
+      <div class="essay-bottom"><p>벽보다 창, 실내보다 풍경을 먼저 보게 되는 집. 흰 구조와 나무, 유리 너머의 나무색을 한 장면 안에서 관찰합니다.<br><br>가상의 건축 편집 시안이며 사진 속 실제 건물은 미스 반 데어 로에가 설계한 판스워스 하우스입니다.</p><img src="../shared/assets/reference-farnsworth-house.jpg" width="1920" height="1280" alt="판스워스 하우스의 계단과 유리 벽을 확대한 세부 크롭"></div>
+    </section>
+    <p class="source">사진: Paul R. Burley, <a href="https://commons.wikimedia.org/wiki/File:Farnsworth_House_Plano-9983.jpg">「Farnsworth House Plano-9983」</a> / <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. 축소본을 크롭·채도 조절·수동 전경 마스크로 재편집했습니다. 사진 및 그 편집 표현은 같은 라이선스를 따릅니다. <a href="./reference-studies.md#assets">자산별 사용 조건</a></p>
+    <details><summary>원본과 맞춘 부분 · 다른 부분</summary><p>주 기준은 01 Hotle입니다. 기존의 한글 중간 크기 제목과 평면 일러스트를 없애고, 폭을 거의 채우는 가는 영문 제목·그 앞에 겹치는 건축 사진·다음 지면의 큰 문장과 작은 설명을 배치했습니다.</p><p>원본 사진은 사용하지 않았습니다. 대체 사진은 실제 건물의 낮 장면이므로 원본의 검정 외벽·저녁 호박색 조명까지 같지는 않습니다. 사진을 그대로 관찰할 수 있도록 실제 구조색을 허위로 바꾸지 않았습니다. 원본 서체명은 확인하지 못해 Arial의 가는 인상을 근사했습니다.</p></details>
+    <footer><span>가상의 건축 편집 브랜드 · 실제 건축사무소나 설계 제안 아님</span><a href="./reference-studies.md">원본 비교와 폰트 확인 기록</a></footer>
+  </main>
+</body>
+</html>

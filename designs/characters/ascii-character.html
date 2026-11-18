@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080a09">
+  <meta name="description" content="후드와 망토, 작은 등불을 가진 방랑자. WebGL로 실시간 생성하는 ASCII 캐릭터 시안입니다.">
+  <title>작은 방랑자 — 문자 실험실</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23080a09'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='monospace' font-size='42' fill='%23dfdfd2'%3E@%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      color: #e2e3d9;
+      background: #080a09;
+      font-synthesis: none;
+      -webkit-font-smoothing: antialiased;
+      --muted: #9a9f95;
+      --line: #282d27;
+      --accent: #c1d5a5;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+    * { box-sizing: border-box; }
+    body { min-width: 320px; margin: 0; }
+    button, input { font: inherit; }
+    button { color: inherit; cursor: pointer; }
+    button:disabled { cursor: wait; opacity: .45; }
+    button:focus-visible, input:focus-visible, canvas:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 6px;
+    }
+    button { -webkit-tap-highlight-color: transparent; }
+    [hidden] { display: none !important; }
+    .page { width: min(100%, 1680px); margin-inline: auto; padding: 0 48px; }
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 92px;
+      border-bottom: 1px solid var(--line);
+      gap: 20px;
+    }
+    .brand { display: flex; align-items: center; gap: 13px; font-size: 15px; font-weight: 600; }
+    .brand-mark { font: 22px var(--mono); color: var(--accent); letter-spacing: -5px; padding-right: 5px; }
+    .renderer-status { display: flex; align-items: center; gap: 9px; color: var(--muted); font: 11px var(--mono); }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; background: #777d71; }
+    .is-ready .status-dot { background: var(--accent); }
+    .stage { position: relative; min-height: 540px; height: calc(100svh - 290px); max-height: 900px; }
+    .intro { position: absolute; z-index: 1; left: 0; top: 54px; pointer-events: none; }
+    .eyebrow { margin: 0 0 27px; color: var(--muted); font-size: 12px; }
+    h1 { margin: 0; font-size: clamp(43px, 4.6vw, 72px); font-weight: 400; line-height: 1.21; letter-spacing: -.075em; }
+    .intro-description { margin: 26px 0 0; color: var(--muted); font-size: 13px; line-height: 1.9; letter-spacing: -.025em; }
+    .scene { position: absolute; inset: 0 0 0 220px; }
+    canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; cursor: grab; }
+    canvas.is-dragging { cursor: grabbing; }
+    .scene-message { position: absolute; inset: 40% 24px auto; text-align: center; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .scene-message p { margin: 0 0 14px; overflow-wrap: anywhere; }
+    .scene-message button { padding: 9px 16px; border: 1px solid #5b6255; background: #080a09; border-radius: 3px; }
+    .scene-note { position: absolute; bottom: 31px; left: 0; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.9; pointer-events: none; }
+    .scene-actions { position: absolute; right: 0; bottom: 26px; display: flex; gap: 20px; align-items: center; }
+    .text-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 2px; border: 0; background: transparent; font-size: 12px; }
+    .text-button:hover { color: var(--accent); }
+    .pause-icon { width: 9px; height: 10px; border-inline: 2px solid currentColor; }
+    .is-paused .pause-icon { width: 0; height: 0; border: 5px solid transparent; border-left: 8px solid currentColor; border-right: 0; }
+    .controls { display: grid; grid-template-columns: 1.4fr 1.3fr 1fr .65fr; gap: 38px; min-width: 0; margin: 0; padding: 27px 0 24px; border: 0; border-top: 1px solid var(--line); }
+    .control-label { display: block; margin: 0 0 14px; color: var(--muted); font-size: 11px; }
+    .choices { display: flex; gap: 23px; align-items: center; }
+    .choice { position: relative; min-height: 36px; border: 0; border-bottom: 1px solid transparent; padding: 0 0 6px; background: transparent; color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .choice[aria-pressed="true"] { border-bottom-color: #d3ddc5; color: #e5e9dd; }
+    .choice:hover { color: #e5e9dd; }
+    .size-control { display: flex; align-items: center; gap: 18px; min-height: 36px; padding-bottom: 6px; }
+    input[type="range"] { width: 100%; max-width: 160px; height: 24px; margin: 0; accent-color: #c1d5a5; cursor: pointer; }
+    output { flex-shrink: 0; min-width: 35px; color: #d2d7ca; font: 11px var(--mono); }
+    .color-sample { display: inline-block; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: #e2e3d9; }
+    .color-sample.green { background: #94dba2; }
+    .rain-switch { display: inline-flex; align-items: center; gap: 11px; min-height: 36px; padding: 0 0 6px; border: 0; background: transparent; font-size: 13px; }
+    .switch-track { display: inline-block; width: 28px; height: 16px; padding: 3px; border: 1px solid #6f7866; border-radius: 10px; }
+    .switch-knob { display: block; width: 8px; height: 8px; border-radius: 50%; background: #8d9683; }
+    [aria-checked="true"] .switch-track { border-color: #c1d5a5; }
+    [aria-checked="true"] .switch-knob { transform: translateX(12px); background: #c1d5a5; }
+    .footer { display: flex; justify-content: space-between; gap: 20px; padding: 17px 0 23px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; line-height: 1.7; }
+    #grid-readout { font-family: var(--mono); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    @media (min-width: 1600px) { .scene { left: 280px; } }
+    @media (max-width: 900px) {
+      .page { padding-inline: 28px; }
+      .intro { top: 40px; }
+      .scene { left: 120px; }
+      .intro-description { max-width: 160px; }
+      .intro-description br { display: none; }
+      .controls { gap: 24px; grid-template-columns: 1.2fr 1.15fr 1fr .6fr; }
+      .choices { gap: 16px; }
+    }
+    @media (max-width: 640px) {
+      .page { padding-inline: 22px; }
+      .masthead { min-height: 74px; }
+      .brand { font-size: 13px; gap: 10px; }
+      .renderer-status { font-size: 10px; }
+      .stage { min-height: 590px; height: calc(100svh - 210px); max-height: 760px; }
+      .intro { top: 29px; }
+      .eyebrow { margin-bottom: 16px; font-size: 10px; }
+      h1 { font-size: 41px; line-height: 1.12; }
+      h1 br { display: none; }
+      .intro-description { max-width: none; margin-top: 15px; font-size: 11px; }
+      .intro-description br { display: block; }
+      .scene { inset: 155px -18px 45px; }
+      .scene-note { bottom: 20px; font-size: 10px; }
+      .scene-note br { display: none; }
+      .scene-note span { display: none; }
+      .scene-actions { bottom: 10px; gap: 18px; }
+      .text-button { font-size: 11px; }
+      .controls { grid-template-columns: 1fr 1fr; gap: 23px 26px; padding-block: 23px; }
+      .control-label { margin-bottom: 9px; }
+      .choice, .rain-switch { min-height: 40px; }
+      .size-control { min-height: 40px; }
+      .footer { align-items: flex-start; font-size: 9px; gap: 14px; }
+      .footer > span:first-child { max-width: 175px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">[:]</span>문자 실험실</div>
+      <div class="renderer-status"><span class="status-dot" aria-hidden="true"></span><span id="render-status">WebGL 준비 중</span></div>
+    </header>
+    <main>
+      <section class="stage" aria-labelledby="character-title">
+        <div class="intro">
+          <p class="eyebrow">움직이는 캐릭터 / 시안 01</p>
+          <h1 id="character-title">작은<br> 방랑자.</h1>
+          <p class="intro-description">후드와 망토, 손끝의 작은 등불.<br>가까이 보면 모두 문자입니다.</p>
+        </div>
+        <div class="scene">
+          <canvas id="character" tabindex="0" role="img" aria-label="문자로 그린 입체 후드 캐릭터. 망토와 등불이 흔들리고 비가 내립니다." aria-describedby="scene-help" aria-keyshortcuts="ArrowLeft ArrowRight Home"></canvas>
+          <div class="scene-message" id="loading" role="status">문자로 몸을 빚는 중입니다.</div>
+          <div class="scene-message" id="error" role="alert" hidden>
+            <p id="error-message"></p>
+            <button type="button" id="reload">다시 불러오기</button>
+          </div>
+        </div>
+        <p class="scene-note" id="scene-help">드래그하여 회전<span><br>방향키로도 둘러볼 수 있어요.</span></p>
+        <div class="scene-actions">
+          <button class="text-button" type="button" id="reset-view" disabled>정면 보기</button>
+          <button class="text-button" type="button" id="pause" aria-pressed="false" disabled><span class="pause-icon" aria-hidden="true"></span><span id="pause-label">일시정지</span></button>
+        </div>
+      </section>
+      <fieldset class="controls" id="controls" disabled aria-label="캐릭터 표현 조절">
+        <legend class="sr-only">캐릭터 표현 조절</legend>
+        <div role="group" aria-labelledby="motion-label">
+          <span class="control-label" id="motion-label">움직임</span>
+          <div class="choices">
+            <button class="choice" type="button" data-motion="0" aria-pressed="true">숨 고르기</button>
+            <button class="choice" type="button" data-motion="1" aria-pressed="false">제자리 걷기</button>
+          </div>
+        </div>
+        <div>
+          <label class="control-label" for="cell-size">문자 크기</label>
+          <div class="size-control"><input type="range" id="cell-size" min="6" max="14" step="1" value="8"><output id="size-output" for="cell-size">8 px</output></div>
+        </div>
+        <div role="group" aria-labelledby="palette-label">
+          <span class="control-label" id="palette-label">문자 색</span>
+          <div class="choices">
+            <button class="choice" type="button" data-palette="0" aria-pressed="true"><span class="color-sample" aria-hidden="true"></span>백색</button>
+            <button class="choice" type="button" data-palette="1" aria-pressed="false"><span class="color-sample green" aria-hidden="true"></span>인광</button>
+          </div>
+        </div>
+        <div>
+          <span class="control-label" id="rain-label">내리는 비</span>
+          <button class="rain-switch" type="button" role="switch" aria-checked="true" aria-labelledby="rain-label rain-state" id="rain"><span class="switch-track" aria-hidden="true"><span class="switch-knob"></span></span><span id="rain-state">켜짐</span></button>
+        </div>
+      </fieldset>
+    </main>
+    <footer class="footer">
+      <span>외부 이미지 없이, 형태와 문자를 실시간으로 그립니다.</span>
+      <span id="grid-readout">문자 격자 준비 중</span>
+    </footer>
+    <noscript><p>캐릭터 시안을 보려면 JavaScript를 켜 주세요.</p></noscript>
+  </div>
+  <script type="module">
+    const canvas = document.querySelector("#character");
+    const controls = document.querySelector("#controls");
+    const pause = document.querySelector("#pause");
+    const reset = document.querySelector("#reset-view");
+    const status = document.querySelector("#render-status");
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+    function showError(error) {
+      console.error("ASCII preview:", error);
+      document.querySelector("#loading").hidden = true;
+      document.querySelector("#error").hidden = false;
+      document.querySelector("#error-message").textContent = error.message;
+      document.querySelector("#scene-help").hidden = true;
+      document.body.classList.remove("is-ready");
+      status.textContent = "렌더링을 사용할 수 없음";
+      document.querySelector("#grid-readout").textContent = "문자 격자 사용 불가";
+      controls.disabled = true;
+      pause.disabled = true;
+      reset.disabled = true;
+    }
+
+    document.querySelector("#reload").addEventListener("click", () => location.reload());
+
+    try {
+      const { AsciiCharacter } = await import("./assets/ascii/renderer.js");
+      const renderer = new AsciiCharacter(canvas, {
+        playing: !reducedMotion.matches,
+        onResize: ({ columns, rows }) => {
+          document.querySelector("#grid-readout").textContent = `문자 격자 ${columns} × ${rows}`;
+        },
+        onError: showError,
+      });
+
+      function syncPlayback() {
+        const paused = !renderer.playing;
+        pause.setAttribute("aria-pressed", String(paused));
+        pause.classList.toggle("is-paused", paused);
+        document.querySelector("#pause-label").textContent = paused ? "재생" : "일시정지";
+        status.textContent = paused ? "WebGL 2 · 정지 화면" : "WebGL 2 · 실시간";
+      }
+
+      if (!renderer.stopped) {
+        renderer.draw();
+        document.body.classList.add("is-ready");
+        document.querySelector("#loading").hidden = true;
+        controls.disabled = false;
+        pause.disabled = false;
+        reset.disabled = false;
+        syncPlayback();
+      }
+
+      pause.addEventListener("click", () => {
+        renderer.setPlaying(!renderer.playing);
+        syncPlayback();
+      });
+      reset.addEventListener("click", () => renderer.resetView());
+      reducedMotion.addEventListener("change", event => {
+        if (event.matches) {
+          renderer.setPlaying(false);
+          syncPlayback();
+        }
+      });
+
+      function bindChoices(attribute, update) {
+        const buttons = Array.from(document.querySelectorAll(`[${attribute}]`));
+        for (const button of buttons) {
+          button.addEventListener("click", () => {
+            update(Number(button.getAttribute(attribute)));
+            for (const item of buttons) item.setAttribute("aria-pressed", String(item === button));
+          });
+        }
+      }
+      bindChoices("data-motion", value => renderer.setMotion(value));
+      bindChoices("data-palette", value => renderer.setPalette(value));
+      document.querySelector("#cell-size").addEventListener("input", event => {
+        const value = Number(event.target.value);
+        renderer.setCellHeight(value);
+        document.querySelector("#size-output").value = `${value} px`;
+      });
+      document.querySelector("#rain").addEventListener("click", event => {
+        const enabled = event.currentTarget.getAttribute("aria-checked") !== "true";
+        event.currentTarget.setAttribute("aria-checked", String(enabled));
+        document.querySelector("#rain-state").textContent = enabled ? "켜짐" : "꺼짐";
+        renderer.setRain(enabled);
+      });
+
+      let pointer = null;
+      canvas.addEventListener("pointerdown", event => {
+        if (event.isPrimary && event.button === 0 && !renderer.stopped) {
+          pointer = { id: event.pointerId, x: event.clientX };
+          canvas.setPointerCapture(event.pointerId);
+          canvas.classList.add("is-dragging");
+        }
+      });
+      canvas.addEventListener("pointermove", event => {
+        if (pointer?.id !== event.pointerId) return;
+        renderer.rotate((pointer.x - event.clientX) * 0.008);
+        pointer.x = event.clientX;
+      });
+      function releasePointer(event) {
+        if (pointer?.id !== event.pointerId) return;
+        pointer = null;
+        canvas.classList.remove("is-dragging");
+      }
+      canvas.addEventListener("pointerup", releasePointer);
+      canvas.addEventListener("pointercancel", releasePointer);
+      canvas.addEventListener("lostpointercapture", releasePointer);
+      canvas.addEventListener("keydown", event => {
+        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+          event.preventDefault();
+          renderer.rotate(event.key === "ArrowLeft" ? -0.15 : 0.15);
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          renderer.resetView();
+        } else if (event.code === "Space") {
+          event.preventDefault();
+          if (!event.repeat) {
+            renderer.setPlaying(!renderer.playing);
+            syncPlayback();
+          }
+        }
+      });
+      addEventListener("pagehide", event => {
+        if (!event.persisted) renderer.dispose();
+      });
+    } catch (error) {
+      showError(error);
+    }
+  </script>
+</body>
+</html>

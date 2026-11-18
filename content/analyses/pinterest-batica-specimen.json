@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-batica-specimen",
+  "title": "Batica — 세 가지 바탕에서 반복한 타이포 스페시먼",
+  "summary": "가로 배색 띠 세 개에 같은 워드마크와 정보 배치를 반복한다. 세 버전의 차이는 색에 집중되고, 큰 글자의 자형 자체가 주 이미지가 된다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": {
+    "type": "url",
+    "location": "https://www.pinterest.com/pin/1101059809017263964/",
+    "description": "2026-11-18 사용자가 제공한 전체 디자인 선호 레퍼런스. Pinterest의 공개 스페시먼 이미지를 관찰했다. 이미지에 Yukita Creative의 크레디트가 보이며 개별 선호 이유는 확인하지 않았다."
+  },
+  "keywords": ["사용자 선호 레퍼런스", "Batica", "타이포 스페시먼", "기하학적 산세리프", "블루", "반전 배색"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/75/5c/a8/755ca8777c6e17f4d0294bdd70adb131.jpg", "description": "736×1472px 공개 JPEG. 배색 띠 세 개와 큰 Batica 표기, 상단에서 좌우로 나뉜 작은 정보, 하단 제작자 크레디트를 관찰했다." },
+    { "id": "raster-samples", "kind": "image", "location": "https://i.pinimg.com/736x/75/5c/a8/755ca8777c6e17f4d0294bdd70adb131.jpg", "description": "좌상단 원점 기준 (50,140), (142,196), (50,650), (50,1150) 중심 11×11px의 RGB 채널별 중앙값이다. 원본 색상 선언이 아니다." }
+  ],
+  "color": {
+    "summary": "따뜻한 흰색과 검정의 조합에서 선명한 블루와 백색, 차콜과 백색으로 바뀐다. 블루만 채도가 높아 무채색에 가까운 두 버전 사이에서 색의 변화를 드러낸다.",
+    "palette": [
+      { "role": "첫 띠의 오프화이트 바탕", "value": "#FAF7F2", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "첫 띠의 제목 내부", "value": "#000000", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "가운데 띠의 블루 바탕", "value": "#1255D8", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "마지막 띠의 차콜 바탕", "value": "#212226", "certainty": "estimated", "evidenceIds": ["raster-samples"] }
+    ],
+    "findings": [
+      { "focus": "color.palette-roles", "topic": "전경·바탕의 명도 반전", "observation": "첫 띠는 밝은 바탕에 검은 글자, 나머지 두 띠는 어두운 바탕에 밝은 글자다. 블루는 소형 강조가 아니라 한 띠 전체의 바탕이다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["배색을 비교할 때 제목의 크기와 정보 배치를 고정해 명도와 색상의 효과를 따로 본다."]
+  },
+  "layout": {
+    "summary": "한 장을 비슷한 높이의 전체 폭 띠 세 개로 나누고, 각 띠에 같은 읽기 순서를 반복한다.",
+    "findings": [
+      { "focus": "layout.hierarchy", "topic": "큰 단어 하나가 중심", "observation": "각 띠에서 중앙의 큰 스페시먼명이 가장 큰 요소다. 위쪽의 작은 설명 묶음과 아래쪽의 크레디트는 크기에서 확실히 물러나 있다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "focus": "layout.rhythm", "topic": "같은 뼈대의 반복", "observation": "세 띠는 상단의 마크와 세 안내 묶음, 중앙 제목, 하단 크레디트의 위치 관계를 반복한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["내용 자체를 보여줘야 하는 하나의 제목만 크게 쓰고 나머지 정보는 차분하게 분리한다."]
+  },
+  "typography": {
+    "summary": "제목은 원에 가까운 내부 공간과 두꺼운 획이 선명한 기하학적 산세리프 스페시먼이다. 실제 폰트 파일과 보조 문구의 서체는 확인하지 않았다.",
+    "fonts": [
+      { "role": "Batica 제목", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "Batica는 이미지에 표시된 스페시먼 이름이다. 굵은 디스플레이 자형으로 보이지만 정확한 웨이트·파일·사용 버전은 미확인이다.", "license": "서체 배포 조건·라이선스 미확인" }
+    ],
+    "findings": [
+      { "focus": "typography.glyphs", "topic": "보여주는 글자", "observation": "제목에서는 단층 a, 큰 원형 공간, 네모난 i점이 눈에 띈다. 작은 라벨보다 자형의 차이가 잘 보이는 크기로 제시한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["자형이 주제일 때 큰 표본을 두되, 구체적인 서체는 라이선스와 실제 렌더링을 확인한 뒤 선택한다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "상단의 정보를 분산하고 주 제목과 크레디트는 중앙축으로 되돌린다.",
+      "findings": [
+        { "focus": "text-placement.alignment", "topic": "보조 정보의 정렬", "observation": "상단의 마크와 라벨은 가로로 분산되고, 제목과 크레디트는 서로 다른 높이에서 중앙에 놓인다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+      ],
+      "reuse": ["상단의 보조 정보가 제목과 경쟁하지 않도록 역할에 맞는 정렬과 크기를 선택한다."]
+    }
+  },
+  "preferenceSignals": [
+    { "key": "single-large-type-anchor", "focus": "layout.hierarchy", "direction": "prefer", "basis": "inferred", "interpretation": "하나의 큰 주 제목에 시선을 모으고 설명을 작게 나누는 위계가 인상에 기여했을 수 있다.", "contextKey": "editorial-poster", "context": "주제가 한 단어 또는 명확한 한 제목으로 드러나는 포스터·표지.", "application": "큰 제목과 작은 보조 정보의 크기 차이를 남긴다. 3단 반복이나 중앙 정렬 자체는 고정하지 않는다.", "tradeoff": "보조 정보가 길거나 필수라면 축소만 하지 않고 읽을 수 있는 크기와 공간을 확보한다.", "evidenceIds": ["pin-preview"] }
+  ],
+  "limitations": ["공개 JPEG만 검토했다. 원본 제작 파일·폰트 파일·CSS·화면별 동작·모션·조작은 미확인이다. 표본 HEX는 공식 팔레트가 아니며 원본 이미지나 서체 파일을 저장하지 않았다."]
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-kyoto-travel-poster",
+  "title": "Kyoto — 큰 지명과 도시 풍경에 우측 안내 띠를 붙인 여행 포스터",
+  "summary": "따뜻한 베이지 하늘과 차가운 남색 도시 위에 큰 지명을 둔다. 풍경의 원근과 우측의 좁은 세로 정보가 관광 인쇄물처럼 읽히는 구조를 만든다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": {
+    "type": "url",
+    "location": "https://www.pinterest.com/pin/863846772321529048/",
+    "description": "2026-11-18 사용자가 제공한 전체 디자인 선호 레퍼런스. Pinterest의 공개 여행 포스터 이미지를 관찰했다. 장면의 제작 기법과 개별 선호 이유는 확인하지 않았다."
+  },
+  "keywords": ["사용자 선호 레퍼런스", "Kyoto", "교토", "여행 포스터", "크림 네이비", "사이드바", "세로 조판", "거리 원근"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/5e/00/53/5e0053f32b34280a68c561f4a884549a.jpg", "description": "736×981px 공개 JPEG. 머리말, 제목, 좌측 풍경, 세로 조판과 지도·좌표가 있는 우측 정보 띠를 확인했다." },
+    { "id": "raster-samples", "kind": "image", "location": "https://i.pinimg.com/736x/5e/00/53/5e0053f32b34280a68c561f4a884549a.jpg", "description": "좌상단 원점 기준 (240,240), (52,90), (650,390), (317,795) 중심 11×11px의 RGB 채널별 중앙값. 하늘과 거리의 전체 팔레트가 아니다." }
+  ],
+  "color": {
+    "summary": "따뜻한 샌드 베이지와 낮은 채도의 차가운 네이비·회청색을 맞춘다. 제목과 하단 장면은 어둡고 하늘과 지도 면은 밝다.",
+    "palette": [
+      { "role": "밝은 지면 겸 하늘의 샌드 베이지", "value": "#EAD9BF", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "대형 지명의 네이비", "value": "#213A50", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "우측 정보 띠의 회청색", "value": "#395465", "certainty": "estimated", "evidenceIds": ["raster-samples"] },
+      { "role": "하단 도시 풍경의 회청색", "value": "#354C5A", "certainty": "estimated", "evidenceIds": ["raster-samples"] }
+    ],
+    "findings": [
+      { "focus": "color.temperature-saturation", "topic": "따뜻한 하늘과 차가운 거리", "observation": "상단의 샌드 베이지와 하단의 회청색 건물·도로가 크게 나뉜다. 우측 정보 띠는 거리와 가까운 회청색으로 연결된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["도시 이미지 안에서 이미 보이는 온도 차를 지명과 정보 영역에 연결해 별도 강조색을 늘리지 않는다."]
+  },
+  "layout": {
+    "summary": "전체 폭을 쓰는 머리말과 지명 아래에 큰 장면과 좁은 안내 띠를 나란히 배치한다.",
+    "findings": [
+      { "focus": "layout.hierarchy", "topic": "큰 지명과 작은 위치 정보", "observation": "상단의 KYOTO가 폭을 거의 다 쓰고, 왼쪽의 일본어 지명과 오른쪽의 문구·지도·좌표는 훨씬 작게 놓인다. 풍경은 제목 아래 넓은 면을 채운다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "focus": "layout.grid", "topic": "넓은 풍경과 좁은 정보 띠", "observation": "지명 아래에서는 왼쪽 풍경과 오른쪽 좁은 열이 비대칭으로 나뉜다. 안내 띠는 위쪽 문구와 아래쪽 지도·좌표를 분리한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["장면에 넉넉한 폭을 주고, 부가 정보가 실제로 있을 때만 좁은 열에 묶는다."]
+  },
+  "typography": {
+    "summary": "큰 라틴 대문자가 지명을 먼저 읽게 하고, 일본어 세로 조판과 작은 영문은 지역 및 문구를 보조한다.",
+    "fonts": [
+      { "role": "라틴 대문자 지명", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "둥근 O와 굵고 정돈된 획의 기하학적 산세리프로 보인다. 일본어·영문의 정확한 패밀리와 폴백은 확인하지 않았다.", "license": "서체 출처·라이선스 미확인" }
+    ],
+    "findings": [
+      { "focus": "typography.weight-style", "topic": "큰 지명과 가벼운 소형 정보", "observation": "폭이 넓고 굵은 라틴 대문자 지명과 작은 영문 안내 글자가 같은 색계열에서도 크기와 무게로 서로 분리된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["다국어 조판은 지역·콘텐츠에 필요한 맥락에서만 쓰고 대체 서체와 가독성을 확인한다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "가로 지명과 우측에 따로 세로로 놓인 일본어가 서로 다른 정보 층을 이룬다.",
+      "findings": [
+        { "focus": "text-placement.alignment", "topic": "오른쪽 안내 열의 세로 조판", "observation": "일본어 문구는 안내 띠 위쪽에 세로로 놓이고, 작은 영문과 지도·좌표는 같은 열의 다른 높이에 정렬된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+      ],
+      "reuse": ["해당 문자 체계에 자연스러운 조판 방향을 쓴다. 세로 조판을 정보와 무관한 장식으로 옮기지 않는다."]
+    },
+    "subject-composition": {
+      "summary": "거리의 앞·뒤 차이로 장면의 깊이를 만든다.",
+      "findings": [
+        { "focus": "subject-composition.depth-layers", "topic": "골목에서 먼 지붕으로", "observation": "전경의 횡단보도와 양쪽 건물 뒤로 좁아지는 도로, 희미한 먼 지붕과 탑의 실루엣이 겹쳐 있다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+      ],
+      "reuse": ["공간 기록이 주제라면 건물 실루엣과 길의 원근을 잠식하지 않도록 글자 영역을 나눈다."]
+    },
+    "lighting": {
+      "summary": "밝은 하늘과 흐릿한 원경, 어두운 전경이 깊이의 인상을 보강한다.",
+      "findings": [
+        { "focus": "lighting.atmosphere", "topic": "원경의 낮은 국소 대비", "observation": "멀리 보이는 산과 지붕 경계는 앞쪽 거리와 건물보다 밝고 흐릿해 대기 원근처럼 보인다.", "certainty": "estimated", "evidenceIds": ["pin-preview"] }
+      ],
+      "reuse": ["실제 장면이 가진 명암 층을 먼저 활용하고 대기 효과는 지명을 읽는 데 방해되지 않게 한다."]
+    }
+  },
+  "preferenceSignals": [
+    { "key": "single-large-type-anchor", "focus": "layout.hierarchy", "direction": "prefer", "basis": "inferred", "interpretation": "지명 하나로 내용을 먼저 정하고 나머지 정보를 작게 나누는 위계가 인상에 기여했을 수 있다.", "contextKey": "editorial-poster", "context": "장소나 작품명을 먼저 알아야 하는 표지·여행 포스터.", "application": "지명은 하나의 큰 단위로 남기고 지도·좌표·다국어 설명은 해당 정보가 필요할 때 분리한다.", "tradeoff": "긴 지명이나 작은 화면에서는 크기보다 온전한 판독을 우선하고 지명을 이미지에만 가두지 않는다.", "evidenceIds": ["pin-preview"] },
+    { "key": "warm-paper-cool-image", "focus": "color.temperature-saturation", "direction": "prefer", "basis": "inferred", "interpretation": "따뜻한 하늘·지면과 낮은 채도의 차가운 거리 사이 온도 차가 여행 인쇄물의 분위기에 기여했을 수 있다.", "contextKey": "image-led-editorial-poster", "context": "풍경에 차가운 명암층이 있고 따뜻한 지면과 연결할 수 있는 편집.", "application": "따뜻한 배경과 차가운 이미지의 관계를 남기되, 양쪽이 분리돼 보이지 않도록 안내 영역의 색을 이미지에 맞춘다.", "tradeoff": "회청색·베이지를 고정하지 않고, 작은 다국어 설명은 실제 바탕에서 대비를 확인한다.", "evidenceIds": ["pin-preview"] }
+  ],
+  "limitations": ["정지 JPEG만 검토했다. 실제 교토 풍경의 촬영 여부, 합성·생성·인쇄 기법, 정확한 폰트와 좌표의 의미, 인터랙션은 검증하지 않았다. 원본 이미지는 저장하지 않았다."]
+}

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>매일 한 라운드 — 빈티지 시안</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #d3cec2; color: #8d2218; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; }
+    main { width: min(100%, 800px); margin: auto; padding: 20px; }
+    .label, footer { display: flex; justify-content: space-between; gap: 20px; font-size: 11px; line-height: 1.8; }
+    .label { margin-bottom: 12px; color: #4f493e; }
+    .poster { position: relative; aspect-ratio: 4 / 5; background: #ece5d4; isolation: isolate; overflow: hidden; }
+    .paper { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
+    h1 { position: absolute; z-index: 1; top: 3%; left: 5%; margin: 0; font-size: clamp(82px, 25vw, 198px); font-weight: 950; line-height: 1.03; letter-spacing: -.09em; color: #bb291c; }
+    h1 span { display: block; }
+    h1 span:last-child { font-size: .65em; margin-top: .08em; }
+    .boxer { position: absolute; width: 65%; height: 69%; left: 31%; top: 28%; z-index: 3; }
+    .line { position: absolute; left: 6%; right: 6%; top: 55%; display: flex; justify-content: space-between; gap: 12px; font-size: clamp(12px, 2.5vw, 19px); font-weight: 700; z-index: 2; }
+    .edition { position: absolute; left: 6%; bottom: 5%; z-index: 3; font-size: clamp(9px, 1.7vw, 13px); line-height: 1.8; }
+    .edition p { margin: 0; }
+    .edition b { display: block; font-size: clamp(12px, 2.3vw, 18px); }
+    .bars { display: flex; gap: 3px; margin-top: 12px; height: 16px; }
+    .bars i { width: 3px; background: #8d2218; }
+    .bars i:nth-child(3n) { width: 7px; }
+    footer { margin-top: 14px; align-items: start; color: #4f493e; }
+    footer p { margin: 0; }
+    a { color: inherit; text-underline-offset: 4px; min-height: 44px; display: inline-flex; align-items: center; }
+    a:focus-visible { outline: 2px solid #8d2218; outline-offset: 4px; }
+    @media (max-width: 500px) { main { padding: 12px; } footer { flex-wrap: wrap; } .bars { height: 10px; gap: 2px; margin-top: 8px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="label"><span>02 / 종이 위의 복싱</span><span>가상 훈련 기록 표지</span></div>
+    <article class="poster" aria-labelledby="title">
+      <h1 id="title"><span>매일</span><span>한 라운드.</span></h1>
+      <div class="line"><span>줄넘기 10분</span><span>샌드백 3세트</span></div>
+      <svg class="boxer" viewBox="0 0 500 650" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="skin"><stop stop-color="#8d765a"/><stop offset=".5" stop-color="#504739"/><stop offset="1" stop-color="#292a24"/></linearGradient>
+          <linearGradient id="glove"><stop stop-color="#ee6741"/><stop offset=".5" stop-color="#b22b1c"/><stop offset="1" stop-color="#66271b"/></linearGradient>
+          <filter id="shadow"><feGaussianBlur stdDeviation="7"/></filter>
+        </defs>
+        <ellipse cx="266" cy="609" rx="166" ry="12" fill="#554c35" opacity=".3" transform="rotate(-9 266 609)" filter="url(#shadow)"/>
+        <path d="M211 314 Q218 368 194 414 L147 540 L161 568 L188 545 L246 452 L269 387 L294 420 L356 527 L375 553 L402 543 L380 512 L335 396 L301 318 Z" fill="url(#skin)"/>
+        <path d="M187 529 L168 568 L151 575 L123 579 Q99 591 108 605 Q139 615 176 603 L200 582 L205 557 Z" fill="#393b30" stroke="#77735b" stroke-width="3"/>
+        <path d="M357 521 L379 553 L389 573 L420 588 Q451 591 445 572 L421 554 L402 529 Z" fill="#303329" stroke="#77735b" stroke-width="3"/>
+        <path d="M205 268 L308 267 L328 346 L265 367 L250 335 L218 352 L190 327 Z" fill="#aaa589"/>
+        <path d="M214 280 L300 278 L307 302 L207 305 Z" fill="#d3c6a8"/>
+        <path d="M280 306 L298 351" stroke="#d7caac" stroke-width="9"/>
+        <path d="M194 151 Q221 115 257 130 Q306 146 308 208 L304 270 Q264 295 211 269 L194 228 Z" fill="url(#skin)"/>
+        <path d="M231 161 Q264 183 275 224 L287 249 M225 226 Q250 247 282 246" fill="none" stroke="#a18b66" stroke-width="4"/>
+        <path d="M206 158 Q177 182 185 214 L204 242 Q215 250 230 228 L246 184" fill="none" stroke="url(#skin)" stroke-width="30" stroke-linecap="round"/>
+        <path d="M274 152 Q314 183 301 213 L265 188 L244 141" fill="none" stroke="url(#skin)" stroke-width="32" stroke-linecap="round"/>
+        <path d="M224 93 Q217 62 236 43 Q255 25 280 47 L287 78 L276 113 L256 128 L236 113 Z" fill="url(#skin)"/>
+        <path d="M221 70 Q219 38 244 32 Q277 26 287 55 L285 73 Q260 59 232 77 Z" fill="#202821"/>
+        <path d="M267 85 L279 86 M255 103 L267 106" stroke="#282720" stroke-width="3"/>
+        <path d="M216 147 Q191 136 184 115 Q179 90 198 81 Q220 72 233 92 L244 118 L237 142 Z" fill="url(#glove)" stroke="#73261c" stroke-width="3"/>
+        <path d="M267 161 Q241 149 235 125 Q232 100 249 91 Q273 79 286 98 L296 123 L289 149 Z" fill="url(#glove)" stroke="#73261c" stroke-width="3"/>
+        <path d="M201 140 L224 155 M250 153 L278 168" stroke="#493c2a" stroke-width="12"/>
+        <path d="M190 99 Q201 83 216 98 M242 109 Q251 93 269 102" fill="none" stroke="#f38859" stroke-width="3"/>
+      </svg>
+      <div class="edition"><b>훈련 기록 / 028</b><p>한 번에 세게보다, 일정하게.<br>가상 편집물 · 실제 훈련 처방 아님</p><div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <svg class="paper" aria-hidden="true" focusable="false">
+        <filter id="paper-grain"><feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="3" seed="17"/><feColorMatrix type="saturate" values="0"/></filter>
+        <rect width="100%" height="100%" filter="url(#paper-grain)" opacity=".14" style="mix-blend-mode:multiply"/>
+      </svg>
+    </article>
+    <footer><p>종이색 · 붉은 대형 글자 · 앞에 겹친 인물.<br>사진 대신 독자적인 SVG 일러스트를 사용했습니다.</p><a href="./boxing-references.md#vintage">참고·제작 안내</a></footer>
+  </main>
+</body>
+</html>

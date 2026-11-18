@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Fold — 편집 스튜디오 / 레퍼런스 스터디 03</title>
+  <style>
+    * { box-sizing: border-box; }
+    @font-face { font-family: "Be Vietnam Pro"; src: url("../shared/assets/be-vietnam-pro-black.ttf") format("truetype"); font-weight: 900; font-style: normal; font-display: swap; }
+    :root { color-scheme: light; --paper: #fafafa; --ink: #080808; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: Arial, "Apple SD Gothic Neo", sans-serif; }
+    a { color: inherit; text-underline-offset: 6px; }
+    a:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+    .skip { position: absolute; top: -100px; left: 20px; z-index: 10; padding: 14px; background: var(--paper); }
+    .skip:focus { top: 10px; }
+    .study-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 26px; padding: 8px 3.5%; background: #f4f2e9; font-size: 13px; }
+    .study-nav span { margin-right: auto; }
+    .study-nav a { min-height: 44px; display: inline-flex; align-items: center; text-decoration: none; }
+    .study-nav [aria-current] { text-decoration: underline; font-weight: 700; }
+    main { max-width: 1700px; margin: auto; }
+    .exhibition { display: grid; grid-template-columns: 1fr 1fr; aspect-ratio: 1 / .574; }
+    .portrait { position: relative; overflow: hidden; margin: 0; background: #372b25; }
+    .portrait::after { content: ""; position: absolute; inset: 50% 0 0; background: linear-gradient(transparent, #000b); }
+    .portrait img { position: absolute; width: 1050%; height: auto; max-width: none; left: -579%; top: -105%; filter: grayscale(1) sepia(.75) brightness(.65); }
+    .portrait figcaption { position: absolute; z-index: 2; left: 5%; bottom: 5%; color: #fff; font-size: 12px; line-height: 1.8; }
+    .title-copy { position: relative; padding: 4% 2% 0; display: flex; flex-direction: column; justify-content: end; }
+    .studio-meta { position: absolute; top: 48%; left: 2%; right: 5%; display: flex; gap: 20px; font-size: 12px; line-height: 1.8; }
+    .studio-meta p { margin: 0; }
+    h1 { margin: 0; font-family: "Be Vietnam Pro", Arial, sans-serif; font-size: clamp(60px, 20.22vw, 344px); line-height: .8; font-weight: 900; letter-spacing: -.055em; }
+    .artwork { margin: 0; position: relative; }
+    .artwork svg { display: block; width: 100%; height: 54vw; max-height: 918px; }
+    .artwork figcaption { padding: 12px 2%; font-size: 12px; line-height: 1.8; }
+    .disciplines { padding: 24px 2% 48px; }
+    .discipline { margin: 0; font-family: "Be Vietnam Pro", Arial, sans-serif; font-size: clamp(66px, 20.22vw, 344px); line-height: .9; letter-spacing: -.055em; font-weight: 900; color: #898989; }
+    h2.discipline { color: #080808; }
+    .statement { display: flex; justify-content: space-between; gap: 30px; margin: 32px 2% 48px; border-top: 1px solid #aaaeb1; padding-top: 30px; }
+    .statement small { font-size: 13px; }
+    .statement p { max-width: 640px; margin: 0; font-size: clamp(22px, 3vw, 40px); line-height: 1.5; letter-spacing: -.05em; word-break: keep-all; }
+    .chapters { padding: 0 2% 40px; }
+    .chapter { display: grid; grid-template-columns: .6fr 1.25fr 1fr; gap: 35px; border-top: 1px solid #aaaeb1; padding: 25px 0 30px; align-items: start; }
+    .chapter .number { font-size: clamp(48px, 7vw, 96px); line-height: 1; font-weight: 700; letter-spacing: -.09em; }
+    .chapter h2 { margin: 0; font-size: 28px; line-height: 1.5; font-weight: 500; letter-spacing: -.06em; }
+    .chapter p { margin: 0; max-width: 350px; font-size: 14px; line-height: 1.9; word-break: keep-all; }
+    .end-title { padding: 32px 2% 60px; font-family: "Be Vietnam Pro", Arial, sans-serif; font-weight: 900; font-size: clamp(50px, 17vw, 280px); line-height: 1; letter-spacing: -.065em; }
+    details { margin: 0 2%; border-top: 1px solid #aaaeb1; padding-top: 16px; font-size: 14px; line-height: 1.9; }
+    summary { min-height: 44px; cursor: pointer; }
+    details p { max-width: 780px; }
+    footer { padding: 26px 2% 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; font-size: 12px; line-height: 1.8; }
+    footer a { min-height: 44px; display: inline-flex; align-items: center; }
+    @media (max-width: 700px) {
+      .study-nav { gap: 4px 18px; padding: 10px 5%; }
+      .study-nav span { flex-basis: 100%; }
+      .exhibition { aspect-ratio: 1 / .65; }
+      .studio-meta { font-size: 10px; gap: 8px; }
+      .studio-meta p + p { margin: 0; white-space: nowrap; }
+      .title-copy { padding: 12px 4% 0; }
+      h1 { font-size: 20.22vw; }
+      .portrait img { top: -76%; }
+      .portrait figcaption { font-size: 10px; }
+      .artwork svg { height: 65vw; }
+      .artwork figcaption { padding: 12px 5%; }
+      .disciplines { padding: 20px 4% 30px; }
+      .discipline { font-size: clamp(60px, 19.5vw, 137px); }
+      .statement { margin: 16px 5% 40px; display: block; }
+      .statement p { margin-top: 22px; }
+      .chapters { padding: 0 5% 25px; }
+      .chapter { grid-template-columns: 60px 1fr; gap: 18px; }
+      .chapter p { grid-column: 2; }
+      .chapter h2 { font-size: 25px; }
+      details { margin: 0 5%; }
+      footer { padding-left: 5%; padding-right: 5%; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 이동</a>
+  <nav class="study-nav" aria-label="레퍼런스 시안 비교"><span>레퍼런스 스터디 / 03</span><a href="./reference-house.html">건축</a><a href="./reference-object.html">조명</a><a href="./reference-exhibition.html" aria-current="page">편집</a><a href="./reference-sport.html">스포츠</a></nav>
+  <main id="main">
+    <section class="exhibition" aria-labelledby="title">
+      <figure class="portrait"><img src="../shared/assets/sports-soccer-cc0.jpg" width="2100" height="1500" alt="CC0 축구 사진에서 크게 확대한 선수의 얼굴"><figcaption>얼굴과 표면<br>사진 · 조판 연구</figcaption></figure>
+      <div class="title-copy"><div class="studio-meta"><p>FOLD / 가상 편집 스튜디오<br>이미지와 지면의 연구</p><p>사진<br>조판<br>형태</p></div><h1 id="title" lang="en">Fold</h1></div>
+    </section>
+      <figure class="artwork">
+        <svg viewBox="0 0 660 780" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="fold-title fold-desc">
+          <title id="fold-title">접힌 금속</title>
+          <desc id="fold-desc">검정·은색의 면이 굽이치며 빛과 그림자를 드러내는 독자적인 추상 SVG 그래픽.</desc>
+          <defs>
+            <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#c5c6c1"/><stop offset="1" stop-color="#e3e3da"/></linearGradient>
+            <linearGradient id="blue-front" x2=".9" y2=".3"><stop stop-color="#070707"/><stop offset=".2" stop-color="#555"/><stop offset=".45" stop-color="#f8f8f6"/><stop offset=".55" stop-color="#c5c5c1"/><stop offset=".82" stop-color="#343434"/><stop offset="1" stop-color="#070707"/></linearGradient>
+            <linearGradient id="blue-back" x2="1" y2="1"><stop stop-color="#050505"/><stop offset=".5" stop-color="#3c3c3c"/><stop offset="1" stop-color="#aaa"/></linearGradient>
+            <linearGradient id="light-fold" x2=".6" y2="1"><stop stop-color="#fff"/><stop offset=".2" stop-color="#bcbcb8"/><stop offset=".55" stop-color="#383838"/><stop offset="1" stop-color="#050505"/></linearGradient>
+            <filter id="fold-shadow"><feGaussianBlur stdDeviation="18"/></filter>
+            <filter id="print"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="7"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".045"/></feComponentTransfer><feBlend in="SourceGraphic" mode="multiply"/></filter>
+          </defs>
+          <path d="M0 0H660V780H0Z" fill="url(#bg)"/>
+          <ellipse cx="365" cy="719" rx="227" ry="29" fill="#555b6d" opacity=".35" filter="url(#fold-shadow)"/>
+          <g filter="url(#print)">
+            <path d="M489 18C535 136 471 201 334 267C222 322 148 353 169 426L64 515C-7 345 104 285 233 218C358 152 366 97 334 18Z" fill="url(#blue-back)"/>
+            <path d="M334 18H489C531 140 399 197 273 252C139 311 101 386 169 426L64 515C-7 345 104 285 233 218C358 152 366 97 334 18Z" fill="url(#blue-front)"/>
+            <path d="M169 426C228 469 329 397 401 372C514 333 597 405 578 504C561 591 450 650 355 737L221 737C308 646 457 559 459 490C459 443 392 436 346 459C224 520 132 563 64 515Z" fill="url(#light-fold)"/>
+            <path d="M221 737C308 646 457 559 459 490C459 443 392 436 346 459C413 413 514 430 506 503C498 583 352 685 309 737Z" fill="url(#blue-back)"/>
+            <path d="M334 18C358 105 316 163 233 218C104 285-7 345 64 515" fill="none" stroke="#deded9" stroke-width="2" opacity=".6"/>
+            <path d="M169 426C228 469 329 397 401 372C514 333 597 405 578 504" fill="none" stroke="#d7d7d3" stroke-width="2"/>
+          </g>
+        </svg>
+        <figcaption>은색 표면 / 독자적인 SVG 그래픽 · 사진이 아닌 재질 표현</figcaption>
+      </figure>
+    <section class="disciplines" aria-label="편집 스터디의 작업 분야"><p class="discipline" lang="en">Imaging</p><h2 class="discipline" lang="en">Design</h2><p class="discipline" lang="en">Editorial</p><p class="discipline" lang="en">Objects</p></section>
+    <section class="statement" aria-label="편집 스터디 소개"><small>기획 노트</small><p>사진·조판·재질.<br>크기가 만드는 읽는 순서.</p></section>
+    <section class="chapters" aria-label="관찰 주제">
+      <article class="chapter"><span class="number" aria-hidden="true">01</span><h2>표면을 보다.</h2><p>같은 금속도 빛을 받는 각도에 따라 달라집니다. 원색을 추가하지 않고 은색 안의 명암 차이를 살폈습니다.</p></article>
+      <article class="chapter"><span class="number" aria-hidden="true">02</span><h2>사이를 남기다.</h2><p>제목과 본문, 그림과 캡션의 거리를 다르게 두었습니다. 빈 공간도 읽는 순서에 참여합니다.</p></article>
+      <article class="chapter"><span class="number" aria-hidden="true">03</span><h2>다르게 읽다.</h2><p>큰 글자 다음에는 짧은 문장, 조밀한 면 다음에는 넓은 여백. 모든 내용을 같은 크기로 말하지 않습니다.</p></article>
+    </section>
+    <div class="end-title" aria-hidden="true">Fold.</div>
+    <details><summary>원본과 맞춘 부분 · 다른 부분</summary><p>주 기준은 03 SwissBrut입니다. 얼굴/흰 지면의 반반 구도, 흰 영역 아래쪽의 큰 단어, 그 아래 넓은 무채색 재질 이미지, 검정·회색 대형 활자의 수직 목록을 맞췄습니다. 기존의 코발트색과 한글 두 열 제목은 없앴습니다.</p><p>공개 원본 프리뷰에서 제목의 Be Vietnam Pro 900, 행간 .8, 자간 -.055em을 확인했습니다. 같은 계열·굵기의 OFL 폰트를 로컬로 포함했습니다. 원본 인물·사진·브랜드 대신 기존 CC0 사진과 새 그래픽을 사용했습니다. 파일과 <a href="../shared/assets/be-vietnam-pro-OFL.txt">폰트 라이선스</a>를 함께 보관하세요.</p></details>
+    <footer><span>가상의 편집 스튜디오 · 실제 실적·행사·예약 기능 없음<br>사진: Keith / CC0 · Be Vietnam Pro: OFL · <a href="../posters/sports-collage.md">사진 출처</a></span><a href="./reference-studies.md">원본 비교와 폰트 확인 기록</a></footer>
+  </main>
+</body>
+</html>

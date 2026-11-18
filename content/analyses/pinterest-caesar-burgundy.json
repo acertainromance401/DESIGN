@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-caesar-burgundy",
+  "title": "Caesar Palette — 검정·버건디·흰색",
+  "summary": "검정과 낮은 명도의 버건디를 붙여 어두운 덩어리를 만들고, 흰색에서 밝기를 크게 끌어올린다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": {
+    "type": "url",
+    "location": "https://www.pinterest.com/pin/1102819027539646280/",
+    "description": "2026-11-18 사용자가 마음에 드는 색 조합으로 제공했다. 선호와 분석의 범위는 공개 팔레트 이미지의 색감으로 한정한다."
+  },
+  "keywords": ["사용자 선호 레퍼런스", "Caesar", "검정", "버건디", "흰색", "명도 대비"],
+  "analysisScope": ["color"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/f5/e2/3a/f5e23ac15427843a93c281e9db307d22.jpg", "description": "736×917px 공개 JPEG. 상단 세 단색 견본의 표기 HEX를 읽었다. 좌상단 원점 기준 픽셀 (185,150)에서 보이는 검정은 #111111로 샘플링됐다." }
+  ],
+  "color": {
+    "summary": "상단 단색 영역에서 검정이 약 절반, 버건디와 흰색이 약 4분의 1씩을 차지한다. 버건디는 검정과 명도가 가깝고 흰색과 강한 명도 대비를 만든다.",
+    "palette": [
+      { "role": "검정 · 이미지 표기", "value": "#000000", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "검정 영역 · 공개 JPEG 표본", "value": "#111111", "certainty": "estimated", "evidenceIds": ["pin-preview"] },
+      { "role": "버건디 · 이미지 표기", "value": "#6D001A", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "흰색 · 이미지 표기", "value": "#FFFFFF", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "findings": [
+      { "focus": "color.palette-roles", "topic": "표기값과 래스터 표본의 구분", "observation": "검정 #000000, 버건디 #6D001A, 흰색 #FFFFFF는 견본 표기다. 보이는 검정의 단일 픽셀 표본 #111111은 원본 선언으로 바꾸어 쓰지 않는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "focus": "color.distribution", "topic": "검정이 넓고 버건디·백색이 나뉨", "observation": "상단 색면의 폭만 보면 검정·버건디·흰색이 약 2:1:1이다. 아래 이미지까지 포함한 전체 픽셀 면적 비율은 아니다.", "certainty": "estimated", "evidenceIds": ["pin-preview"] },
+      { "focus": "color.contrast", "topic": "어두운 버건디와 밝은 중립", "observation": "표기 HEX의 sRGB 상대 명도 대비는 검정·버건디 약 1.67:1, 버건디·흰색 약 12.61:1이다. 검정과 버건디의 차이는 색상에서, 흰색과의 차이는 명도에서 더 크게 드러난다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["버건디를 밝은 빨강 포인트로 바꾸지 않고 낮은 명도로 유지하는 조합을 비교한다. 검정과 버건디처럼 명도가 가까운 쌍만으로 필수 텍스트나 상태를 구분하지 않는다."]
+  },
+  "preferenceFocuses": ["color.palette-roles", "color.distribution", "color.contrast"],
+  "preferenceSignals": [
+    { "key": "deep-red-light-neutral-contrast", "focus": "color.contrast", "direction": "prefer", "basis": "inferred", "interpretation": "채도가 아니라 낮은 명도에 무게를 둔 버건디와 밝은 중립의 대비가 조합의 인상에 기여했을 수 있다.", "contextKey": "palette-led-graphic", "context": "깊은 적색을 넓은 면 또는 주조색 중 하나로 쓰는 그래픽.", "application": "진한 적색과 밝은 중립 사이의 명도차를 유지한다. 순백·검정이나 예시의 배치 비율은 고정하지 않는다.", "tradeoff": "다른 어두운 색과 맞닿을 때 색만으로 구분해야 하는 내용이 없는지 확인한다.", "evidenceIds": ["pin-preview"] }
+  ],
+  "limitations": ["대비율은 표기 스와치 사이를 계산한 값이지 실제 UI 텍스트 검증이 아니다. 색감 이외의 요소는 분석하지 않았고 원본 이미지는 저장하지 않았다."]
+}

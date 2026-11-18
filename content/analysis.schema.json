@@ -1,0 +1,933 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "analyzed"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "visualId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "local-html",
+            "url",
+            "image",
+            "other"
+          ]
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "referenceGroup": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        }
+      },
+      "required": [
+        "type",
+        "location",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "source-code",
+              "browser-render",
+              "image",
+              "external-reference"
+            ]
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "location",
+          "description"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "analysisScope": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "color",
+          "layout",
+          "typography",
+          "text-placement",
+          "subject-composition",
+          "lighting",
+          "motion",
+          "texture",
+          "interaction"
+        ]
+      }
+    },
+    "color": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "topic": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "certainty": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "estimated",
+                  "unknown"
+                ]
+              },
+              "evidenceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                }
+              },
+              "focus": {
+                "type": "string",
+                "enum": [
+                  "color.palette-roles",
+                  "color.emphasis",
+                  "color.distribution",
+                  "color.contrast",
+                  "color.temperature-saturation",
+                  "layout.grid",
+                  "layout.spacing",
+                  "layout.hierarchy",
+                  "layout.layering",
+                  "layout.responsive",
+                  "layout.density",
+                  "layout.rhythm",
+                  "typography.family",
+                  "typography.weight-style",
+                  "typography.glyphs",
+                  "typography.fallback",
+                  "typography.license",
+                  "text-placement.alignment",
+                  "text-placement.hierarchy",
+                  "text-placement.line-breaks",
+                  "text-placement.spacing",
+                  "text-placement.readability",
+                  "text-placement.image-balance",
+                  "subject-composition.position-scale",
+                  "subject-composition.framing",
+                  "subject-composition.viewpoint",
+                  "subject-composition.depth-layers",
+                  "subject-composition.direction-gesture",
+                  "subject-composition.balance",
+                  "lighting.source-direction",
+                  "lighting.quality",
+                  "lighting.highlights",
+                  "lighting.shadows",
+                  "lighting.atmosphere",
+                  "motion.movement",
+                  "motion.timing",
+                  "motion.transition",
+                  "motion.feedback",
+                  "motion.accessibility",
+                  "texture.material",
+                  "texture.pattern",
+                  "texture.density",
+                  "texture.edges",
+                  "texture.grain",
+                  "interaction.affordance",
+                  "interaction.states",
+                  "interaction.navigation",
+                  "interaction.accessibility",
+                  "interaction.recovery"
+                ]
+              }
+            },
+            "required": [
+              "topic",
+              "observation",
+              "certainty",
+              "evidenceIds"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "reuse": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "palette": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "certainty": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "estimated",
+                  "unknown"
+                ]
+              },
+              "evidenceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                }
+              }
+            },
+            "required": [
+              "role",
+              "value",
+              "certainty",
+              "evidenceIds"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "summary",
+        "findings",
+        "reuse",
+        "palette"
+      ],
+      "additionalProperties": false
+    },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "topic": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "certainty": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "estimated",
+                  "unknown"
+                ]
+              },
+              "evidenceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                }
+              },
+              "focus": {
+                "type": "string",
+                "enum": [
+                  "color.palette-roles",
+                  "color.emphasis",
+                  "color.distribution",
+                  "color.contrast",
+                  "color.temperature-saturation",
+                  "layout.grid",
+                  "layout.spacing",
+                  "layout.hierarchy",
+                  "layout.layering",
+                  "layout.responsive",
+                  "layout.density",
+                  "layout.rhythm",
+                  "typography.family",
+                  "typography.weight-style",
+                  "typography.glyphs",
+                  "typography.fallback",
+                  "typography.license",
+                  "text-placement.alignment",
+                  "text-placement.hierarchy",
+                  "text-placement.line-breaks",
+                  "text-placement.spacing",
+                  "text-placement.readability",
+                  "text-placement.image-balance",
+                  "subject-composition.position-scale",
+                  "subject-composition.framing",
+                  "subject-composition.viewpoint",
+                  "subject-composition.depth-layers",
+                  "subject-composition.direction-gesture",
+                  "subject-composition.balance",
+                  "lighting.source-direction",
+                  "lighting.quality",
+                  "lighting.highlights",
+                  "lighting.shadows",
+                  "lighting.atmosphere",
+                  "motion.movement",
+                  "motion.timing",
+                  "motion.transition",
+                  "motion.feedback",
+                  "motion.accessibility",
+                  "texture.material",
+                  "texture.pattern",
+                  "texture.density",
+                  "texture.edges",
+                  "texture.grain",
+                  "interaction.affordance",
+                  "interaction.states",
+                  "interaction.navigation",
+                  "interaction.accessibility",
+                  "interaction.recovery"
+                ]
+              }
+            },
+            "required": [
+              "topic",
+              "observation",
+              "certainty",
+              "evidenceIds"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "reuse": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "summary",
+        "findings",
+        "reuse"
+      ],
+      "additionalProperties": false
+    },
+    "typography": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "topic": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "certainty": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "estimated",
+                  "unknown"
+                ]
+              },
+              "evidenceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                }
+              },
+              "focus": {
+                "type": "string",
+                "enum": [
+                  "color.palette-roles",
+                  "color.emphasis",
+                  "color.distribution",
+                  "color.contrast",
+                  "color.temperature-saturation",
+                  "layout.grid",
+                  "layout.spacing",
+                  "layout.hierarchy",
+                  "layout.layering",
+                  "layout.responsive",
+                  "layout.density",
+                  "layout.rhythm",
+                  "typography.family",
+                  "typography.weight-style",
+                  "typography.glyphs",
+                  "typography.fallback",
+                  "typography.license",
+                  "text-placement.alignment",
+                  "text-placement.hierarchy",
+                  "text-placement.line-breaks",
+                  "text-placement.spacing",
+                  "text-placement.readability",
+                  "text-placement.image-balance",
+                  "subject-composition.position-scale",
+                  "subject-composition.framing",
+                  "subject-composition.viewpoint",
+                  "subject-composition.depth-layers",
+                  "subject-composition.direction-gesture",
+                  "subject-composition.balance",
+                  "lighting.source-direction",
+                  "lighting.quality",
+                  "lighting.highlights",
+                  "lighting.shadows",
+                  "lighting.atmosphere",
+                  "motion.movement",
+                  "motion.timing",
+                  "motion.transition",
+                  "motion.feedback",
+                  "motion.accessibility",
+                  "texture.material",
+                  "texture.pattern",
+                  "texture.density",
+                  "texture.edges",
+                  "texture.grain",
+                  "interaction.affordance",
+                  "interaction.states",
+                  "interaction.navigation",
+                  "interaction.accessibility",
+                  "interaction.recovery"
+                ]
+              }
+            },
+            "required": [
+              "topic",
+              "observation",
+              "certainty",
+              "evidenceIds"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "reuse": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "fonts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "declaredFamilies": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "renderedFamily": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "weight": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "identification": {
+                "type": "string",
+                "enum": [
+                  "declared-only",
+                  "rendered-confirmed",
+                  "estimated",
+                  "unknown"
+                ]
+              },
+              "evidenceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                }
+              },
+              "notes": {
+                "type": "string",
+                "minLength": 1
+              },
+              "license": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "role",
+              "declaredFamilies",
+              "renderedFamily",
+              "weight",
+              "identification",
+              "evidenceIds",
+              "notes",
+              "license"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "summary",
+        "findings",
+        "reuse",
+        "fonts"
+      ],
+      "additionalProperties": false
+    },
+    "elements": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "enum": [
+          "text-placement",
+          "subject-composition",
+          "lighting",
+          "motion",
+          "texture",
+          "interaction"
+        ]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "topic": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "observation": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "certainty": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "estimated",
+                    "unknown"
+                  ]
+                },
+                "evidenceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  }
+                },
+                "focus": {
+                  "type": "string",
+                  "enum": [
+                    "color.palette-roles",
+                    "color.emphasis",
+                    "color.distribution",
+                    "color.contrast",
+                    "color.temperature-saturation",
+                    "layout.grid",
+                    "layout.spacing",
+                    "layout.hierarchy",
+                    "layout.layering",
+                    "layout.responsive",
+                    "layout.density",
+                    "layout.rhythm",
+                    "typography.family",
+                    "typography.weight-style",
+                    "typography.glyphs",
+                    "typography.fallback",
+                    "typography.license",
+                    "text-placement.alignment",
+                    "text-placement.hierarchy",
+                    "text-placement.line-breaks",
+                    "text-placement.spacing",
+                    "text-placement.readability",
+                    "text-placement.image-balance",
+                    "subject-composition.position-scale",
+                    "subject-composition.framing",
+                    "subject-composition.viewpoint",
+                    "subject-composition.depth-layers",
+                    "subject-composition.direction-gesture",
+                    "subject-composition.balance",
+                    "lighting.source-direction",
+                    "lighting.quality",
+                    "lighting.highlights",
+                    "lighting.shadows",
+                    "lighting.atmosphere",
+                    "motion.movement",
+                    "motion.timing",
+                    "motion.transition",
+                    "motion.feedback",
+                    "motion.accessibility",
+                    "texture.material",
+                    "texture.pattern",
+                    "texture.density",
+                    "texture.edges",
+                    "texture.grain",
+                    "interaction.affordance",
+                    "interaction.states",
+                    "interaction.navigation",
+                    "interaction.accessibility",
+                    "interaction.recovery"
+                  ]
+                }
+              },
+              "required": [
+                "topic",
+                "observation",
+                "certainty",
+                "evidenceIds"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "reuse": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "findings",
+          "reuse"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "preferenceFocuses": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "color.palette-roles",
+          "color.emphasis",
+          "color.distribution",
+          "color.contrast",
+          "color.temperature-saturation",
+          "layout.grid",
+          "layout.spacing",
+          "layout.hierarchy",
+          "layout.layering",
+          "layout.responsive",
+          "layout.density",
+          "layout.rhythm",
+          "typography.family",
+          "typography.weight-style",
+          "typography.glyphs",
+          "typography.fallback",
+          "typography.license",
+          "text-placement.alignment",
+          "text-placement.hierarchy",
+          "text-placement.line-breaks",
+          "text-placement.spacing",
+          "text-placement.readability",
+          "text-placement.image-balance",
+          "subject-composition.position-scale",
+          "subject-composition.framing",
+          "subject-composition.viewpoint",
+          "subject-composition.depth-layers",
+          "subject-composition.direction-gesture",
+          "subject-composition.balance",
+          "lighting.source-direction",
+          "lighting.quality",
+          "lighting.highlights",
+          "lighting.shadows",
+          "lighting.atmosphere",
+          "motion.movement",
+          "motion.timing",
+          "motion.transition",
+          "motion.feedback",
+          "motion.accessibility",
+          "texture.material",
+          "texture.pattern",
+          "texture.density",
+          "texture.edges",
+          "texture.grain",
+          "interaction.affordance",
+          "interaction.states",
+          "interaction.navigation",
+          "interaction.accessibility",
+          "interaction.recovery"
+        ]
+      }
+    },
+    "preferenceSignals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "focus": {
+            "type": "string",
+            "enum": [
+              "color.palette-roles",
+              "color.emphasis",
+              "color.distribution",
+              "color.contrast",
+              "color.temperature-saturation",
+              "layout.grid",
+              "layout.spacing",
+              "layout.hierarchy",
+              "layout.layering",
+              "layout.responsive",
+              "layout.density",
+              "layout.rhythm",
+              "typography.family",
+              "typography.weight-style",
+              "typography.glyphs",
+              "typography.fallback",
+              "typography.license",
+              "text-placement.alignment",
+              "text-placement.hierarchy",
+              "text-placement.line-breaks",
+              "text-placement.spacing",
+              "text-placement.readability",
+              "text-placement.image-balance",
+              "subject-composition.position-scale",
+              "subject-composition.framing",
+              "subject-composition.viewpoint",
+              "subject-composition.depth-layers",
+              "subject-composition.direction-gesture",
+              "subject-composition.balance",
+              "lighting.source-direction",
+              "lighting.quality",
+              "lighting.highlights",
+              "lighting.shadows",
+              "lighting.atmosphere",
+              "motion.movement",
+              "motion.timing",
+              "motion.transition",
+              "motion.feedback",
+              "motion.accessibility",
+              "texture.material",
+              "texture.pattern",
+              "texture.density",
+              "texture.edges",
+              "texture.grain",
+              "interaction.affordance",
+              "interaction.states",
+              "interaction.navigation",
+              "interaction.accessibility",
+              "interaction.recovery"
+            ]
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "prefer",
+              "avoid"
+            ]
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "explicit",
+              "inferred"
+            ]
+          },
+          "interpretation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contextKey": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "context": {
+            "type": "string",
+            "minLength": 1
+          },
+          "application": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tradeoff": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]*$"
+            }
+          },
+          "userNote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key",
+          "focus",
+          "direction",
+          "basis",
+          "interpretation",
+          "contextKey",
+          "context",
+          "application",
+          "evidenceIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "summary",
+    "status",
+    "createdAt",
+    "updatedAt",
+    "source",
+    "keywords",
+    "evidence",
+    "limitations"
+  ],
+  "additionalProperties": false
+}

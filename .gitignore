@@ -2,3 +2,11 @@ node_modules/
 dist/
 *.tgz
 .DS_Store
+# Local-only references, private birthday content, and workspace configuration.
+/reference/private/
+/reference/cinema/
+/designs/celebration/birthday.html
+/designs/celebration/assets/birthday/
+/birthday.html
+/test/birthday.test.mjs
+/DESIGN.code-workspace
