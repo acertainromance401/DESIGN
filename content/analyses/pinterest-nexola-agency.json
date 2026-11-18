@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-nexola-agency",
+  "title": "Nexola — 얇은 그리드와 가운데 이미지 열을 쓴 에이전시",
+  "summary": "옅은 그리드 위에 소개·인용·수치를 서로 다른 열에 배치한다. 프로젝트 구간의 가운데 두 열에만 큰 이미지를 쌓고, 양쪽에는 제목과 링크를 남긴다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/1092193347151579737/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. 핀 미리보기에서 배치·색을 관찰하고, 연결된 Framer 데모에서 서체를 확인했다." },
+  "keywords": ["사용자 선호 레퍼런스", "Nexola", "Framer", "에이전시", "노출 그리드", "중앙 이미지 열", "Inter Display"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/1c/08/3c/1c083ca2b6729500c07430d5f5480259.jpg", "description": "736×1104 공개 JPEG. HEX는 (135,490), (325,513), (357,654) 중심 5×5px의 RGB 중앙값이다(좌상단 원점)." },
+    { "id": "demo-fonts", "kind": "browser-render", "location": "https://nexola.framer.website/", "description": "macOS Chrome 1440×960에서 계산 스타일과 실제 사용 글꼴을 확인했다. Projects는 Inter Display SemiBold 600·120px, 소개 문장은 같은 폰트 600·54px, Velora 라벨은 Inter Display Regular 400·12px이다." }
+  ],
+  "color": {
+    "summary": "밝은 회백색 면과 검은 글자가 그리드를 잡고, 모피의 갈색과 금속·의상의 회색은 프로젝트 이미지에서 나온다.",
+    "palette": [{ "role": "UI의 밝은 지면", "value": "#F6F6F6", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "큰 제목의 검정", "value": "#0F0F0F", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "패션 이미지 모피의 어두운 갈색", "value": "#724827", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.distribution", "topic": "강조색을 이미지에 맡김", "observation": "검정에 가까운 글자와 옅은 회색 선이 일정한 가운데, 갈색과 은회색 작업 컷이 가운데 열에서 장면을 바꾼다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["인터페이스에 또 다른 포인트색을 칠하기 전에 작업 이미지가 색의 역할을 맡을 수 있는지 본다."]
+  },
+  "layout": {
+    "summary": "네 열을 기준으로 소개·수치·목록을 편집한다. 작업 이미지는 가운데 두 열에 몰아주고 라벨과 동작은 양쪽에 분리한다.",
+    "findings": [{ "focus": "layout.grid", "topic": "좌측 라벨 / 중앙 이미지 / 우측 링크", "observation": "Projects는 두 번째 열에서 시작한다. 항목은 가운데 두 열을 쓰는 이미지, 첫 열의 이름·분류, 네 번째 열 끝의 링크 단서로 정렬된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["프로젝트마다 개별 상자를 반복하기보다 공통 열을 공유하고 이미지가 넓이를 주도하게 한다."]
+  },
+  "typography": {
+    "summary": "연결된 데모는 Inter Display 한 패밀리를 쓰며 제목과 소개는 600, 항목 라벨은 400이다.",
+    "fonts": [{ "role": "Projects 및 소개", "declaredFamilies": ["Inter Display", "Inter Display Placeholder", "sans-serif"], "renderedFamily": "Inter Display SemiBold", "weight": "600", "identification": "rendered-confirmed", "evidenceIds": ["demo-fonts"], "notes": "데스크톱 데모의 실제 영문 글리프 확인. 미리보기 이미지의 원본 파일은 별도다.", "license": "Inter 공개 프로젝트: SIL Open Font License 1.1" }, { "role": "Velora 항목명", "declaredFamilies": ["Inter Display", "Inter Display Placeholder", "sans-serif"], "renderedFamily": "Inter Display", "weight": "400", "identification": "rendered-confirmed", "evidenceIds": ["demo-fonts"], "notes": "실제 포스트스크립트 이름은 InterDisplay-Regular였다.", "license": "Inter 공개 프로젝트: SIL Open Font License 1.1" }],
+    "findings": [{ "focus": "typography.weight-style", "topic": "웨이트를 늘리기보다 크기로 구분", "observation": "120px 제목과 54px 소개는 같은 600이지만, 작품 라벨은 12px 400으로 낮아진다.", "certainty": "confirmed", "evidenceIds": ["demo-fonts"] }],
+    "reuse": ["소개와 제목에 같은 웨이트를 써도 페이지의 위치·크기 차이로 위계를 잡을 수 있다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "가장 중요한 글만 열을 가로지르고, 나머지는 가장자리와 빈 칸을 이용한다.",
+      "findings": [{ "focus": "text-placement.alignment", "topic": "왼쪽 소개와 오른쪽 인용의 시차", "observation": "소개는 첫 두 열의 위쪽에서 시작한다. 인용문과 작은 얼굴 사진은 네 번째 열에, 소개보다 한참 아래에 놓인다. 프로젝트 라벨은 각 행의 왼쪽에 붙여 중앙 이미지를 침범하지 않는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["문장 길이에 맞는 열만 쓰고 남는 칸은 억지로 채우지 않는다."]
+    },
+    "subject-composition": {
+      "summary": "동일한 가운데 이미지 폭을 유지하면서 인물과 사물을 매번 다른 높이에서 자른다.",
+      "findings": [{ "focus": "subject-composition.framing", "topic": "눈·몸통·제품의 관찰 거리 차", "observation": "패션 이미지의 눈은 거의 컷 하단에 있고 모피가 위쪽 면적을 채운다. 헬스케어 이미지는 얼굴을 자르고 상의·손과 의료기기를 함께 보여 준다. 가구 이미지에는 인물 없이 의자의 관과 검은 면이 크게 들어간다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.balance", "topic": "같은 열, 다른 시각적 무게", "observation": "패션 컷에서는 모피가 중앙을 채우고, 의료기기는 인물의 몸통 옆 오른쪽에 있다. 마지막은 의자의 관과 가죽처럼 보이는 면이 프레임을 가로지른다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["그리드는 고정하되 프로젝트마다 보여줘야 할 눈·손·표면이 무엇인지 정해 크롭한다. 잘린 인물이 주인공인지 제품의 맥락인지 구분한다."]
+    },
+    "texture": {
+      "summary": "장식 없는 그리드 대신 이미지의 소재 대비가 프로젝트 사이의 차이를 만든다.",
+      "findings": [{ "focus": "texture.material", "topic": "털·금속·어두운 가구 표면", "observation": "첫 컷은 모피의 결, 두 번째는 의료기기의 밝은 반사, 세 번째는 광택 있는 관과 검은 면의 경계가 두드러진다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["서로 다른 작업물은 색만 바꾸기보다 표면과 크롭의 대비로 구분할 수 있다."]
+    }
+  },
+  "preferenceSignals": [{ "key": "neutral-grid-image-color", "focus": "color.distribution", "direction": "prefer", "basis": "inferred", "interpretation": "중립적인 그리드 사이에서 작업 이미지의 서로 다른 색과 재질이 강조되는 점이 선호에 기여했을 수 있다.", "contextKey": "image-led-web", "context": "양질의 작업 이미지가 확보된 에이전시·포트폴리오.", "application": "정보는 중립색과 정렬선으로 통일하고 작업 이미지에 색을 맡긴다.", "tradeoff": "옅은 선만으로 조작 영역을 구분하지 않고 라벨과 포커스를 검수한다.", "evidenceIds": ["pin-preview"] }],
+  "limitations": ["핀 속 수치와 추천 문구는 화면에 보이는 템플릿 내용으로, 실제 실적이나 증언을 검증하지 않았다.", "서체는 연결된 최신 데스크톱 데모의 일부 노드에서 확인했다. 모바일 및 인터랙션은 검증 범위가 아니다."]
+}

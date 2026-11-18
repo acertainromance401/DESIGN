@@ -7,9 +7,57 @@ MCP: `design://design-preferences` · `get_design_preferences` · [저장·적�
 
 현재 요청과 사용성·접근성 제약 안에서만 적용한다. 관련 있는 명시적 피드백 → 독립 예시에서 반복된 해석 → 단일 출처에서 나온 가설 순서로 참고한다. 전체 디자인 선호는 모든 개별 요소의 선호를 뜻하지 않는다.
 
+## `bright-yellow-dark-anchor`
+
+**선호 후보** · 반복된 해석 · 독립 출처 3개 · `color.palette-roles` · `palette-led-graphic`
+
+### [pinterest-gargoyle-space-cadet](<../pinterest-gargoyle-space-cadet.md#근거-목록>)
+
+- **분석자 해석**: 노랑의 높은 명도와 어두운 네이비의 역할 분리가 활기와 판독을 같이 만들었을 수 있다.
+  - 맥락: 밝은 노랑이 주도하는 포스터·제품 그래픽.
+  - 디자인 결정: 옐로는 시각 강조나 큰 면을, 어두운 잉크는 형태와 판독을 맡기고 밝은 여백은 필요한 경우만 보완한다.
+  - 상충·검수: 노랑과 밝은 바탕만으로 상태나 텍스트를 전달하지 않는다.
+  - 근거: `pin-preview`
+
+### [pinterest-jet-black-mustard](<../pinterest-jet-black-mustard.md#근거-목록>)
+
+- **분석자 해석**: 따뜻한 머스터드의 존재감을 유지하면서 웜 블랙이 명도를 맡는 점이 조합의 인상에 기여했을 수 있다.
+  - 맥락: 밝은 노랑이 주도하는 포스터·제품 그래픽.
+  - 디자인 결정: 밝은 노랑은 강조에, 어두운 잉크는 판독에 쓴다. 따뜻한 인상을 지키고 싶으면 남색 대신 따뜻한 블랙과 베이지를 비교한다.
+  - 상충·검수: 밝은 색 둘로만 경계나 상태를 그리지 않는다.
+  - 근거: `pin-preview`
+
+### [pinterest-thunderstorm-palette](<../pinterest-thunderstorm-palette.md#근거-목록>)
+
+- **분석자 해석**: 노랑과 앰버를 큰 면으로 쓰고 무채색 잉크가 형태와 읽기를 맡기는 점이 선명한 인상에 기여했을 수 있다.
+  - 맥락: 밝은 노랑이 주도하는 포스터·제품 그래픽.
+  - 디자인 결정: 옐로 계열과 검정을 분리한다. 두 노랑은 기능 상태의 짝이 아니라 밝은 면의 변주로 사용한다.
+  - 상충·검수: 앰버도 높은 주목도를 가지므로 중요도가 낮은 콘텐츠에 넓게 쓰면 위계가 뒤집힐 수 있다.
+  - 근거: `pin-preview`
+
+## `deep-blue-electric-light-roles`
+
+**선호 후보** · 반복된 해석 · 독립 출처 2개 · `color.palette-roles` · `blue-led-identity`
+
+### [pinterest-outcore-blue-palette](<../pinterest-outcore-blue-palette.md#근거-목록>)
+
+- **분석자 해석**: 블루 안에서도 짙은 바탕, 전기 블루 강조, 옅은 읽기색의 역할이 또렷한 점이 인상에 기여했을 수 있다.
+  - 맥락: 블루가 정체성을 만드는 브랜드 그래픽과 디지털 화면.
+  - 디자인 결정: 낮은 명도 면과 강한 브랜드색, 밝은 정보색을 분리한다. 포인트의 정확한 HEX나 광택 표현은 고정하지 않는다.
+  - 상충·검수: 강한 블루를 작은 글자에 쓸 때 배경에 따라 대비가 크게 달라진다.
+  - 근거: `pin-preview`
+
+### [pinterest-salesport-blue-gradient](<../pinterest-salesport-blue-gradient.md#근거-목록>)
+
+- **분석자 해석**: 강한 블루를 빛과 로고에 나누어 쓰고 밝은 색은 판독에 남긴 점이 다크 블루의 인상에 기여했을 수 있다.
+  - 맥락: 블루가 정체성을 만드는 브랜드 그래픽과 디지털 화면.
+  - 디자인 결정: 저명도 바탕과 국소 고채도 포인트, 밝은 정보색을 분리한다. 그라데이션은 내용과 대비를 해치지 않을 때만 쓴다.
+  - 상충·검수: 광택을 모든 표면에 반복하지 않고 가장 밝은 구간 위 글자 대비를 확인한다.
+  - 근거: `pin-preview`
+
 ## `deep-red-light-neutral-contrast`
 
-**선호 후보** · 반복된 해석 · 독립 출처 2개 · `color.contrast` · `palette-led-graphic`
+**선호 후보** · 반복된 해석 · 독립 출처 4개 · `color.contrast` · `palette-led-graphic`
 
 ### [pinterest-bordo-green-cream](<../pinterest-bordo-green-cream.md#근거-목록>)
 
@@ -26,6 +74,106 @@ MCP: `design://design-preferences` · `get_design_preferences` · [저장·적�
   - 디자인 결정: 진한 적색과 밝은 중립 사이의 명도차를 유지한다. 순백·검정이나 예시의 배치 비율은 고정하지 않는다.
   - 상충·검수: 다른 어두운 색과 맞닿을 때 색만으로 구분해야 하는 내용이 없는지 확인한다.
   - 근거: `pin-preview`
+
+### [pinterest-cherry-maroon-noir](<../pinterest-cherry-maroon-noir.md#근거-목록>)
+
+- **분석자 해석**: 깊은 적색 두 층과 블랙을 유지하면서 따뜻한 백색으로 밝기를 분리한 점이 조합의 인상에 기여했을 수 있다.
+  - 맥락: 적색과 검은 면적이 큰 패션·브랜드 그래픽.
+  - 디자인 결정: 낮은 명도의 적색은 깊이를 만들고 코튼 계열 중립색은 시각적 기준과 읽기를 맡긴다.
+  - 상충·검수: 적색 계열끼리는 작은 글자와 상태를 구분하는 데 쓰지 않는다.
+  - 근거: `pin-preview`
+
+### [pinterest-wine-red-light-sand](<../pinterest-wine-red-light-sand.md#근거-목록>)
+
+- **분석자 해석**: 채도가 남은 깊은 적색을 밝고 따뜻한 중립색과 분리한 점이 조합의 인상에 기여했을 수 있다.
+  - 맥락: 진한 적색을 브랜드 면 또는 제목으로 쓰는 색 중심 그래픽.
+  - 디자인 결정: 진한 적색과 밝은 비백색의 명도 관계를 유지하고 정확한 색상과 면적은 프로젝트에 맞춘다.
+  - 상충·검수: 버튼·본문·포커스는 실제 바탕에서 다시 검수한다.
+  - 근거: `pin-preview`
+
+## `foreground-crosses-type`
+
+**선호 후보** · 반복된 해석 · 독립 출처 4개 · `layout.layering` · `image-led-web`
+
+### [pinterest-coppola-logan-film-theme](<../pinterest-coppola-logan-film-theme.md#근거-목록>)
+
+- **분석자 해석**: 차량의 실루엣이 큰 제목 앞으로 나오면서 영화 이미지와 문자가 한 장면을 만드는 점이 선호에 기여했을 수 있다.
+  - 맥락: 실루엣이 분명한 영화·캠페인 첫 화면.
+  - 디자인 결정: 피사체의 선명한 일부분만 앞 레이어에 놓고 핵심 글자의 인지를 보존한다.
+  - 상충·검수: 잘리는 비율은 장면과 화면 폭마다 확인한다.
+  - 근거: `pin-preview`
+
+### [pinterest-frameform-motion-portfolio](<../pinterest-frameform-motion-portfolio.md#근거-목록>)
+
+- **분석자 해석**: 카메라와 제목이 서로의 경계를 넘어 하나의 첫 화면으로 읽히는 점이 선호에 기여했을 수 있다.
+  - 맥락: 실루엣이 또렷한 대표 이미지가 있는 포트폴리오·브랜드 화면.
+  - 디자인 결정: 작업 정체성을 나타내는 한 피사체만 활자 일부의 앞으로 내민다.
+  - 상충·검수: 브랜드명 판독이나 모바일 크롭에 문제가 있으면 겹침을 줄인다.
+  - 근거: `pin-preview`
+
+### [pinterest-rico-supply-interactive](<../pinterest-rico-supply-interactive.md#근거-목록>)
+
+- **분석자 해석**: 선택된 이미지가 활자를 가르면서 중앙 항목의 우선순위를 바꾸는 구도가 선호에 기여했을 수 있다.
+  - 맥락: 같은 구조의 여러 작업을 펼쳐보는 포트폴리오.
+  - 디자인 결정: 앞뒤 레이어의 전환은 중앙 작업에 제한하고 좌우 기준선을 보존한다.
+  - 상충·검수: 겹침이 필수 제목의 시각적·보조기술 판독을 막지 않게 한다.
+  - 근거: `pin-video`
+
+### [pinterest-trionn-portfolio-motion](<../pinterest-trionn-portfolio-motion.md#근거-목록>)
+
+- **분석자 해석**: 프로젝트가 제목 앞을 통과하는 전환이 정적인 썸네일 목록과 다른 깊이를 만든 점이 선호에 기여했을 수 있다.
+  - 맥락: 작업 화면 자체를 시각 피사체로 쓰는 포트폴리오 도입.
+  - 디자인 결정: 작업을 소개하는 구간에만 원근과 겹침을 주고, 최종 탐색 목록은 읽기 쉽게 남긴다.
+  - 상충·검수: 동작 줄이기와 작은 화면에서는 중간 레이어를 생략할 수 있어야 한다.
+  - 근거: `pin-video`
+
+## `large-type-small-information`
+
+**선호 후보** · 반복된 해석 · 독립 출처 2개 · `layout.hierarchy` · `editorial-web`
+
+### [pinterest-ima-home-showreel](<../pinterest-ima-home-showreel.md#근거-목록>)
+
+- **분석자 해석**: 가로로 과감한 인사말과 작고 차분한 탐색 층을 분리한 점이 선호에 기여했을 수 있다.
+  - 맥락: 첫인상에 큰 활자를 쓰는 이미지 중심 에이전시.
+  - 디자인 결정: 시각 표현에는 큰 문구를 허용하되 탐색·정보에는 예측 가능한 정렬과 읽기 대비를 남긴다.
+  - 상충·검수: 표현형 문구 밖에서도 이름과 동작을 쉽게 찾을 수 있어야 한다.
+  - 근거: `pin-preview`
+
+### [pinterest-katie-hunter-portfolio](<../pinterest-katie-hunter-portfolio.md#근거-목록>)
+
+- **분석자 해석**: 큰 글자에 시선을 모은 뒤 작은 정보를 같은 정렬선에서 찾을 수 있는 점이 매력에 기여했을 수 있다.
+  - 맥락: 이름과 연락처를 먼저 읽는 편집형 포트폴리오.
+  - 디자인 결정: 큰 글자와 정보의 역할을 크기로 구별하고 공통 기준선은 유지한다.
+  - 상충·검수: 사진 폭과 작은 정보의 판독성을 모바일에서 재검수한다.
+  - 근거: `pin-preview`
+
+## `neutral-grid-image-color`
+
+**선호 후보** · 반복된 해석 · 독립 출처 3개 · `color.distribution` · `image-led-web`
+
+### [pinterest-ima-home-showreel](<../pinterest-ima-home-showreel.md#근거-목록>)
+
+- **분석자 해석**: UI는 흑백을 유지하고 영상·작품 쪽에서만 색이 바뀌는 구조가 선호에 기여했을 수 있다.
+  - 맥락: 많은 작업 이미지에 서로 다른 색이 있는 에이전시 화면.
+  - 디자인 결정: 유채색은 영상과 프로젝트에 남기고 탐색과 지면은 흑백 대비로 구분한다.
+  - 상충·검수: 영상 교체 시 그 위의 흰 글자 대비를 다시 본다.
+  - 근거: `pin-video`
+
+### [pinterest-nexola-agency](<../pinterest-nexola-agency.md#근거-목록>)
+
+- **분석자 해석**: 중립적인 그리드 사이에서 작업 이미지의 서로 다른 색과 재질이 강조되는 점이 선호에 기여했을 수 있다.
+  - 맥락: 양질의 작업 이미지가 확보된 에이전시·포트폴리오.
+  - 디자인 결정: 정보는 중립색과 정렬선으로 통일하고 작업 이미지에 색을 맡긴다.
+  - 상충·검수: 옅은 선만으로 조작 영역을 구분하지 않고 라벨과 포커스를 검수한다.
+  - 근거: `pin-preview`
+
+### [pinterest-rico-supply-interactive](<../pinterest-rico-supply-interactive.md#근거-목록>)
+
+- **분석자 해석**: 배경의 명도는 바뀌어도 채도는 작업물에 남는 역할 분리가 선호에 기여했을 수 있다.
+  - 맥락: 작품의 색이 서로 다른 프로젝트 목록.
+  - 디자인 결정: 바탕과 라벨의 색을 중립에 두고 작품 자체를 색의 중심으로 삼는다.
+  - 상충·검수: 반전되는 모든 상태에서 제목과 라벨 대비를 확인한다.
+  - 근거: `pin-video`
 
 ## `single-large-type-anchor`
 
@@ -83,6 +231,26 @@ MCP: `design://design-preferences` · `get_design_preferences` · [저장·적�
   - 상충·검수: 예시의 카피 가림을 그대로 가져오지 않는다. 본문과 제목을 작은 화면에서도 각각 읽을 수 있어야 한다.
   - 근거: `pin-preview`
 
+## `warm-cool-night-lighting`
+
+**선호 후보** · 반복된 해석 · 독립 출처 2개 · `color.temperature-saturation` · `cinematic-image`
+
+### [pinterest-coppola-logan-film-theme](<../pinterest-coppola-logan-film-theme.md#근거-목록>)
+
+- **분석자 해석**: 따뜻한 인물과 차가운 야경이 같은 어둠 안에서 분리되는 색 관계가 선호에 기여했을 수 있다.
+  - 맥락: 차량과 인물이 함께 있는 야간 영화풍 장면.
+  - 디자인 결정: 인물과 환경을 서로 다른 온도의 국소 조명으로 분리하고 글자에 필요한 대비를 별도로 확보한다.
+  - 상충·검수: 청록·황색 수치를 고정하지 말고 재질과 노출에 따라 조정한다.
+  - 근거: `pin-preview`
+
+### [pinterest-taxi-driver-neon-prompts](<../pinterest-taxi-driver-neon-prompts.md#근거-목록>)
+
+- **분석자 해석**: 따뜻한 인물색과 차갑고 어두운 창의 대비가 같은 야간 장면을 깊게 보이게 한 점이 선호에 기여했을 수 있다.
+  - 맥락: 차창·유리·실내와 외부가 분리되는 인물 중심 야간 이미지.
+  - 디자인 결정: 빛의 온도 차를 공간과 소재에 연결하고 얼굴과 제목의 대비를 확인한다.
+  - 상충·검수: 모든 그림자를 청록으로 물들이거나 밝은 반사로 눈을 가리지 않는다.
+  - 근거: `pin-preview`
+
 ## `warm-paper-cool-image`
 
 **선호 후보** · 반복된 해석 · 독립 출처 3개 · `color.temperature-saturation` · `image-led-editorial-poster`
@@ -109,6 +277,30 @@ MCP: `design://design-preferences` · `get_design_preferences` · [저장·적�
   - 맥락: 차가운 톤이 이미 있는 사진을 따뜻한 지면과 결합하는 편집.
   - 디자인 결정: 바탕을 보조색으로 두고 사진의 저명도 청록을 살린다. 오렌지나 샘플 HEX는 필수 조건이 아니다.
   - 상충·검수: 사진과 글이 함께 뜨거워 보이거나 제목이 바탕과 분리되지 않으면 밝기와 채도를 다시 조절한다.
+  - 근거: `pin-preview`
+
+## `imagery-carries-accent-color`
+
+**선호 후보** · 단일 출처의 가설 · 독립 출처 1개 · `color.distribution` · `studio-portfolio`
+
+### [pinterest-swissbrut-portfolio](<../pinterest-swissbrut-portfolio.md#근거-목록>)
+
+- **분석자 해석**: 지면의 색은 절제하고 작업 이미지에 색과 질감을 맡긴 선택이, 사이트보다 작업물을 먼저 보게 했을 수 있다.
+  - 맥락: 작업 간 색온도와 재질 차이가 뚜렷한 이미지 중심 포트폴리오.
+  - 디자인 결정: 정보용 바탕과 글자는 대비가 있는 중립색으로 두고, 색은 우선 작업 이미지에서 가져온다.
+  - 상충·검수: 작업 이미지나 페이지 상태가 변해도 내비게이션과 설명의 대비를 확인한다.
+  - 근거: `pin-preview`
+
+## `oversized-type-on-aligned-grid`
+
+**선호 후보** · 단일 출처의 가설 · 독립 출처 1개 · `layout.hierarchy` · `studio-portfolio`
+
+### [pinterest-swissbrut-portfolio](<../pinterest-swissbrut-portfolio.md#근거-목록>)
+
+- **분석자 해석**: 큰 활자와 작은 메뉴·설명의 차이가 크면서도 정렬선이 반복되어, 강한 첫인상과 정돈된 정보가 공존한 점이 선호에 기여했을 수 있다.
+  - 맥락: 작업 제목이나 서비스 이름이 짧고 실제로 전달할 내용이 있는 포트폴리오·브랜드 페이지.
+  - 디자인 결정: 큰 제목은 필요한 곳에만 배치하고, 메뉴·캡션·설명은 공통 정렬선에 남긴다. 정확한 크기나 반반 분할을 고정하지 않는다.
+  - 상충·검수: 작은 화면에서는 제목이나 메뉴를 자르거나 겹쳐 강조하지 않는다.
   - 근거: `pin-preview`
 
 ## `photo-tones-as-text-background`

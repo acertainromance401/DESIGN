@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-trionn-portfolio-motion",
+  "title": "Trionn — 작업 썸네일이 원근을 지나 그리드로 모이는 포트폴리오",
+  "summary": "회색 지면에서 작업 화면들이 크기와 원근을 바꿔 제목 앞을 통과한 뒤 2행 그리드로 정리된다. 정지 이미지에서 보이는 카드 겹침은 전환 중간의 모습이다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/1107181889668067699/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. 7번과 8번 단축 링크가 동일한 핀이므로 한 건으로 기록했다. Details.so의 바깥 프레임과 Trionn 화면을 구분했다." },
+  "keywords": ["사용자 선호 레퍼런스", "Trionn", "Details.so", "포트폴리오", "원근 썸네일", "그리드 전환"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/7f/0d/d2/7f0dd29d69594a18bf25d82d627d0d48.jpg", "description": "736×1104 공개 JPEG. 외곽·내부 지면과 전경 이미지의 (56,247), (630,635), (497,552) 중심 5×5px의 RGB 중앙값을 표본으로 삼았다." },
+    { "id": "pin-video", "kind": "external-reference", "location": "https://v1.pinimg.com/videos/iht/h265-pt-mp4/17/d1/14/17d114d167ad417e551ee4e042e8488a_540w_t1.mp4", "description": "14.03초 공개 영상의 약 2초 간격 프레임을 확인했다. 제목과 빈 지면, 작은 원근 썸네일, 큰 전경 패널, 2행 그리드 순서가 보인다." }
+  ],
+  "color": {
+    "summary": "밝은 회색 프레임과 검은 글자가 배경을 잡고, 분홍·적색·회청색은 작업 썸네일에서 나온다.",
+    "palette": [{ "role": "Details.so 외곽 회색", "value": "#CCCCCC", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "Trionn 화면 내부의 회색", "value": "#BABABA", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "헤드폰 이미지의 회청색", "value": "#74898E", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.distribution", "topic": "무채색 UI와 유채색 작업물", "observation": "제목과 프레임은 무채색이고, 분홍과 붉은색은 작은 프로젝트 화면에 분포한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["작업 이미지가 움직이며 주의를 끌 때 바탕까지 같은 강도로 착색하지 않는다."]
+  },
+  "layout": {
+    "summary": "넓은 내부 무대에서 원근이 다른 작업 화면들이 가운데 제목을 일부 가리고, 전환이 끝나면 평평한 그리드에 모인다.",
+    "findings": [{ "focus": "layout.layering", "topic": "전경 썸네일과 제목의 겹침", "observation": "큰 헤드폰 프로젝트 화면이 앞쪽에 있고, 다른 화면은 비스듬히 뒤로 이어지면서 DESIGN IN MOTION을 일부 가린다.", "certainty": "confirmed", "evidenceIds": ["pin-preview", "pin-video"] }],
+    "reuse": ["전환의 중간에는 원근과 겹침으로 작업을 소개하고, 끝에는 읽고 선택할 수 있는 평면 목록을 마련한다."]
+  },
+  "typography": {
+    "summary": "얇고 큰 영문 대문자가 배경 레이어를, 작은 메뉴와 문장이 가장자리 정보를 맡는다.",
+    "fonts": [{ "role": "Trionn 메인 제목", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "큰 글자는 비교적 가는 산세리프다. 바깥 Details.so 문구는 본 사이트 서체 표본이 아니다.", "license": "미확인" }],
+    "findings": [{ "focus": "typography.weight-style", "topic": "큰 저중량 텍스트 뒤로 이미지", "observation": "큰 문구는 굵은 블록보다 가는 획으로 보이며, 프로젝트 화면이 전경에서 시선을 가져간다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["전환 중 가리는 글자가 필수 제목이면 별도의 판독 가능한 표기도 남긴다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "큰 문구는 작업을 소개하는 무대 뒤쪽에, 작은 정보는 무대의 모서리에 남는다.",
+      "findings": [{ "focus": "text-placement.image-balance", "topic": "제목과 고정된 듯 보이는 외곽 정보의 분리", "observation": "큰 문구는 무대 안에서 위치가 바뀌고 작업 패널에 가린다. 작은 로고와 메뉴 표기는 무대 윗모서리, 짧은 설명은 아래 왼쪽에 따로 보인다. 바깥의 검은 표식과 하단 홍보 문구는 Details.so의 소개 프레임이다.", "certainty": "confirmed", "evidenceIds": ["pin-preview", "pin-video"] }],
+      "reuse": ["움직이는 장면과 사용자가 계속 찾아야 할 메뉴의 위치를 나누고, 외부 소개 영상의 장식을 사이트 구성으로 착각하지 않는다."]
+    },
+    "subject-composition": {
+      "summary": "인물은 각 작업 이미지 안에 남고, 화면 전체에서 전경 역할을 하는 것은 작업 패널이다.",
+      "findings": [{ "focus": "subject-composition.depth-layers", "topic": "가까운 작업과 먼 작업의 크기·각도 차", "observation": "중간 프레임에서 우측의 헤드폰 패널이 가장 크고, 다른 작업 패널은 뒤쪽으로 작아지고 기울어진 채 겹친다. 패션 인물은 각 패널 내부에 남아 바깥 무대의 독립 인물처럼 배치되지 않는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview", "pin-video"] }],
+      "reuse": ["장면 전체의 주 피사체가 인물인지, 인물을 담은 작업 화면인지 먼저 정한다. 작업 화면이 주인공이면 패널의 거리만 바꿔도 깊이를 만들 수 있다."]
+    },
+    "motion": { "summary": "전경 이동과 원근 변화가 프로젝트 그리드 출현으로 연결된다.", "findings": [{ "focus": "motion.transition", "topic": "썸네일 띠에서 2행 목록으로", "observation": "초반의 빈 무대와 제목 뒤로 작은 썸네일 띠가 나타난다. 중간에는 전경의 화면들이 커지고 위쪽으로 빠지며, 후반에는 여섯 작업이 3열 2행으로 정리된다.", "certainty": "confirmed", "evidenceIds": ["pin-video"] }], "reuse": ["모션의 마지막 상태가 다음 탐색에 필요한 목록을 드러내게 설계한다. 동작 줄이기에서는 해당 목록으로 바로 도달할 수 있게 한다."] }
+  },
+  "preferenceSignals": [{ "key": "foreground-crosses-type", "focus": "layout.layering", "direction": "prefer", "basis": "inferred", "interpretation": "프로젝트가 제목 앞을 통과하는 전환이 정적인 썸네일 목록과 다른 깊이를 만든 점이 선호에 기여했을 수 있다.", "contextKey": "image-led-web", "context": "작업 화면 자체를 시각 피사체로 쓰는 포트폴리오 도입.", "application": "작업을 소개하는 구간에만 원근과 겹침을 주고, 최종 탐색 목록은 읽기 쉽게 남긴다.", "tradeoff": "동작 줄이기와 작은 화면에서는 중간 레이어를 생략할 수 있어야 한다.", "evidenceIds": ["pin-video"] }],
+  "limitations": ["외부 소개 영상의 시각 순서를 관찰했다. 스크롤·호버 등 실제 입력 트리거와 WebGL·CSS 등의 기술, 서체, 접근성 동작은 미확인이다."]
+}

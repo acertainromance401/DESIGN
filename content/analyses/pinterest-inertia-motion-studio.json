@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-inertia-motion-studio",
+  "title": "Inertia — 흐린 실루엣과 주황 궤적을 사용한 모션 스튜디오",
+  "summary": "회백색 지면에 흔들린 인물과 주황색 궤적을 놓고, 커다란 흰 inertia를 하단에서 자른다. 아래의 소개와 작업 항목에는 넓은 간격을 둔다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/771804454938335562/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. 링크 메타데이터의 사이트 빌더가 아니라 핀 이미지의 Inertia 화면을 분석했다." },
+  "keywords": ["사용자 선호 레퍼런스", "Inertia", "모션 스튜디오", "주황 궤적", "크롭 타이포", "모션 블러"],
+  "evidence": [{ "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/ad/7b/38/ad7b386ead4672af0cbdb39d84f9e044.jpg", "description": "736×1472 공개 JPEG. HEX는 (36,610), (107,92), (566,231) 중심 5×5px의 RGB 중앙값이다(좌상단 원점)." }],
+  "color": {
+    "summary": "회백색과 검정이 기본이고, 제한된 주황색이 궤적과 작은 강조에 반복된다.",
+    "palette": [{ "role": "본문 지면", "value": "#F4F4F4", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "첫 설명의 검정", "value": "#151515", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "주황 궤적의 옅은 가장자리", "value": "#EF997C", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.emphasis", "topic": "가로 주황색이 방향을 만듦", "observation": "첫 화면의 검은 인물에 주황색 띠가 가로지른다. 다음 구간에서도 짧은 소재 조각과 작은 표식에만 주황 계열이 남는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["작업 이미지에서 나온 강조색을 작은 표기에 제한적으로 연결한다."]
+  },
+  "layout": {
+    "summary": "좌측 설명과 중앙 실루엣, 하단의 큰 이름이 한 화면을 나눈다. 다음 문단과 작업 항목 사이에는 큰 빈 면이 있다.",
+    "findings": [{ "focus": "layout.layering", "topic": "하단의 이름을 잘라 이미지 위에 놓음", "observation": "큰 흰 inertia가 인물의 하체 앞을 가로지르고, 프레임 아래에서 일부 잘린다. 상단 왼쪽에는 같은 이름이 작게 보인다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "layout.spacing", "topic": "소개 좌측을 비움", "observation": "첫 화면 뒤의 소개 문단은 오른쪽으로 옮겨져 왼쪽의 넓은 지면을 비우며, 그 다음 네 항목의 상단 높이에는 차이가 있다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["잘리는 대형 글자는 보조 표현으로 쓰고, 주요 이름이나 설명은 개별적으로 읽을 수 있게 둔다."]
+  },
+  "typography": {
+    "summary": "가는 대형 소문자와 중간 두께의 문장형 제목을 대비시킨다.",
+    "fonts": [{ "role": "대형 이름·소개", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "산세리프 형태는 보이지만 패밀리, 웨이트, 로고 글리프의 별도 제작 여부는 알 수 없다.", "license": "미확인" }],
+    "findings": [{ "focus": "typography.weight-style", "topic": "굵기보다 스케일로 강조", "observation": "화면 하단의 inertia는 상대적으로 가는 소문자다. 왼쪽 제목은 크기가 작아도 획과 대비가 선명하다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["큰 글자가 항상 굵어야 하는 것은 아니다. 배경 대비와 장면에서 맡는 역할을 따로 정한다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "큰 이름, 읽어야 할 소개, 보조 프로젝트 프리뷰가 각기 다른 앵커에 놓인다.",
+      "findings": [{ "focus": "text-placement.alignment", "topic": "좌상단 소개·우상단 프리뷰·하단 워드마크", "observation": "첫 화면의 소개와 텍스트 링크는 왼쪽에, 작은 프로젝트 프리뷰는 오른쪽 위에 있다. 가로로 큰 이름은 아래에서 잘리며 좌우 정보와 정렬을 공유하지 않는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "text-placement.image-balance", "topic": "소개 문장 안의 작은 이미지 조각", "observation": "다음 구간의 소개 문장에는 가로로 짧은 주황 이미지 조각이 행 안에 두 군데 들어간다. 그 조각은 문장의 인접 단어들보다 낮고 가로로 길다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["시각적 장치와 별개로 소개 문장은 온전하게 읽히도록 하고, 삽입 이미지가 줄바꿈을 망가뜨리면 작은 화면에서 분리한다."]
+    },
+    "subject-composition": {
+      "summary": "인물을 인물 소개가 아니라 밝은 지면에 방향을 주는 검은 실루엣으로 배치한다.",
+      "findings": [{ "focus": "subject-composition.position-scale", "topic": "가운데 세로 인물과 가로 궤적", "observation": "검은 인물은 한가운데에 세로로 길게 서 있고 얼굴은 밝은 번짐 속에 흐려져 있다. 주황 궤적은 몸의 중간 높이를 가로지른다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.depth-layers", "topic": "번진 피사체 앞의 선명한 활자", "observation": "인물의 하단 일부는 앞쪽의 흰 이름에 가려진다. 주황 궤적도 인물보다 앞으로 겹쳐 보인다. 번짐만으로 실제 이동 방향은 판별할 수 없다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["사람을 알아봐야 하는 화면이라면 얼굴을 지우지 않는다. 분위기용 피사체라면 실루엣과 궤적의 방향 차로 초점을 만든다."]
+    },
+    "texture": { "summary": "방향성 있는 번짐으로 움직임의 인상을 낸다.", "findings": [{ "focus": "texture.edges", "topic": "선명한 정보와 흐린 피사체 경계", "observation": "인물의 외곽과 주황 띠가 번져 있지만 메뉴·설명은 선명하다. 움직이는 방향이나 애니메이션 여부는 정지 이미지로 확인할 수 없다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }], "reuse": ["번짐은 장면 표현에만 쓰고 읽거나 눌러야 할 요소에는 적용하지 않는다."] }
+  },
+  "limitations": ["정지 이미지에서 보이는 블러를 실제 애니메이션이나 구현 기술 확인으로 간주하지 않는다.", "카드와 배지의 존재가 해당 요소 사용을 선호하거나 승인했다는 뜻은 아니다."]
+}

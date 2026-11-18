@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-opal-tadpole",
+  "title": "Opal Tadpole — 제품 실루엣과 거대한 푸터 워드마크",
+  "summary": "밝은 회색 위에 웹캠의 측면을 크게 두어 클립과 케이블을 보여준다. 제품 목록은 정면 컷으로 대비되며, 하단의 Opal은 지면 폭을 채운다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/926545323326375493/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. Land-book에 연결된 Opal Camera Inc.의 Tadpole 시점 이미지다." },
+  "keywords": ["사용자 선호 레퍼런스", "Opal", "Tadpole", "제품 상세", "제품 클로즈업", "대형 워드마크", "흑백 웹"],
+  "evidence": [{ "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/38/0b/05/380b059e0ae966ca5df0be4cbb42b862.jpg", "description": "736×1467 공개 JPEG. HEX는 (668,472), (103,1037), (358,202) 중심 5×5px의 RGB 중앙값이다(좌상단 원점)." }],
+  "color": {
+    "summary": "회색과 검은 제품·활자가 대부분이며, 작은 파란 링크와 노란 표시만 유채색이다.",
+    "palette": [{ "role": "제품 뒤 밝은 회색", "value": "#E2E2E2", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "검은 푸터 워드마크", "value": "#010101", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "클립의 중간 회색", "value": "#878787", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.contrast", "topic": "색보다 제품의 면과 가장자리", "observation": "제품의 어두운 케이블과 은회색 몸체가 밝은 배경에서 분리되고, 푸터는 흰 바탕과 검은 이름의 명도 차만으로 강조된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["중립색 제품은 짙은 실루엣과 밝은 배경의 명도 차로 형상을 먼저 읽히게 한다."]
+  },
+  "layout": {
+    "summary": "작은 소개 옆에 제품 측면을 크게 두고, 다음 목록과 푸터에서 서로 다른 비율을 사용한다.",
+    "findings": [{ "focus": "layout.rhythm", "topic": "측면 확대→정면 목록→대형 워드마크", "observation": "큰 측면 제품과 좌측 설명 뒤로 정면 제품 세 항목이 열을 이루고, 마지막으로 Opal 글자가 거의 전폭을 채운다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["첫 컷에서 제품의 특징을 보여주는 각도를 고르고, 비교 구간에서 필요한 각도로 바꾼다."]
+  },
+  "typography": {
+    "summary": "작은 산세리프 소개와 거대한 Opal 워드마크는 서체 굵기보다 크기 차이가 크다.",
+    "fonts": [{ "role": "소개 제목·제품 설명", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "단순한 산세리프로 보인다. 푸터 Opal은 워드마크이며 본문 서체와 같은 패밀리라고 확인되지 않았다.", "license": "미확인" }],
+    "findings": [{ "focus": "typography.glyphs", "topic": "푸터의 큰 둥근 형태", "observation": "Opal의 큰 O와 길게 내려오는 p가 하단의 주 그래픽으로 쓰이고, 작은 링크 목록은 글자 아래의 여백에 남는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["워드마크를 크게 쓸 때 탐색이나 주요 본문과 같은 층에서 경쟁하지 않게 한다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "제품 소개는 왼쪽에 따로 두고, 가장 큰 활자는 첫 화면이 아닌 하단에 남긴다.",
+      "findings": [{ "focus": "text-placement.image-balance", "topic": "제품이 가장 큰 첫 화면", "observation": "왼쪽의 두 줄 소개와 짧은 링크는 측면 실루엣에 겹치지 않는다. 이름을 전폭으로 쓰는 큰 워드마크는 제품 목록 뒤에서만 등장한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["제품의 특징이 먼저 읽혀야 하면 제목의 최대 크기는 하단의 브랜드 영역에 남겨도 된다."]
+    },
+    "subject-composition": {
+      "summary": "인물 없이 제품의 쓰임새를 시점과 프레이밍으로 설명한다.",
+      "findings": [{ "focus": "subject-composition.viewpoint", "topic": "클립이 읽히는 측면", "observation": "옆에서 본 컷이라 렌즈의 정면보다 클립의 두 면과 제품 두께가 선명하다. 목록의 제품 컷은 앞면을 보여 준다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.framing", "topic": "제품의 부착부와 연결 경로", "observation": "제품 본체는 중앙 상단에 있고, 휘어진 케이블과 클립이 붙은 얇은 세로 모서리는 아래에서 잘린다. 오른쪽에 넓은 회색 공간이 남는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["제품의 실제 차이가 드러나는 시점을 정하고, 부착 위치가 이해될 만큼 주변 구조를 남긴다."]
+    },
+    "texture": {
+      "summary": "같은 회색 지면에서도 표면마다 다른 광택과 결이 읽힌다.",
+      "findings": [{ "focus": "texture.material", "topic": "매끈한 본체와 거친 케이블", "observation": "검은 케이블의 짜인 결, 매끈한 은회색 본체, 어두운 렌즈 표면이 서로 다르게 보인다. 재질의 실제 사양이나 렌더 방식은 확인하지 않았다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["실사풍 제품 컷은 외곽선뿐 아니라 재질마다 반사·거칠기의 차이를 남겨 기능적으로 구별되게 한다."]
+    }
+  },
+  "limitations": ["공유된 캡처만 분석했다. 현재 Opal 사이트의 구조·서체, 사진 또는 렌더 방식과 권리는 확인하지 않았다."]
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-moon-concentric-poster",
+  "title": "Moon — 동심원 안의 작은 우주인과 검은 여백",
+  "summary": "검은 포스터 오른쪽에 회백색 동심원을 크게 두고 중심 가까이에 우주인을 작게 놓는다. 제목과 크레딧은 왼쪽 아래의 빈 면에 분리된다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/242420392411529432/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. 핀 메타데이터의 계정 문구와 달리 이미지에 보이는 영화명 MOON으로 식별했다." },
+  "keywords": ["사용자 선호 레퍼런스", "Moon", "SF 영화 포스터", "동심원", "검정", "우주인", "크기 대비"],
+  "evidence": [{ "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/26/fb/66/26fb66958e1da404a3ec661e81b34f47.jpg", "description": "736×1083 공개 JPEG. 바탕 (41,210), 제목 (107,926), 우주복 (514,559) 중심 5×5px의 RGB 중앙값이다." }],
+  "color": {
+    "summary": "검정이 대부분이고 회백색 동심원과 우주복이 그 위에서 분리된다. 빨간 포인트는 인물의 장비에 아주 작게 남는다.",
+    "palette": [{ "role": "검은 바탕", "value": "#000000", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "흰 MOON 제목", "value": "#FFFFFF", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "우주복의 회색 면", "value": "#ABAAAC", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.emphasis", "topic": "작은 빨간 장비 표식", "observation": "넓은 지면이 무채색이라 장비의 작은 붉은 부분도 눈에 띈다. 제목은 우주복보다 평평하고 밝은 흰색이다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["거의 무채색 지면에 작은 유채색을 쓸 때 피사체의 용도와 연결한다."]
+  },
+  "layout": {
+    "summary": "오른쪽으로 벗어나는 큰 원과 작은 인물의 스케일 차를, 왼쪽 아래의 한 줄 제목과 빈 면이 받쳐준다.",
+    "findings": [{ "focus": "layout.hierarchy", "topic": "작은 사람, 거대한 기하, 별도 제목", "observation": "동심원은 오른쪽 경계에서 잘리고 인물은 그 중심 가까이에 서 있다. 제목·카피와 압축된 크레딧은 원과 겹치지 않는 왼쪽 하단에서 읽힌다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["피사체와 반복 패턴의 비율로 규모나 고립감을 말하고 제목은 별도 영역에 둔다."]
+  },
+  "typography": {
+    "summary": "MOON은 넓고 흰 대문자 산세리프이며 아래 크레딧은 응축된 소형 대문자다.",
+    "fonts": [{ "role": "영화명·크레딧", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "O가 두 번 반복되는 넓은 제목의 형태는 보이나 정확한 폰트나 레터링 여부는 미확인이다.", "license": "미확인" }],
+    "findings": [{ "focus": "typography.glyphs", "topic": "둥근 O와 좁은 크레딧", "observation": "제목의 O 두 개가 동심원의 원형 모티프를 이어받고, 그 아래 크레딧은 좁은 글자로 여러 줄 묶인다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["제목의 자형과 주 그래픽이 닮은 지점을 활용하되 작은 화면에서 크레딧 판독을 별도로 확인한다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "왼쪽 위 배우명과 왼쪽 아래의 제목·크레딧이 큰 원이 없는 빈 면을 이용한다.",
+      "findings": [{ "focus": "text-placement.alignment", "topic": "한 왼쪽 기준선에 다른 높이의 정보 묶음", "observation": "배우명은 왼쪽 위에 있고, 소개 문구와 제목, 크레딧은 왼쪽 아래에서 이어진다. 크레딧은 제목보다 가로로 넓게 뻗지만 시작점은 같다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "text-placement.hierarchy", "topic": "배우명 뒤의 옅어진 반복", "observation": "맨 위 이름 바로 아래에서 같은 이름이 점차 옅어지며 오른쪽 아래로 조금씩 어긋난다. 실제 모션이 아닌 정지 지면의 표현이다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["반복 글자를 그래픽으로 쓰더라도 본 문구의 시작 위치와 가장 높은 대비는 하나로 유지한다."]
+    },
+    "subject-composition": {
+      "summary": "우주인은 지면 중앙이 아니라 오른쪽 동심원의 중심 부근에 선다. 몸 전체와 자세가 보인다.",
+      "findings": [{ "focus": "subject-composition.position-scale", "topic": "원은 잘리고 사람은 끝까지 보임", "observation": "인물은 오른쪽으로 치우쳐 있고 원은 화면 밖으로 잘릴 만큼 크다. 인물은 머리부터 발끝까지 원 안에 드러나 크기 차가 유지된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.direction-gesture", "topic": "아래를 보는 듯한 고개와 화면 왼쪽 헬멧", "observation": "우주인은 몸이 정면에 가깝고 고개를 살짝 아래와 화면 왼쪽으로 기울인다. 헬멧은 화면 왼쪽의 인물 옆에 붙어 있다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["고립감이나 규모 차를 표현할 때 얼굴을 크게 넣기보다 몸 전체를 남기고, 비교가 되는 큰 구조물이나 패턴을 잘라 쓴다."]
+    },
+    "texture": { "summary": "촘촘한 원형 선의 반복이 검은 면에서 위치와 초점을 만든다.", "findings": [{ "focus": "texture.pattern", "topic": "동심원으로 인물 쪽을 향하게 함", "observation": "외곽에서 잘리는 여러 원은 인물 부근으로 모인다. 배경 전체를 세밀한 패턴으로 채우지는 않는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }], "reuse": ["반복선을 사용할 때 축소 화면에서 간섭무늬가 생기거나 중심 피사체를 압도하지 않는지 확인한다."] }
+  },
+  "limitations": ["정적 포스터 미리보기다. 정확한 서체, 제작 및 인쇄 사양, 공식 배포본의 판형과 권리는 미확인이다."]
+}

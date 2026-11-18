@@ -19,14 +19,14 @@
 
 분석 후 등록은 별도 저장 요청 없이 진행합니다. “색감만”처럼 범위를 지정해도 분석한 항목은 해당 로그에 누적합니다. 사용자가 저장하지 말라고 명시한 경우는 제외합니다.
 
-1. 예시를 확인하고 **색감 분석 → 레이아웃 분석 → 폰트 분석**을 각각 작성합니다. 이어 `elements`에 관련된 글자 배치, 피사체 구도, 조명, 모션, 질감, 상호작용을 기록합니다. 조작 피드백·실패와 복구·접근성은 실제로 확인한 상태만 기록합니다. 관련 없는 초안 슬롯은 제거하고, 중요하지만 확인할 수 없는 사항은 `unknown`으로 기록합니다. 기존 세 축만 있던 기록도 유효합니다.
-2. 확인한 근거를 `evidence`에 등록합니다. 소스 위치, 선택자·줄, 이미지 파일명, 관찰 환경·화면 크기 등을 적습니다. 원본과 재현 시안을 구분합니다.
+1. 예시를 확인하고 **색감 분석 → 레이아웃 분석 → 폰트 분석**을 각각 작성합니다. 이어 [공통 지침의 세부 분석 기준](../content/design-cautions.md#세부-분석-기준)에 따라 글자 배치, 인물·피사체 구도, 조명, 모션, 질감, 상호작용을 살피고 해당하는 축을 `elements`에 기록합니다. 조작 피드백·실패와 복구·접근성은 실제로 확인한 상태만 기록합니다. 관련 없는 초안 슬롯은 제거하고, 중요하지만 확인할 수 없는 사항은 `unknown`으로 기록합니다. 기존 세 축만 있던 기록도 유효합니다.
+2. 확인한 근거를 `evidence`에 등록합니다. 자료에 맞게 이미지 크기·좌표·기준 면, 브라우저 뷰포트·선택자, 영상 시점 또는 조작 조건을 적습니다. 원본과 재현 시안을 구분합니다.
 3. 분석 문장은 `confirmed` / `estimated` / `unknown`으로 구분하고 근거 ID를 연결합니다. 확인·추정에는 근거가 필수입니다. 모르는 색은 `null`을 사용합니다.
 4. 폰트의 CSS 선언 `declaredFamilies`와 실제 사용 서체 `renderedFamily`를 구분합니다. 실제 서체는 브라우저 관찰 근거가 있는 `rendered-confirmed`일 때만 기록합니다. CSS만 있으면 `declared-only`, 이미지 유추는 `estimated`로 두고 실제 서체는 `null`로 둡니다. 추정 후보·유사 대안은 `notes`에 명시합니다. 한글/영문 fallback, 웨이트·역할·출처·라이선스와 미확인 사항도 기록합니다.
 5. 각 축의 `reuse`에 독립적으로 가져갈 원칙을 적습니다. **실제로 선택을 바꾸는 관찰**만 `preferenceSignals`로 연결합니다. `limitations`에는 미검증 항목을 남깁니다.
 6. 작업 중에는 `draft`, 요청 범위의 관찰을 검토한 뒤에는 `analyzed`로 저장합니다. `analyzed`라도 개별 항목은 미확인일 수 있으며, 상태가 실제 렌더링 검증 완료를 뜻하지 않습니다. 초안 여부·폰트 미확인과 사용자의 전체 디자인 선호는 별개입니다.
 
-범위를 지정하지 않으면 기본 세 축을 작성합니다. 일부 항목만 분석할 때는 `analysisScope`에 분석한 상위 `axis`만 적습니다. 예를 들어 색감만 검토했으면 `"analysisScope": ["color"]`와 `color`를 남기고 `layout`, `typography`, `elements`는 제외합니다. 완료한 색감 기록은 그대로 `analyzed`로 저장할 수 있고, 색감 로그에만 들어갑니다. `analysisScope`는 분석 범위이고, `preferenceFocuses`는 사용자가 좋다고 지정한 세부 선호 범위입니다.
+범위를 지정하지 않으면 기본 세 축을 작성하고 자료에 해당하는 세부 축을 덧붙입니다. 일부 항목만 분석할 때는 `analysisScope`에 분석한 상위 `axis`만 적습니다. 예를 들어 색감만 검토했으면 `"analysisScope": ["color"]`와 `color`를 남기고 `layout`, `typography`, `elements`는 제외합니다. 완료한 색감 기록은 그대로 `analyzed`로 저장할 수 있고, 색감 로그에만 들어갑니다. `analysisScope`는 분석 범위이고, `preferenceFocuses`는 사용자가 좋다고 지정한 세부 선호 범위입니다.
 
 ### 관찰을 세부 항목으로 나누기
 
@@ -79,7 +79,7 @@ npm run analysis:save -- /absolute/path/to/revised-reference.json --replace
 ## MCP에서 조회
 
 - `get_design_preferences` 또는 `design://design-preferences`: 취향 프로필. 도구는 `focus` 또는 `contextKey`로 좁힐 수 있습니다. 프로필은 선택의 근거를 제공하며 현재 요청에 맞는지는 연결된 AI가 판단합니다.
-- `search_design_analyses`: 저장된 예시 검색. 디자인 취향을 찾을 때는 `scope: "preferred"`를 사용합니다. `axis`(요소별 로그의 상위 항목), `focus`(태그가 붙은 관찰의 제목·내용), `status`(`analyzed | draft | all`), `visualId`, `limit`(최대 10), `offset`으로 범위를 좁힙니다.
+- `search_design_analyses`: 저장된 예시 검색. 디자인 취향을 찾을 때는 `scope: "preferred"`를 사용합니다. `axis`를 지정하면 그 축의 내용만, `focus`를 지정하면 해당 태그가 붙은 관찰 제목·내용만 검색합니다. 작품명으로 찾으려면 `axis`·`focus`를 생략하고, ID를 이미 알면 `get_design_analysis`를 사용합니다. `status`(`analyzed | draft | all`), `visualId`, `limit`(최대 10), `offset`으로도 범위를 좁힙니다.
 - `get_design_analysis`: `id`만 주면 전체 분석, `axis`는 해당 상위 항목, `focus`는 태그가 붙은 관찰과 그 근거만 반환합니다. 관찰이 없는 경우 `ANALYSIS_AXIS_NOT_RECORDED` 또는 `ANALYSIS_FOCUS_NOT_RECORDED`로 알려줍니다. `focus`만으로 상위 항목을 알 수 있으므로 `axis`를 생략할 수 있습니다.
 - `design://analyses`: 저장 기록 목록과 초안/분석 수, 요소별 `logs` 목록.
 - `design://analysis-scope`: 세부 기준 ID와 관찰 기준 목록.

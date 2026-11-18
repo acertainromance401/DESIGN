@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-thunderstorm-palette",
+  "title": "Thunderstorm — 블랙·차콜·옐로·앰버",
+  "summary": "세 단계 무채색에서 고명도 옐로와 앰버로 전환한다. 밝은 색을 얇은 포인트에만 두지 않고 스와치 면의 절반 넘게 쓴다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/317503842486013547/", "description": "2026-11-18 사용자 제공 Pinterest 묶음의 06번. 공개 팔레트 이미지의 색감과 조합만 분석했다." },
+  "keywords": ["사용자 선호 레퍼런스", "Thunderstorm", "검정", "차콜", "옐로", "앰버", "배색"],
+  "analysisScope": ["color"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/27/e1/66/27e1665fafcf7c0036a2ff296a5f69a1.jpg", "description": "736×1172px 공개 JPEG. 다섯 가로 띠의 표기 HEX를 확인했다." },
+    { "id": "swatch-samples", "kind": "image", "location": "https://i.pinimg.com/736x/27/e1/66/27e1665fafcf7c0036a2ff296a5f69a1.jpg", "description": "좌상단 원점 중심 x=456, y=175/345/421/521/738의 11×11px RGB 중앙값: #000000, #262626, #383838, #FFC813, #FAB23C. 중앙 부근 x=450에서 스와치 상단 y≈45, 옐로 시작 y≈459, 앰버 시작 y≈582, 하단 y≈932를 읽었다." }
+  ],
+  "color": {
+    "summary": "블랙과 두 차콜은 무채색의 깊이를 만들고 채도 높은 옐로·앰버가 한 번에 온도를 올린다. 두 따뜻한 색은 서로를 구분하기보다 큰 밝은 덩어리 안에서 변주한다.",
+    "palette": [
+      { "role": "Black · 가장 깊은 무채색 면과 잉크", "value": "#000000", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "Charcoal · 어두운 보조 면", "value": "#262626", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "Gray · 밝은 쪽의 차콜 변형", "value": "#383838", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "Yellow · 명도가 높은 전환색", "value": "#FFC812", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "Amber · 넓고 따뜻한 밝은 면", "value": "#FAB23D", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "findings": [
+      { "focus": "color.distribution", "topic": "시연 면적의 절반 이상이 밝은 색", "observation": "동일 너비의 띠만 보면 옐로와 앰버가 합계 약 53%를 차지하고, 그중 앰버가 더 넓다. 바깥 회색 배경과 하단 표기는 이 비율에 넣지 않았다.", "certainty": "estimated", "evidenceIds": ["swatch-samples"] },
+      { "focus": "color.contrast", "topic": "따뜻한 두 띠는 판독용으로만 보면 비슷함", "observation": "표기값의 sRGB 대비는 옐로·앰버 1.18:1, 블랙·옐로 13.52:1, 블랙·앰버 11.50:1이다. 옐로와 앰버는 배경 변주로 쓰고 정보는 어두운 잉크로 분리하기 좋다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "focus": "color.palette-roles", "topic": "따뜻한 면과 어두운 잉크", "observation": "밝은 두 스와치는 어두운 표기를, 어두운 스와치들은 밝은 표기를 쓴다. 두 옐로의 차이보다 밝은 면과 어두운 잉크의 차이가 읽기를 만든다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["차콜 단계는 깊이와 보조 면에, 블랙은 노랑과 앰버 위의 정보색에 사용한다. 포스터처럼 노랑을 큰 면적에 쓸 수도 있지만 제품 UI에서는 정보의 우선순위에 맞게 면적을 조정한다."]
+  },
+  "preferenceSignals": [
+    { "key": "bright-yellow-dark-anchor", "focus": "color.palette-roles", "direction": "prefer", "basis": "inferred", "interpretation": "노랑과 앰버를 큰 면으로 쓰고 무채색 잉크가 형태와 읽기를 맡기는 점이 선명한 인상에 기여했을 수 있다.", "contextKey": "palette-led-graphic", "context": "밝은 노랑이 주도하는 포스터·제품 그래픽.", "application": "옐로 계열과 검정을 분리한다. 두 노랑은 기능 상태의 짝이 아니라 밝은 면의 변주로 사용한다.", "tradeoff": "앰버도 높은 주목도를 가지므로 중요도가 낮은 콘텐츠에 넓게 쓰면 위계가 뒤집힐 수 있다.", "evidenceIds": ["pin-preview"] }
+  ],
+  "limitations": ["스와치 표기값을 보존했다. 면적 비율은 JPEG 팔레트 본체의 중앙 단면 추정이며 디자인 전반에 적용할 공식 비율이 아니다."]
+}

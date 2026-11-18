@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-ima-home-showreel",
+  "title": "IMA–HOME — 디스플레이 활자와 중앙 영상이 교대로 주도하는 에이전시",
+  "summary": "검은 첫 화면을 큰 흰 인사말이 가로지르고 중앙 영상이 바뀐다. 이후 흰 작업 목록과 어두운 에이전시 지면 사이에서 글자와 사진의 무게가 바뀐다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/1067493917901887235/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. 캡처에 적힌 © IMA–HOME 2022를 식별에 사용했으며 현재 사이트라고 가정하지 않는다." },
+  "keywords": ["사용자 선호 레퍼런스", "IMA–HOME", "쇼릴", "에이전시", "대형 인사말", "흑백 전환"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/c7/bc/2e/c7bc2e413e9a659d67763efa29e38884.jpg", "description": "736×552 공개 JPEG. HEX는 내부 검정 (88,411), 중앙 영상 (268,270), 큰 흰 글자 (506,250) 중심 5×5px의 RGB 중앙값이다." },
+    { "id": "pin-video", "kind": "external-reference", "location": "https://v1.pinimg.com/videos/mc/720p/03/f2/86/03f286f296e7654ce222b15a05a123d9.mp4", "description": "37.2초 공개 영상의 앞·뒤 구간을 약 2~3초 간격으로 표본 확인했다. 중앙 영상, Latest work, Agency, London/New York 장면이 보인다." }
+  ],
+  "color": {
+    "summary": "화면의 기본 인쇄색은 흑백이고, 중앙 쇼릴과 작업 이미지에만 색이 집중된다.",
+    "palette": [{ "role": "첫 화면 검정", "value": "#0C0C0C", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "중앙 영상의 짙은 블루", "value": "#08142E", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "큰 인사말의 흰색", "value": "#F7FCFF", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.distribution", "topic": "검은 도입과 흰 작업 목록", "observation": "짙은 도입부에서는 영상의 파랑과 피사체가 유채색을 이룬다. 영상의 다음 작업 목록은 흰 지면으로 바뀌고, 이미지 속 색은 계속 남는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview", "pin-video"] }],
+    "reuse": ["섹션 명도는 콘텐츠 전환에서만 바꾸고, 작업 이미지에 넓은 색 면을 맡긴다."]
+  },
+  "layout": {
+    "summary": "상단 탐색은 작게 가장자리에 두고, 중앙 영상과 화면을 가로지르는 인사말이 같은 첫 장면을 만든다.",
+    "findings": [{ "focus": "layout.hierarchy", "topic": "가로 인사말과 작은 메뉴", "observation": "Hello — G'day가 검은 화면의 좌우에 닿을 만큼 크다. 중앙 영상과 겹치지만 상단의 로고와 메뉴는 분리되어 있다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["화면 전체를 쓰는 표현형 제목이 있어도 탐색 영역은 움직이는 이미지와 분리한다."]
+  },
+  "typography": {
+    "summary": "비교적 균일한 획의 큰 영문 산세리프에 긴 대시를 넣어 방향을 만든다.",
+    "fonts": [{ "role": "Hello — G'day 및 큰 구간 제목", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview", "pin-video"], "notes": "크고 단순한 산세리프로 보인다. 정확한 서체, 굵기, 자막과 동일한 패밀리인지는 미확인이다.", "license": "미확인" }],
+    "findings": [{ "focus": "typography.glyphs", "topic": "긴 대시가 두 단어를 분리하고 연결", "observation": "두 영문 인사말 사이의 긴 가로획이 중앙 영상 앞을 가로지른다. 이후 작업 목록에도 대시가 있는 대형 문구가 보인다.", "certainty": "confirmed", "evidenceIds": ["pin-preview", "pin-video"] }],
+    "reuse": ["활자와 구분 기호를 화면을 묶는 리듬으로 쓸 수 있지만, 필수 탐색 문구는 잘리지 않게 둔다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "흰 인사말은 영상 앞으로 나오고, 조작을 위한 상단 탐색은 따로 남는다.",
+      "findings": [{ "focus": "text-placement.image-balance", "topic": "대시가 영상의 중앙을 가로지름", "observation": "인사말의 단어들은 영상 좌우의 검은 면까지 이어진다. 중앙의 긴 대시는 영상 안 인물의 얼굴 아래를 가로지르며, 작은 저작권 표기는 영상 밑에 떨어져 있다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["표현형 활자를 영상보다 앞에 둘 때 눈·입이나 핵심 사물의 위치를 가리지 않는 높이로 정하고, 영상 컷이 바뀌어도 확인한다."]
+    },
+    "subject-composition": {
+      "summary": "첫 인물은 검은 지면 전체가 아닌 가운데 영상 프레임 안에 있고, 후속 컷은 같은 자리에서 거리와 밀도를 바꾼다.",
+      "findings": [{ "focus": "subject-composition.direction-gesture", "topic": "정면에 가까운 상반신과 양손", "observation": "대표 이미지에서 인물은 푸른 배경에 정면에 가까운 상반신으로 보인다. 양손이 얼굴 아래 양옆에 올라와 있다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.framing", "topic": "같은 영상 창에서 인물에서 공간으로", "observation": "영상 초반의 중앙 프레임은 사람의 몸을 가까이 잡는 컷에서 여러 피사체가 있는 밝은 장면과 깊은 실내 전경으로 바뀐다.", "certainty": "confirmed", "evidenceIds": ["pin-video"] }],
+      "reuse": ["영상 창은 일정한 위치에 두고 샷 크기를 바꿔 리듬을 만든다. 장면의 주인공이 바뀔 때도 내비게이션은 안정된 자리에 남긴다."]
+    },
+    "motion": { "summary": "가로 활자 프레이밍과 중앙 영상 장면이 변하고, 이후 명도와 이미지 밀도가 바뀐다.", "findings": [{ "focus": "motion.transition", "topic": "영상 도입에서 작업 지면으로", "observation": "영상 앞부분에서 인사말의 잘린 위치와 중앙 영상 장면이 달라진다. 이후 비교적 빈 검정 화면을 지나 흰 Latest work가 나오며, 후반에는 Agency와 도시명 화면이 이어진다.", "certainty": "confirmed", "evidenceIds": ["pin-video"] }], "reuse": ["인트로의 움직임과 작업 탐색을 분리해 영상을 보지 않아도 콘텐츠에 도달하게 한다."] }
+  },
+  "preferenceSignals": [
+    { "key": "large-type-small-information", "focus": "layout.hierarchy", "direction": "prefer", "basis": "inferred", "interpretation": "가로로 과감한 인사말과 작고 차분한 탐색 층을 분리한 점이 선호에 기여했을 수 있다.", "contextKey": "editorial-web", "context": "첫인상에 큰 활자를 쓰는 이미지 중심 에이전시.", "application": "시각 표현에는 큰 문구를 허용하되 탐색·정보에는 예측 가능한 정렬과 읽기 대비를 남긴다.", "tradeoff": "표현형 문구 밖에서도 이름과 동작을 쉽게 찾을 수 있어야 한다.", "evidenceIds": ["pin-preview"] },
+    { "key": "neutral-grid-image-color", "focus": "color.distribution", "direction": "prefer", "basis": "inferred", "interpretation": "UI는 흑백을 유지하고 영상·작품 쪽에서만 색이 바뀌는 구조가 선호에 기여했을 수 있다.", "contextKey": "image-led-web", "context": "많은 작업 이미지에 서로 다른 색이 있는 에이전시 화면.", "application": "유채색은 영상과 프로젝트에 남기고 탐색과 지면은 흑백 대비로 구분한다.", "tradeoff": "영상 교체 시 그 위의 흰 글자 대비를 다시 본다.", "evidenceIds": ["pin-video"] }
+  ],
+  "limitations": ["편집된 소개 영상이며, 실제 스크롤과 메뉴의 반응·모션 트리거·키보드 지원은 확인하지 않았다."]
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-wine-powder-blue",
+  "title": "Wine / Blue — 짙은 와인·파우더 블루",
+  "summary": "거의 검은 와인색과 밝은 푸른색을 큰 두 면으로 맞세운 명도·온도 대비.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/710583647507651742/", "description": "2026-11-18 사용자 제공 Pinterest 묶음의 02번. 공개 대표 이미지의 색감과 조합만 분석했다. 조명이나 실내 재료의 실제 색상은 확인하지 않았다." },
+  "keywords": ["사용자 선호 레퍼런스", "와인", "버건디", "파우더 블루", "하늘색", "온도 대비", "배색"],
+  "analysisScope": ["color"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/e8/ba/dd/e8badda71cc79c7f27957df8f351719e.jpg", "description": "736×1307px 공개 JPEG. 배경의 좌우 적색·청색 영역과 그 위에 놓인 WINE·BLUE 스와치의 표기 HEX를 확인했다." },
+    { "id": "swatch-samples", "kind": "image", "location": "https://i.pinimg.com/736x/e8/ba/dd/e8badda71cc79c7f27957df8f351719e.jpg", "description": "좌상단 원점 중심 (507,431), (507,751)의 11×11px RGB 채널별 중앙값 #52000F, #88B4FF. 사진 조명과 벽면의 색은 샘플링 대상에서 제외했다." }
+  ],
+  "color": {
+    "summary": "따뜻한 적색은 명도를 낮춰 무게를 만들고 차가운 파랑은 밝기를 올려 맞선다. 01번과 달리 밝은 색도 색상이 뚜렷해 온도 차가 더 선명하다.",
+    "palette": [
+      { "role": "Wine · 어둡고 따뜻한 축", "value": "#51000F", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "Blue · 밝고 차가운 축", "value": "#87B3FE", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "findings": [
+      { "focus": "color.temperature-saturation", "topic": "두 유채색에 다른 온도와 무게 배분", "observation": "상단 스와치의 깊은 와인과 하단의 맑은 밝은 파랑은 명도와 색온도가 함께 다르다. 배경의 적색 벽과 창가의 청색 면도 같은 색 방향을 반복한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "focus": "color.contrast", "topic": "두 색을 잉크와 배경으로 교체", "observation": "표기 HEX 간 상대 명도 대비는 7.30:1이다. 두 스와치는 상대색으로 이름을 적어, 흰색을 제3의 텍스트색으로 더하지 않고 명도차를 쓴다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["크림보다 차가운 인상이 필요하면 깊은 와인에 명도가 충분히 높은 블루를 짝짓는다. 두 색을 같은 명도로 맞추면 여기서 관찰된 분리감은 약해진다."]
+  },
+  "limitations": ["대표 이미지에 표기된 HEX를 사용했다. 실내 배경의 조명과 그라데이션, 실제 바탕 위 글자 렌더링은 별도 검수 대상이다."]
+}

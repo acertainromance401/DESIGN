@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-cherry-maroon-noir",
+  "title": "Cotton White / Cherry Red / Deep Maroon / Noir Black",
+  "summary": "체리 레드에서 마룬과 붉은 기가 남은 블랙으로 깊어지고, 따뜻한 백색이 어두운 색들을 분리한다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/22306960651087661/", "description": "2026-11-18 사용자 제공 Pinterest 묶음의 03번. 공개 대표 이미지의 스와치와 배경 사진의 색 관계만 분석했다." },
+  "keywords": ["사용자 선호 레퍼런스", "체리 레드", "마룬", "코튼 화이트", "노아르 블랙", "패션 팔레트", "배색"],
+  "analysisScope": ["color"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/1f/07/97/1f0797e378012c9ce57f364fa46a3e00.jpg", "description": "720×909px 공개 JPEG. 왼쪽부터 Cotton White, Cherry Red, Deep Maroon, Noir Black의 표기 HEX를 확인했다." },
+    { "id": "swatch-samples", "kind": "image", "location": "https://i.pinimg.com/736x/1f/07/97/1f0797e378012c9ce57f364fa46a3e00.jpg", "description": "좌상단 원점 중심 (144,481), (288,481), (432,481), (576,481)의 11×11px RGB 채널별 중앙값: #EDEBDE, #820203, #630100, #1D1717." }
+  ],
+  "color": {
+    "summary": "따뜻한 옅은 백색과 낮은 명도의 적색·블랙을 맞세운 팔레트다. 적색 두 개는 기능적으로 높은 대비를 내기보다 짙은 면 안에서 깊이를 더한다.",
+    "palette": [
+      { "role": "Cotton White · 따뜻한 광점과 정보색", "value": "#EDEBDD", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "Cherry Red · 주된 적색", "value": "#810100", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "Deep Maroon · 그림자 쪽 적색", "value": "#630000", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "role": "Noir Black · 적색기가 남은 어두운 축", "value": "#1B1717", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "findings": [
+      { "focus": "color.palette-roles", "topic": "사진과 팔레트의 역할이 대응함", "observation": "사진에서 붉은 배경과 장미, 옅은 꽃, 검은 의상이 적색·밝은 중립·어두운 중립의 역할을 보여준다. 사진 자체가 표기 HEX로 칠해졌다는 뜻은 아니다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] },
+      { "focus": "color.contrast", "topic": "두 적색은 층위, 백색은 판독", "observation": "표기 HEX 기준 체리·마룬은 1.27:1이다. 코튼 화이트는 체리에 9.05:1, 마룬에 11.45:1, 블랙에 14.84:1이다. 진한 적색 둘을 상태색으로 구분하기보다 백색으로 정보를 분리하는 편이 명확하다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }
+    ],
+    "reuse": ["체리와 마룬은 색상이 다른 두 강조색으로 쓰지 않고, 주 적색과 짙은 변형으로 나눈다. 작은 글자나 필수 상태는 코튼 화이트나 충분히 밝은 바탕으로 분리한다."]
+  },
+  "preferenceSignals": [
+    { "key": "deep-red-light-neutral-contrast", "focus": "color.contrast", "direction": "prefer", "basis": "inferred", "interpretation": "깊은 적색 두 층과 블랙을 유지하면서 따뜻한 백색으로 밝기를 분리한 점이 조합의 인상에 기여했을 수 있다.", "contextKey": "palette-led-graphic", "context": "적색과 검은 면적이 큰 패션·브랜드 그래픽.", "application": "낮은 명도의 적색은 깊이를 만들고 코튼 계열 중립색은 시각적 기준과 읽기를 맡긴다.", "tradeoff": "적색 계열끼리는 작은 글자와 상태를 구분하는 데 쓰지 않는다.", "evidenceIds": ["pin-preview"] }
+  ],
+  "limitations": ["HEX는 미리보기 표기값이다. RGB와 함께 쓰인 CMYK는 출력 프로파일 없이 인쇄 기준으로 확정하지 않는다."]
+}

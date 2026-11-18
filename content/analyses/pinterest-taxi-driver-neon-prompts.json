@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-taxi-driver-neon-prompts",
+  "title": "Taxi Driver풍 PROMPTS — 비 내린 창 너머의 인물과 응축된 제목",
+  "summary": "주황빛 실내의 인물을 차가운 청록 야경과 젖은 차창으로 감싼다. 흰 PROMPTS를 하단의 어두운 차문 위에 크게 얹는다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/768004542750046704/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. 핀 설명과 이미지에는 Gemini x Nano Banana가 적혀 있다. 게시자 표기이며 실제 생성 과정이나 공식 영화 포스터 여부를 확인한 것은 아니다." },
+  "keywords": ["사용자 선호 레퍼런스", "Taxi Driver풍", "PROMPTS", "네온 야경", "젖은 유리", "응축 타이포"],
+  "evidence": [{ "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/4c/dc/fa/4cdcfa0d739fe806cf7aca3ab7dfcc9c.jpg", "description": "736×980 공개 JPEG. 주황빛 얼굴 (317,345), 차창 뒤 어두운 청록 (626,294), 흰 제목 (345,704) 중심 5×5px의 RGB 중앙값이다." }],
+  "color": {
+    "summary": "얼굴과 실내는 황주황·적갈색, 창 바깥과 일부 반사는 청록, 제목은 흰색의 역할 분리가 있다.",
+    "palette": [{ "role": "얼굴의 주황빛", "value": "#9A3A1A", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "창 밖 어두운 청록", "value": "#183839", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "하단 큰 제목", "value": "#FFFFFF", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.temperature-saturation", "topic": "따뜻한 인물과 차가운 야경", "observation": "인물과 좌측 물방울은 따뜻하고, 우측 창과 외부 반사는 청록이다. 흰 제목은 하단의 어두운 면에 선명하게 분리된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["유채색은 장면 속 빛에 연결하고, 정보용 제목은 독립적인 명도 대비로 읽히게 한다."]
+  },
+  "layout": {
+    "summary": "차창을 안쪽 프레임으로 사용해 인물의 얼굴을 상반부에 두고, 하단 어두운 문짝은 제목과 보조 문구에 남긴다.",
+    "findings": [{ "focus": "layout.hierarchy", "topic": "얼굴 다음에 하단 제목", "observation": "인물이 반신으로 중앙에 앉아 있고 대형 제목은 턱이나 눈이 아닌 가슴 아래와 어두운 차문에 걸쳐 있다. 계정과 소형 표기는 외곽에 놓인다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["피사체의 눈과 표정을 보존하고 장면 안의 덜 복잡한 하단 면을 제목 자리로 쓴다."]
+  },
+  "typography": {
+    "summary": "폭이 좁고 높이가 큰 흰 대문자와 훨씬 작은 일반 산세리프를 대비한다.",
+    "fonts": [{ "role": "PROMPTS 대형 제목", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "세로 장축이 강한 응축 산세리프로 보인다. 정확한 패밀리와 웨이트는 미확인이다.", "license": "미확인" }],
+    "findings": [{ "focus": "typography.weight-style", "topic": "좁고 높은 한 단어와 작은 설명", "observation": "큰 단어 하나는 세로로 길고 굵으며, 그 위의 설명과 아래의 크레딧은 훨씬 작고 더 여유 있는 폭이다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["짧은 제목에서만 강한 응축을 검토하고 작은 설명은 글자폭을 지나치게 줄이지 않는다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "큰 제목과 작은 설명을 하단 중앙에 묶고 화면 중앙 위의 얼굴은 비워 둔다.",
+      "findings": [{ "focus": "text-placement.image-balance", "topic": "차문의 어두운 면이 제목 받침", "observation": "흰 PROMPTS는 가슴 아래와 어두워지는 차문에 걸쳐 있고 설명과 크레딧은 그 위아래에 밀착한다. 얼굴 앞에는 큰 글자를 놓지 않는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["카피를 위한 검은 상자를 씌우기 전에, 장면 속 원래 어두운 면이 판독 가능한 자리를 제공하는지 확인한다."]
+    },
+    "subject-composition": {
+      "summary": "차창은 한 겹의 전경 프레임, 인물은 창 안의 중경, 바깥의 네온은 흐린 배경이다.",
+      "findings": [{ "focus": "subject-composition.framing", "topic": "차창이 인물의 어깨와 몸통을 자름", "observation": "차창 위아래의 경계가 비스듬히 화면을 가로지른다. 인물의 얼굴은 중앙보다 위에 있고, 몸통과 어깨 일부는 차창 하단과 프레임에서 잘린다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.direction-gesture", "topic": "비스듬한 어깨와 보는 쪽을 향한 얼굴", "observation": "몸과 어깨는 화면에 비스듬히 놓이고, 얼굴과 시선은 보는 쪽에 가깝다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.depth-layers", "topic": "유리·사람·야경을 서로 다른 초점으로", "observation": "빗방울과 차창 경계가 인물 앞에 겹치고, 인물 뒤에는 좌우의 흐린 네온과 실내 표면이 이어진다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["실사풍 장면은 전경 표면, 인물의 눈·표정, 뒤쪽 광원이 한 평면처럼 보이지 않도록 각 영역의 선명도와 대비를 나눈다."]
+    },
+    "lighting": {
+      "summary": "따뜻한 빛이 얼굴 한쪽을 강조하고, 창 밖의 차가운 빛은 얼굴보다 뒤로 빠진다.",
+      "findings": [{ "focus": "lighting.shadows", "topic": "얼굴 안의 밝은 면과 어두운 면", "observation": "화면 왼쪽의 이마·뺨은 주황빛으로 밝고, 얼굴의 오른쪽은 그보다 어둡다. 광원의 종류나 촬영 세팅은 판별하지 않았다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["얼굴 전체를 같은 정도로 밝히지 않고 주요 표정이 읽히는 한쪽 면에 밝기를 남긴다."]
+    },
+    "texture": { "summary": "초점이 다른 빗방울과 반사가 차창을 인물 앞의 표면으로 드러낸다.", "findings": [{ "focus": "texture.material", "topic": "빗방울이 보이는 유리", "observation": "얼굴 주변에 붉고 청록색인 반사와 물방울이 겹치고, 일부 빛은 초점에서 벗어나 크게 번진다. 실제 유리 촬영인지 디지털 재현인지는 확인되지 않았다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }], "reuse": ["젖은 표면에서는 모든 반사를 같은 선명도로 만들지 않고, 얼굴과 글자 대비를 우선한다."] }
+  },
+  "preferenceSignals": [{ "key": "warm-cool-night-lighting", "focus": "color.temperature-saturation", "direction": "prefer", "basis": "inferred", "interpretation": "따뜻한 인물색과 차갑고 어두운 창의 대비가 같은 야간 장면을 깊게 보이게 한 점이 선호에 기여했을 수 있다.", "contextKey": "cinematic-image", "context": "차창·유리·실내와 외부가 분리되는 인물 중심 야간 이미지.", "application": "빛의 온도 차를 공간과 소재에 연결하고 얼굴과 제목의 대비를 확인한다.", "tradeoff": "모든 그림자를 청록으로 물들이거나 밝은 반사로 눈을 가리지 않는다.", "evidenceIds": ["pin-preview"] }],
+  "limitations": ["공개 첫 이미지와 게시자 설명을 기준으로 했다. 원본 생성 프롬프트, 작업 파일, 정확한 서체, 이미지 재사용 권리는 확인하지 않았다."]
+}

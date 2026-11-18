@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-profico-academy",
+  "title": "Profico Academy — 어두운 본문 바깥에 색광을 모은 교육 페이지",
+  "summary": "짙은 네이비 중앙에는 흰 제목과 신청 버튼을 두고, 분홍·청록 광원을 상단과 혜택 구간 하단에 모았다. 투명한 입체 오브젝트가 하단 정보층 앞에 놓인다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/1031676227152238001/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. 핀의 일반 광고 문구가 아니라 이미지에 보이는 Profico Academy 화면을 분석했다." },
+  "keywords": ["사용자 선호 레퍼런스", "Profico Academy", "교육 랜딩", "네이비", "그라데이션", "투명 오브젝트"],
+  "evidence": [{ "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/72/83/00/72830043ca7a7b1d2c2e5c9a945685e5.jpg", "description": "736×1221 공개 JPEG. HEX는 (370,315), (225,42), (709,74) 중심 5×5px의 RGB 중앙값이다(좌상단 원점)." }],
+  "color": {
+    "summary": "거의 검은 네이비가 읽기 공간을 이루고, 살구·자주·청록의 빛이 상단과 중하단에 모인다.",
+    "palette": [{ "role": "어두운 읽기 공간", "value": "#0A0A14", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "상단의 따뜻한 광색", "value": "#AA6152", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "우측 청록 광색", "value": "#145569", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.distribution", "topic": "가운데는 어둡고 색은 경계에", "observation": "가장 강한 광색은 첫 화면 상단과 혜택 영역 아랫부분에 있다. 큰 흰 제목 주변에는 비교적 어두운 면이 남는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["빛을 모든 구역에 반복하지 않고 구간의 시작이나 전환 지점에 남긴다."]
+  },
+  "layout": {
+    "summary": "중앙 제목 아래에 일정 정보를 한 줄로 묶고, 넓은 간격 뒤에 혜택 네 항목을 놓는다.",
+    "findings": [{ "focus": "layout.hierarchy", "topic": "소개→일정→혜택", "observation": "두 줄 제목과 신청 버튼 다음에 위치·기간·멘토·과정이 작은 네 칸으로 분리된다. 그 아래 넓은 빈 공간 뒤에 혜택 제목과 네 설명이 나온다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["신청 판단에 필요한 숫자와 일정을 첫 설명 다음에 한 줄로 묶는다. 혜택마다 유리 패널을 반복하는 방식은 복제하지 않는다."]
+  },
+  "typography": {
+    "summary": "큰 혼합 대소문자 산세리프가 제목을, 작은 대문자 라벨과 설명이 보조 정보를 맡는다.",
+    "fonts": [{ "role": "제목·설명", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "제목은 비교적 균일한 획의 산세리프로 보인다. 패밀리·수치 웨이트는 미확인이다.", "license": "미확인" }],
+    "findings": [{ "focus": "typography.weight-style", "topic": "큰 이름과 작은 정보", "observation": "Profico와 Academy는 큰 두 줄이며, 메뉴와 숫자 라벨은 훨씬 작아 역할이 다르다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["과정명과 보조 정보를 구분하되, 보조 설명을 광색 위에 희미하게 놓지 않는다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "중앙의 과정명과 양쪽 가장자리의 메뉴를 분리하고, 아래 정보는 왼쪽 정렬로 전환한다.",
+      "findings": [{ "focus": "text-placement.alignment", "topic": "중앙으로 읽고, 아래는 열을 따라 비교", "observation": "상단에 로고·메뉴·신청 버튼이 가로로 분리된다. 소개의 과정명과 본문은 가운데 기준으로 쌓이지만, 일정 수치와 혜택 본문은 각각 자기 열의 왼쪽에 정렬된다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["한 덩어리로 읽을 도입만 중앙에 두고, 비교 정보는 일관된 시작점으로 정렬한다."]
+    },
+    "subject-composition": {
+      "summary": "인물 대신 투명 다면체가 혜택 구간의 하단에 비대칭으로 놓인다.",
+      "findings": [{ "focus": "subject-composition.position-scale", "topic": "같은 정보 줄에 서로 다른 높이의 사물", "observation": "왼쪽에는 기울어진 긴 사각 프리즘, 가운데보다 오른쪽 아래에는 다각형, 맨 오른쪽에는 삼각형이 있다. 높이와 크기가 다르고 제목·설명은 그 위쪽에 남는다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.depth-layers", "topic": "다면체가 패널 아랫선을 넘음", "observation": "다면체가 혜택 패널의 하단 경계 또는 그 밖에 겹쳐 있다. 정보의 상단과 사물의 전경이 분리되어 보인다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["정보와 입체 사물을 같은 영역에 쓸 때, 사물은 제목과 설명을 가리지 않는 하단이나 바깥쪽에 배치한다."]
+    },
+    "lighting": {
+      "summary": "배경의 넓은 색 번짐과 전경 물체의 좁고 밝은 모서리가 대비된다.",
+      "findings": [{ "focus": "lighting.quality", "topic": "부드러운 배경과 선명한 하이라이트", "observation": "배경색은 경계가 넓고 흐리지만 다면체 모서리의 밝기는 선명하다. 이 차이가 배경과 물체를 분리한다. 실제 광원 배치는 알 수 없다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+      "reuse": ["같은 색을 써도 배경과 사물의 빛 경계 폭을 다르게 조절해 거리를 읽히게 한다."]
+    },
+    "texture": { "summary": "하단의 다면체는 투명한 유리처럼 보인다.", "findings": [{ "focus": "texture.material", "topic": "밝은 모서리와 투명한 면", "observation": "다면체의 몇몇 모서리가 밝게 반사되며 면 안으로 뒤쪽 색이 보인다. 실제 렌더링 또는 합성 방식은 알 수 없다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }], "reuse": ["투명 재질은 모서리 반사와 배경 대비로 드러내고 글자 영역을 가리지 않는다."] }
+  },
+  "limitations": ["정적 미리보기다. 실제 모션·신청 기능·반응형 배치·서체는 미확인이다.", "색광과 카드가 함께 보이지만 어떤 요소를 사용자가 선호했는지 따로 확인되지 않았다."]
+}

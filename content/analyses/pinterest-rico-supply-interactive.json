@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "pinterest-rico-supply-interactive",
+  "title": "Rico Supply — 중앙 프로젝트 컷이 커지며 제목을 가르는 편집",
+  "summary": "가로선으로 나눈 작업 열의 중앙에서 이미지가 커지고, 큰 제목의 가운데를 가린다. 흑백 지면 전환 속에서도 세로 목록의 리듬을 유지한다.",
+  "status": "analyzed",
+  "createdAt": "2026-11-18",
+  "updatedAt": "2026-11-18",
+  "source": { "type": "url", "location": "https://www.pinterest.com/pin/1144336586603047857/", "description": "2026-11-18 사용자 제공 전체 디자인 선호 레퍼런스. 핀의 공개 영상과 대표 정지 프레임을 분석했다." },
+  "keywords": ["사용자 선호 레퍼런스", "Rico Supply", "인터랙티브 포트폴리오", "중앙 이미지 열", "명도 반전", "오버랩"],
+  "evidence": [
+    { "id": "pin-preview", "kind": "image", "location": "https://i.pinimg.com/736x/59/69/23/5969239f78b71301c9911f64573a9acb.jpg", "description": "416×740 공개 JPEG. (58,274)와 (112,290) 중심 5×5px의 RGB 중앙값으로 회백색 지면과 붉은 작업 이미지를 표본화했다." },
+    { "id": "pin-video", "kind": "external-reference", "location": "https://v1.pinimg.com/videos/iht/expMp4/1b/f7/86/1bf7866afc472d2dbf999854ef76ad9e_720w.mp4", "description": "12.98초 공개 영상의 약 2초 간격 샘플을 확인했다. 밝고 어두운 지면, 중앙 이미지 확대, 제목 오버랩이 서로 다른 작업에서 보인다." }
+  ],
+  "color": {
+    "summary": "회백색·검정은 지면과 글자의 역할을 교대하고, 붉은 인물과 녹색 인쇄물은 작업 이미지로 남는다.",
+    "palette": [{ "role": "밝은 지면", "value": "#DEE3E6", "certainty": "estimated", "evidenceIds": ["pin-preview"] }, { "role": "붉은 작업 이미지의 배경", "value": "#9D1803", "certainty": "estimated", "evidenceIds": ["pin-preview"] }],
+    "findings": [{ "focus": "color.distribution", "topic": "유채색은 중앙 콘텐츠에", "observation": "지면이 밝거나 검을 때 모두 이미지 자체의 빨강, 초록, 청록이 중앙에서 먼저 보인다.", "certainty": "confirmed", "evidenceIds": ["pin-video"] }],
+    "reuse": ["작업별 이미지 색을 살리고, 지면 전환 중에도 작은 라벨의 명도 대비를 보존한다."]
+  },
+  "layout": {
+    "summary": "작은 라벨과 가로 구분선이 목록을 잡고, 중앙의 한 프로젝트 컷만 크게 돌출된다.",
+    "findings": [{ "focus": "layout.layering", "topic": "제목 가운데를 가르는 프로젝트 컷", "observation": "큰 이름이 가로로 놓이고 중앙 이미지의 좌우로 남는다. 확대가 덜 된 앞뒤 이미지와 작은 라벨은 목록의 순서를 유지한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview", "pin-video"] }],
+    "reuse": ["선택된 작업의 확대와 제목 레이어만 변주하고, 목록을 되찾을 수 있는 기준선은 유지한다."]
+  },
+  "typography": {
+    "summary": "크고 비교적 가는 제목과 작은 항목명이 같은 무채색 축에서 대비된다.",
+    "fonts": [{ "role": "대형 프로젝트 제목", "declaredFamilies": [], "renderedFamily": null, "weight": null, "identification": "estimated", "evidenceIds": ["pin-preview"], "notes": "획이 균일한 산세리프로 보인다. 정확한 서체와 수치 웨이트는 미확인이다.", "license": "미확인" }],
+    "findings": [{ "focus": "typography.weight-style", "topic": "크기로 차등을 줌", "observation": "굵기를 크게 높이지 않고 제목의 크기와 가로 길이로 목록 라벨과 역할을 분리한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }],
+    "reuse": ["전경 이미지가 제목 가운데를 가리더라도 링크 이름이나 별도 라벨로 프로젝트명을 완전하게 제공한다."]
+  },
+  "elements": {
+    "text-placement": {
+      "summary": "작은 프로젝트 정보는 양쪽에, 큰 이름은 확장된 이미지와 같은 높이에 놓인다.",
+      "findings": [{ "focus": "text-placement.alignment", "topic": "양쪽의 작은 라벨과 가운데의 큰 타이틀", "observation": "얇은 가로줄로 나뉜 행마다 작은 표기가 좌우 끝에 있다. 큰 제목은 중앙 이미지 뒤로 지나가며 두 끝만 양쪽에 드러나기도 한다.", "certainty": "confirmed", "evidenceIds": ["pin-preview", "pin-video"] }],
+      "reuse": ["중앙에서 제목을 가리는 연출을 하더라도, 작은 정보층에 전체 프로젝트명이 읽히게 남긴다."]
+    },
+    "subject-composition": {
+      "summary": "중앙 프레임은 유지하지만 인물, 제품, 인쇄물의 보는 거리가 다르다.",
+      "findings": [{ "focus": "subject-composition.framing", "topic": "얼굴을 다 보여주지 않는 연속 컷", "observation": "대표 프레임에는 붉은 바탕의 인물이 옆얼굴과 어깨만 크게 보이고, 위아래 행에는 턱이나 선글라스·입 주변만 보이는 인물 컷이 나타난다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }, { "focus": "subject-composition.viewpoint", "topic": "프로젝트에 따라 시점이 달라짐", "observation": "영상에서는 옆에서 본 인물, 사선에서 본 초록색 책, 내부 단면이 드러나는 흰 기계가 같은 중앙 위치를 교대로 맡는다.", "certainty": "confirmed", "evidenceIds": ["pin-video"] }],
+      "reuse": ["목록의 시각 중심은 고정하고, 초점은 인물의 제스처나 제품이 가장 잘 읽히는 각도에 맞춰 작업마다 바꾼다."]
+    },
+    "motion": { "summary": "가운데 행을 크게 펼치고 그 앞뒤의 압축된 행을 그대로 보이는 흐름이다.", "findings": [{ "focus": "motion.transition", "topic": "중앙 이미지와 지면의 변화", "observation": "영상의 여러 시점에서 다른 중앙 이미지가 크게 보이고, 뒤에서 큰 제목이 드러난다. 밝은 지면 버전과 어두운 지면 버전이 모두 나타난다.", "certainty": "confirmed", "evidenceIds": ["pin-video"] }], "reuse": ["전환 효과가 없어도 각 항목의 제목·이미지·링크가 식별되는 목록을 먼저 만든다."] }
+  },
+  "preferenceSignals": [
+    { "key": "foreground-crosses-type", "focus": "layout.layering", "direction": "prefer", "basis": "inferred", "interpretation": "선택된 이미지가 활자를 가르면서 중앙 항목의 우선순위를 바꾸는 구도가 선호에 기여했을 수 있다.", "contextKey": "image-led-web", "context": "같은 구조의 여러 작업을 펼쳐보는 포트폴리오.", "application": "앞뒤 레이어의 전환은 중앙 작업에 제한하고 좌우 기준선을 보존한다.", "tradeoff": "겹침이 필수 제목의 시각적·보조기술 판독을 막지 않게 한다.", "evidenceIds": ["pin-video"] },
+    { "key": "neutral-grid-image-color", "focus": "color.distribution", "direction": "prefer", "basis": "inferred", "interpretation": "배경의 명도는 바뀌어도 채도는 작업물에 남는 역할 분리가 선호에 기여했을 수 있다.", "contextKey": "image-led-web", "context": "작품의 색이 서로 다른 프로젝트 목록.", "application": "바탕과 라벨의 색을 중립에 두고 작품 자체를 색의 중심으로 삼는다.", "tradeoff": "반전되는 모든 상태에서 제목과 라벨 대비를 확인한다.", "evidenceIds": ["pin-video"] }
+  ],
+  "limitations": ["공유 영상의 결과만 확인했다. 스크롤·포인터·전환 편집 중 무엇이 실제 트리거인지, 동작 줄이기와 키보드 지원, 구현 기술은 미확인이다."]
+}
