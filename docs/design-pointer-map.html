@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="ko" data-stop="pointer">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>DESIGN MCP — 조회 지도</title>
+  <style>
+    :root {
+      --base: #101016;
+      --ink: #f0f0e9;
+      --muted: #b6b6c1;
+      --rule: #373741;
+      --lime: #ddff66;
+      --violet: #cabbff;
+      --route: #96ac49;
+      --mono: "SFMono-Regular", Consolas, monospace;
+      font: 16px/1.53 "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--base);
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body, h1, h2, p, ol, dl, dd, pre { margin: 0; }
+    a { color: inherit; }
+    a:focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
+    code, pre, .index, .brand :last-child { font-family: var(--mono); }
+    .wrap { inline-size: min(91%, 88rem); margin-inline: auto; }
+    .mast, .intro, .map-head, .foot { display: flex; justify-content: space-between; gap: .75rem 1.65rem; }
+    .mast, .foot { align-items: baseline; flex-wrap: wrap; }
+    .mast { border-block-end: 1px solid var(--rule); padding-block: 1.05rem .9rem; }
+    .brand { display: flex; gap: .75rem; align-items: baseline; font-weight: 850; }
+    .brand :last-child { color: var(--lime); font-size: .73rem; font-weight: 500; letter-spacing: .075em; }
+    .mast > p:last-child, .foot { color: var(--muted); font-size: .8rem; }
+    .intro { align-items: end; padding-block: clamp(1.7rem, 3.8vw, 3.5rem) 1.55rem; }
+    .intro h1 { font-size: clamp(3rem, 5.9vw, 6rem); font-weight: 850; line-height: .98; letter-spacing: -.075em; }
+    .intro h1 span { color: var(--lime); }
+    .intro p { color: var(--muted); max-inline-size: 25rem; }
+    .intro p strong { color: var(--ink); }
+
+    .map-head { align-items: center; flex-wrap: wrap; padding: .8rem 0 .72rem; border-block-start: 1px solid var(--rule); }
+    .map-head h2 { font-size: .95rem; }
+    .legend { display: flex; flex-wrap: wrap; gap: .3rem 1.15rem; color: var(--muted); font-size: .8rem; }
+    .legend span { display: inline-flex; align-items: center; gap: .43rem; }
+    .legend span::before { content: ""; inline-size: 1.15rem; border-block-start: 2px solid var(--lime); }
+    .legend span:last-child::before { border-block-start: 2px dashed var(--violet); }
+    .terrain {
+      --line-y: 40%;
+      --home-y: 84%;
+      --detour-y: 74%;
+      position: relative;
+      isolation: isolate;
+      block-size: clamp(23rem, 29vw, 27rem);
+      border-block: 1px solid var(--rule);
+      background: radial-gradient(circle, #2d2d38 1px, transparent 1.1px) 2px 3px / 18px 18px, #14141c;
+    }
+    .terrain::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0 0 42% 24%;
+      border-inline-start: 1px dashed #555544;
+      border-block-end: 1px dashed #555544;
+      background: linear-gradient(110deg, #ddff660f, #ddff6604 69%, transparent);
+      pointer-events: none;
+    }
+    .landmark {
+      position: absolute;
+      inset-block-start: .95rem;
+      letter-spacing: .025em;
+      color: var(--muted);
+      font-size: .75rem;
+    }
+    .landmark b { color: var(--ink); display: block; font-size: .9rem; letter-spacing: -.025em; }
+    .project-land { inset-inline-start: 1.1rem; }
+    .mcp-land { inset-inline-start: calc(24% + 1.1rem); }
+    .source-land { inset-inline-end: 1.1rem; text-align: end; }
+    .source-land b { font-size: .83rem; }
+    .rails { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; pointer-events: none; }
+    .rails path, .mobile-detour path { fill: none; vector-effect: non-scaling-stroke; stroke-width: 2; stroke-linejoin: round; }
+    .mobile-detour { display: none; }
+    .track { stroke: var(--route); }
+    .track-detour { stroke: var(--violet); stroke-dasharray: 4 5; opacity: .7; }
+    .segment { stroke: var(--lime); stroke-width: 3 !important; opacity: 0; transition: opacity .24s; }
+    .segment.detour { stroke: var(--violet); stroke-dasharray: 4 5; }
+    [data-stop="request"] .seg-request,
+    [data-stop="pointer"] .seg-pointer,
+    [data-stop="rules"] .seg-rules,
+    [data-stop="taste"] .seg-taste,
+    [data-stop="search"] .seg-search,
+    [data-stop="evidence"] .seg-evidence,
+    [data-stop="repository"] .seg-repository,
+    [data-stop="return"] .seg-return { opacity: 1; }
+    .arrow {
+      position: absolute;
+      color: var(--lime);
+      inline-size: .48rem;
+      block-size: .48rem;
+      border: solid currentColor;
+      border-width: 2px 2px 0 0;
+      transform: translate(-50%, -50%) rotate(45deg);
+      pointer-events: none;
+    }
+    .arrow-out { left: 16%; top: var(--line-y); }
+    .arrow-in { left: 31.7%; top: var(--line-y); }
+    .arrow-cases { left: 77.5%; top: var(--line-y); }
+    .arrow-return { left: 34%; top: var(--home-y); transform: translate(-50%, -50%) rotate(-135deg); }
+    .arrow-repo { left: 53.8%; top: var(--detour-y); color: var(--violet); transform: translate(-50%, -50%) rotate(-135deg); }
+    .handoff, .decision {
+      position: absolute;
+      color: var(--muted);
+      font-size: .76rem;
+      inset-block-start: calc(var(--home-y) + .62rem);
+    }
+    .handoff { right: 14%; text-align: end; }
+    .decision { left: 23%; }
+    .stations { padding: 0; list-style: none; }
+    .station { --y: var(--line-y); position: absolute; left: var(--x); top: var(--y); }
+    .station a { text-decoration: none; -webkit-tap-highlight-color: transparent; }
+    .station a:hover .stop-title { text-decoration: underline; text-underline-offset: .2em; }
+    .station a[aria-current] { color: var(--lime); }
+    .station--repository a { color: var(--violet); }
+    .station--repository a[aria-current] { color: #e4dbff; }
+    .station--pointer { --x: 24%; }
+    .station--rules { --x: 39%; }
+    .station--taste { --x: 54%; }
+    .station--search { --x: 69%; }
+    .station--evidence { --x: 86%; }
+    .station--repository { --x: 62%; --y: var(--detour-y); }
+    .station--request, .station--return { --x: 8%; }
+    .station--return { --y: var(--home-y); }
+    .stop-mark {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      inline-size: .93rem;
+      block-size: .93rem;
+      border-radius: 50%;
+      border: 2px solid var(--route);
+      background: #191921;
+      transform: translate(-50%, -50%);
+      transition: border-color .2s, box-shadow .25s, background-color .25s;
+    }
+    a[aria-current] .stop-mark { border-color: var(--lime); background: var(--lime); box-shadow: 0 0 0 5px #ddff662b; }
+    .station--repository .stop-mark { border-radius: 0; border-color: var(--violet); transform: translate(-50%, -50%) rotate(45deg) scale(.8); }
+    .station--repository a[aria-current] .stop-mark { background: var(--violet); box-shadow: 0 0 0 5px #cabbff35; border-color: #e4dbff; }
+    .pin {
+      position: absolute;
+      inset-block-start: -4.25rem;
+      inset-inline-start: 50%;
+      inline-size: 3.65rem;
+      block-size: 4.25rem;
+      transform: translateX(-50%);
+      overflow: visible;
+      filter: drop-shadow(0 5px 16px #0e0e14);
+    }
+    .pin path { fill: #171a13; stroke: var(--lime); stroke-width: 2; }
+    .pin circle { fill: var(--lime); }
+    a[aria-current] .pin path { fill: var(--lime); }
+    a[aria-current] .pin circle { fill: #171a13; }
+    .station--pointer .stop-mark { display: none; }
+    [data-ready] .station--pointer .stop-mark { display: block; }
+    .route-cursor {
+      position: absolute;
+      z-index: 3;
+      inset: 0 auto auto 0;
+      pointer-events: none;
+      --pin-color: var(--lime);
+    }
+    .route-cursor[data-detour] { --pin-color: var(--violet); }
+    .route-cursor .pin {
+      inset: auto;
+      inline-size: 3.2rem;
+      block-size: 3.7rem;
+      transform: translate(-50%, -97.3%);
+      transform-origin: 50% 97.3%;
+      transition: transform .18s ease-out;
+    }
+    .route-cursor[data-under] .pin {
+      transform: translate(-50%, -97.3%) rotate(180deg) scale(.55);
+    }
+    .route-cursor .pin path { fill: var(--pin-color); stroke: var(--pin-color); }
+    .route-cursor .pin circle { fill: #171a13; }
+    .mobile-detour .track-detour { opacity: .7; }
+    [data-stop="repository"] .mobile-detour .track-detour { opacity: 1; }
+    .index { color: var(--muted); font-size: .72rem; font-weight: 500; white-space: nowrap; }
+    a[aria-current] .index { color: inherit; }
+    .stop-title { font-size: 1.19rem; font-weight: 820; line-height: 1.2; letter-spacing: -.04em; }
+    .station--pointer .stop-title { font-size: 1.34rem; }
+    .where { color: var(--muted); display: block; font-size: .78rem; line-height: 1.3; }
+    .stop-label { display: block; }
+    .station--repository .stop-title { font-size: 1.07rem; }
+
+    @media (width > 45rem) {
+      .station a {
+        position: relative;
+        transform: translate(-50%, 0);
+        display: block;
+        min-inline-size: 7.6rem;
+        text-align: center;
+        padding: .8rem .35rem .35rem;
+      }
+      .station--pointer a { min-inline-size: 9.2rem; padding-block-start: .7rem; }
+      .station--repository a, .station--return a { transform: translate(-50%, -100%); padding: .48rem .35rem .5rem; }
+      .station--repository .stop-mark, .station--return .stop-mark { top: 100%; }
+      .station--repository .index { color: var(--violet); }
+      .stop-label { white-space: nowrap; }
+    }
+
+    .readout { padding-block: .15rem 0; }
+    .note {
+      border-block-end: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1fr) minmax(0, 1.02fr);
+      gap: .7rem 2rem;
+      padding: 1.12rem 0 1.24rem;
+      scroll-margin-block-start: .75rem;
+    }
+    .note h2 { font-size: clamp(1.52rem, 2.45vw, 2.26rem); font-weight: 850; line-height: 1.12; letter-spacing: -.055em; }
+    .note h2:focus { outline-offset: .25rem; }
+    .note-label { color: var(--lime); font-size: .74rem; margin-block-end: .36rem; }
+    #stop-repository .note-label { color: var(--violet); }
+    .note p:not(.note-label) { color: var(--muted); }
+    .note strong { color: var(--ink); }
+    .address { border-block-start: 1px solid var(--rule); padding-block-start: .55rem; }
+    .address dt { color: var(--muted); font-size: .78rem; margin-block-end: .25rem; }
+    .address dd, .address code { font-size: .88rem; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--muted); margin-block-start: .3rem; line-height: 1.43; }
+    .back { display: none; font-size: .88rem; color: var(--lime); justify-self: start; padding-block: .5rem; }
+    [data-jump] .back { display: inline-block; }
+    .foot { padding-block: .85rem 1.4rem; }
+    .sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+    @media (45rem < width <= 57.5rem) {
+      .intro p { max-inline-size: 18rem; font-size: .91rem; }
+      .station a { min-inline-size: 5.35rem; padding-inline: .12rem; }
+      .station--pointer a { min-inline-size: 6rem; }
+      .stop-title { font-size: .99rem; }
+      .station--pointer .stop-title { font-size: 1.1rem; }
+      .index { font-size: .63rem; }
+      .where { font-size: .72rem; }
+      .note { gap: .75rem 1rem; }
+    }
+
+    @media (width <= 45rem) {
+      .intro { flex-direction: column; align-items: start; gap: .95rem; }
+      .intro p { max-inline-size: 37rem; }
+      .terrain {
+        --rail-x: calc(1.6rem + 1px);
+        --branch-x: 4.25rem;
+        block-size: auto;
+        padding-block-start: 3.6rem;
+      }
+      .terrain::before, .rails, .arrow, .decision, .handoff, .project-land, .mcp-land { display: none; }
+      .source-land { inset: .66rem 1rem auto 1rem; text-align: start; }
+      .stations { position: relative; }
+      .stations::before {
+        content: "";
+        position: absolute;
+        inset: 2.3rem auto 2.3rem 1.6rem;
+        border-inline-start: 2px solid var(--route);
+      }
+      .station { position: relative; left: auto; top: auto; }
+      .station a {
+        position: relative;
+        display: grid;
+        align-items: center;
+        padding: .7rem 1rem .7rem 3.4rem;
+        min-block-size: 4.6rem;
+      }
+      .station--rules, .station--taste, .station--search, .station--evidence {
+        background: linear-gradient(90deg, transparent 2.66rem, #ddff6608 2.66rem, transparent);
+      }
+      .station--rules .stop-label::before {
+        content: attr(data-zone);
+        display: block;
+        margin-block-end: .22rem;
+        color: var(--muted);
+        font-size: .73rem;
+      }
+      .station--request::after, .station--repository::after {
+        content: "";
+        position: absolute;
+        inset: auto auto -.17rem calc(1.6rem - .13rem);
+        inline-size: .4rem;
+        block-size: .4rem;
+        border: solid var(--lime);
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        pointer-events: none;
+      }
+      .stop-mark { left: var(--rail-x); top: 50%; }
+      .pin { inline-size: 2.05rem; block-size: 2.45rem; inset-inline-start: var(--rail-x); inset-block-start: calc(50% - 2.43rem); }
+      .route-cursor .pin { inline-size: 2.05rem; block-size: 2.37rem; }
+      .station--repository a { padding-inline-start: 5.5rem; }
+      .station--repository .stop-mark { left: var(--branch-x); }
+      .mobile-detour {
+        display: block;
+        position: absolute;
+        inset: 0 auto auto var(--rail-x);
+        inline-size: calc(var(--branch-x) - var(--rail-x));
+        block-size: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+      .note { grid-template-columns: minmax(0, 1fr); gap: .7rem; }
+      [data-ready] .back { display: inline-block; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="mast wrap">
+    <p class="brand"><strong>DESIGN MCP</strong><span>POINTER MAP</span></p>
+    <p>다른 프로젝트에서 DESIGN 참조하기</p>
+  </header>
+  <main class="wrap">
+    <header class="intro">
+      <h1>어디를 <span>조회할까.</span></h1>
+      <p><strong><code>design</code>은 저장소 링크가 아니라 MCP 연결 이름입니다.</strong> 정거장을 누르면 핀이 선로를 따라 움직이고, 하단에 조회 위치가 나옵니다.</p>
+    </header>
+
+    <section aria-labelledby="map-title">
+      <div class="map-head">
+        <h2 id="map-title">전시 사이트에서 〈Moon〉 레퍼런스 찾기</h2>
+        <p class="legend"><span>기본 흐름</span><span>필요할 때만 원문 열람</span></p>
+      </div>
+      <div class="terrain">
+        <p class="landmark project-land"><b>현재 프로젝트</b>요청의 출발점과 도착점</p>
+        <p class="landmark mcp-land"><b>DESIGN MCP · 읽기 전용</b>규칙 → 선호 → 사례</p>
+        <p class="landmark source-land"><b>연결된 로컬 빌드 / 설치 패키지</b>서버 시작 시 자료 로드</p>
+        <svg class="rails" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+          <path class="track" d="M80 40 H912 Q930 40 930 45 V78 Q930 84 906 84 H80"/>
+          <path class="track-detour" d="M790 84 C766 84 746 74 715 74 H547 C516 74 493 84 462 84"/>
+          <path class="segment seg-request" d="M80 40 H240"/>
+          <path class="segment seg-pointer" d="M80 40 H390"/>
+          <path class="segment seg-rules" d="M240 40 H390"/>
+          <path class="segment seg-taste" d="M390 40 H540"/>
+          <path class="segment seg-search" d="M540 40 H690"/>
+          <path class="segment seg-evidence" d="M690 40 H860"/>
+          <path class="segment detour seg-repository" data-leg="branch-in" d="M790 84 C766 84 746 74 715 74 H620"/>
+          <path class="segment detour seg-repository" data-leg="branch-out" d="M620 74 H547 C516 74 493 84 462 84"/>
+          <path class="segment seg-return" data-leg="approach" d="M860 40 H912 Q930 40 930 45 V78 Q930 84 906 84 H790"/>
+          <path class="segment seg-return" d="M790 84 H80"/>
+        </svg>
+        <span class="arrow arrow-out" aria-hidden="true"></span>
+        <span class="arrow arrow-in" aria-hidden="true"></span>
+        <span class="arrow arrow-cases" aria-hidden="true"></span>
+        <span class="arrow arrow-return" aria-hidden="true"></span>
+        <span class="arrow arrow-repo" aria-hidden="true"></span>
+        <p class="handoff">AI가 조회 결과를 받음</p>
+        <p class="decision">근거를 현재 프로젝트로 가져감</p>
+
+        <ol class="stations" role="list">
+          <li class="station station--request">
+            <a id="pin-request" href="#stop-request" data-stop-link="request">
+              <span class="stop-mark" aria-hidden="true"></span>
+              <span class="stop-label"><span class="index">01</span> <span class="stop-title">요청</span><span class="where">현재 프로젝트 채팅</span></span>
+            </a>
+          </li>
+          <li class="station station--pointer">
+            <a id="pin-pointer" href="#stop-pointer" data-stop-link="pointer" aria-current="step">
+              <span class="stop-mark" aria-hidden="true"></span>
+              <svg class="pin" viewBox="0 0 64 74" aria-hidden="true">
+                <path d="M32 72C28 61 5 47 5 30a27 27 0 1 1 54 0C59 47 36 61 32 72Z"/>
+                <circle cx="32" cy="30" r="10"/>
+              </svg>
+              <span class="stop-label"><span class="index">02</span> <span class="stop-title">MCP 포인터</span><span class="where"><code>design</code> 연결 설정</span></span>
+            </a>
+          </li>
+          <li class="station station--rules">
+            <a id="pin-rules" href="#stop-rules" data-stop-link="rules">
+              <span class="stop-mark" aria-hidden="true"></span>
+              <span class="stop-label" data-zone="DESIGN MCP · 읽기 전용"><span class="index">03</span> <span class="stop-title">공통 규칙</span><span class="where">필수 디자인 리소스</span></span>
+            </a>
+          </li>
+          <li class="station station--taste">
+            <a id="pin-taste" href="#stop-taste" data-stop-link="taste">
+              <span class="stop-mark" aria-hidden="true"></span>
+              <span class="stop-label"><span class="index">04</span> <span class="stop-title">사용자 선호</span><span class="where">선호 프로필</span></span>
+            </a>
+          </li>
+          <li class="station station--search">
+            <a id="pin-search" href="#stop-search" data-stop-link="search">
+              <span class="stop-mark" aria-hidden="true"></span>
+              <span class="stop-label"><span class="index">05</span> <span class="stop-title">사례 검색</span><span class="where">저장된 분석 목록</span></span>
+            </a>
+          </li>
+          <li class="station station--evidence">
+            <a id="pin-evidence" href="#stop-evidence" data-stop-link="evidence">
+              <span class="stop-mark" aria-hidden="true"></span>
+              <span class="stop-label"><span class="index">06</span> <span class="stop-title">상세 확인</span><span class="where">〈Moon〉 사례 기록</span></span>
+            </a>
+          </li>
+          <li class="station station--repository">
+            <svg class="mobile-detour" viewBox="0 0 42 100" preserveAspectRatio="none" aria-hidden="true">
+              <path class="track-detour" data-leg="branch-in" d="M0 0 H20 Q42 0 42 27 V50"/>
+              <path class="track-detour" data-leg="branch-out" d="M42 50 V73 Q42 100 20 100 H0"/>
+            </svg>
+            <a id="pin-repository" href="#stop-repository" data-stop-link="repository">
+              <span class="stop-mark" aria-hidden="true"></span>
+              <span class="stop-label"><span class="index">우회</span> <span class="stop-title">저장소 별도 열람</span><span class="where">GitHub / 로컬 원문</span></span>
+            </a>
+          </li>
+          <li class="station station--return">
+            <a id="pin-return" href="#stop-return" data-stop-link="return">
+              <span class="stop-mark" aria-hidden="true"></span>
+              <span class="stop-label"><span class="index">07</span> <span class="stop-title">결과</span><span class="where">현재 프로젝트로 복귀</span></span>
+            </a>
+          </li>
+        </ol>
+        <div class="route-cursor" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <div class="readout" id="readout">
+      <section class="note" id="stop-request">
+        <div><p class="note-label">01 / 출발</p><h2 tabindex="-1">현재 프로젝트에서 요청</h2></div>
+        <p>“고요하지만 고립감이 있는 전시 랜딩 사례를 찾아줘. 파일은 바꾸지 마.” 전시 사이트 프로젝트를 연 채로 채팅에서 요청합니다.</p>
+        <dl class="address"><dt>어디를 보나</dt><dd>현재 프로젝트의 채팅 · 목적과 수정 범위 확인</dd></dl>
+      </section>
+      <section class="note" id="stop-pointer">
+        <div><p class="note-label">02 / 연결</p><h2 tabindex="-1">MCP 포인터가 가리키는 곳</h2></div>
+        <p>클라이언트는 등록된 <strong><code>design</code> 설정을 통해 MCP 서버에 연결</strong>합니다. 서버는 설정에 연결된 로컬 빌드나 설치 패키지의 자료를 읽습니다. 조회할 때마다 GitHub에 접속하는 게 아닙니다.</p>
+        <dl class="address"><dt>어디를 보나 · Copilot Global 설정 예</dt><dd><code>mcpServers.design</code><pre><code>node …/DESIGN/dist/index.js</code></pre></dd></dl>
+      </section>
+      <section class="note" id="stop-rules">
+        <div><p class="note-label">03 / MCP 리소스</p><h2 tabindex="-1">공통 규칙부터 읽기</h2></div>
+        <p>사례를 보기 전에 모든 프로젝트에 공통으로 적용하는 디자인 원칙과 검수 기준을 읽습니다.</p>
+        <dl class="address"><dt>어디를 보나 · 리소스 URI</dt><dd><code>design://design-cautions</code></dd></dl>
+      </section>
+      <section class="note" id="stop-taste">
+        <div><p class="note-label">04 / MCP 도구</p><h2 tabindex="-1">사용자 선호 확인</h2></div>
+        <p>선호 프로필에서 사용자가 직접 요청한 기준과 여러 레퍼런스에서 반복 관찰된 특징을 구분해 봅니다.</p>
+        <dl class="address"><dt>어디를 보나 · 도구</dt><dd><code>get_design_preferences</code></dd></dl>
+      </section>
+      <section class="note" id="stop-search">
+        <div><p class="note-label">05 / MCP 도구</p><h2 tabindex="-1">분위기와 활용처로 검색</h2></div>
+        <p>사용자가 고른 레퍼런스에서 <strong>‘고요·고립감’과 ‘전시 랜딩’</strong>을 함께 검색합니다. 사례 ID를 이미 알면 검색을 건너뛰고 상세를 조회할 수 있습니다.</p>
+        <dl class="address"><dt>어디를 보나 · 도구와 예시 인자</dt><dd><code>search_design_analyses</code><pre><code>{
+  "scope": "preferred",
+  "character": {"dimension": "mood", "query": "고요 고립감"},
+  "useCase": "전시 랜딩"
+}</code></pre></dd></dl>
+      </section>
+      <section class="note" id="stop-evidence">
+        <div><p class="note-label">06 / MCP 도구</p><h2 tabindex="-1">〈Moon〉의 관찰 근거 확인</h2></div>
+        <p>〈Moon〉 기록에서 <strong>큰 구조와 작은 전신 인물의 크기 차</strong>를 확인합니다. 가져올 것은 대비의 원리이지, 동심원이나 우주인 자체가 아닙니다.</p>
+        <dl class="address"><dt>어디를 보나 · 도구와 사례 ID</dt><dd><code>get_design_analysis</code><pre><code>{"id": "pinterest-moon-concentric-poster"}</code></pre></dd></dl>
+      </section>
+      <section class="note" id="stop-repository">
+        <div><p class="note-label">우회 / MCP 밖</p><h2 tabindex="-1">원문만 별도로 열람</h2></div>
+        <p>조회 결과만으로 충분하지 않을 때 <strong>AI가 별도로</strong> 보고서나 소스를 엽니다. MCP가 GitHub 전체를 내려받거나 실행 중인 사본을 자동 갱신하는 단계가 아닙니다.</p>
+        <dl class="address"><dt>어디를 보나 · 원문</dt><dd><a href="https://github.com/acertainromance401/DESIGN">공개 DESIGN 저장소</a> 또는 접근 가능한 로컬 사본</dd></dl>
+      </section>
+      <section class="note" id="stop-return">
+        <div><p class="note-label">07 / 복귀</p><h2 tabindex="-1">근거를 현재 프로젝트로</h2></div>
+        <p><strong>조회만 요청</strong>하면 근거와 적용 방안을 설명합니다. <strong>구현도 요청</strong>하면 현재 프로젝트의 AI가 대상 파일을 수정하고 실제 화면을 검수합니다.</p>
+        <dl class="address"><dt>어디를 보나</dt><dd>현재 프로젝트의 채팅 · 구현 요청 시에만 대상 프로젝트 파일</dd></dl>
+      </section>
+      <a class="back" id="map-back" href="#pin-pointer">← 지도에서 이어보기</a>
+    </div>
+    <p class="sr-only" id="map-status" role="status"></p>
+    <footer class="foot">
+      <p>지도 시안입니다. 정거장을 눌러도 실제 MCP를 호출하거나 파일을 수정하지 않습니다.</p>
+      <p>새 기록이 안 보이면 연결된 사본을 갱신하고 MCP를 다시 시작합니다.</p>
+    </footer>
+  </main>
+  <script>
+    const root = document.documentElement;
+    const terrain = document.querySelector('.terrain');
+    const cursor = terrain.querySelector('.route-cursor');
+    const links = [...document.querySelectorAll('[data-stop-link]')];
+    const stops = new Map(links.map(link => [link.dataset.stopLink, {
+      link, note: document.querySelector(link.hash),
+    }]));
+    const back = document.querySelector('#map-back');
+    const status = document.querySelector('#map-status');
+    const narrow = matchMedia('(width <= 45rem)');
+    const still = matchMedia('(prefers-reduced-motion: reduce)');
+    const outbound = ['request', 'pointer', 'rules', 'taste', 'search', 'evidence'];
+    let geometry, position, frame = 0, onArrival;
+
+    function measureRoutes() {
+      const bounds = terrain.getBoundingClientRect();
+      const origin = { x: bounds.left + terrain.clientLeft, y: bounds.top + terrain.clientTop };
+      const points = new Map([...stops].map(([id, { link }]) => {
+        const mark = link.querySelector('.stop-mark').getBoundingClientRect();
+        return [id, { x: mark.x + mark.width / 2 - origin.x, y: mark.y + mark.height / 2 - origin.y }];
+      }));
+      const mobile = narrow.matches;
+      const scope = terrain.querySelector(mobile ? '.mobile-detour' : '.rails');
+      function sample(leg) {
+        const path = scope.querySelector(`[data-leg="${leg}"]`);
+        const matrix = path.getScreenCTM();
+        const length = path.getTotalLength();
+        return Array.from({ length: 49 }, (_, i) => {
+          const point = path.getPointAtLength(length * i / 48).matrixTransform(matrix);
+          return { x: point.x - origin.x, y: point.y - origin.y };
+        });
+      }
+
+      const branchIn = sample('branch-in');
+      const branchOut = sample('branch-out');
+      points.set('fork', branchIn[0]);
+      points.set('join', branchOut.at(-1));
+      const edges = [];
+      function connect(a, b, trail = [points.get(a), points.get(b)], detour = false) {
+        const distances = [0];
+        for (let i = 1; i < trail.length; i++) {
+          distances.push(distances[i - 1] + Math.hypot(trail[i].x - trail[i - 1].x, trail[i].y - trail[i - 1].y));
+        }
+        edges.push({ a, b, trail, distances, length: distances.at(-1), detour });
+      }
+      outbound.slice(1).forEach((id, i) => connect(outbound[i], id));
+      connect('evidence', 'fork', mobile ? undefined : sample('approach'));
+      connect('fork', 'join');
+      connect('fork', 'repository', branchIn, true);
+      connect('repository', 'join', branchOut, true);
+      connect('join', 'return');
+      return { points, edges, mobile };
+    }
+
+    function place(point, detour) {
+      cursor.style.transform = `translate3d(${point.x}px, ${point.y}px, 0)`;
+      cursor.toggleAttribute('data-detour', detour);
+      cursor.toggleAttribute('data-under', !geometry.mobile && point.y > terrain.clientHeight * .63);
+    }
+
+    function arrive(id) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      position = { node: id };
+      place(geometry.points.get(id), id === 'repository');
+      const notify = onArrival;
+      onArrival = undefined;
+      notify?.();
+    }
+
+    function pathTo(target) {
+      const queue = [];
+      const offer = (node, legs, cost) => queue.push({ node, legs, cost });
+      const visited = new Set();
+      if (position.node) offer(position.node, [], 0);
+      else {
+        const { edge, distance } = position;
+        offer(edge.a, [{ edge, from: distance, to: 0 }], distance);
+        offer(edge.b, [{ edge, from: distance, to: edge.length }], edge.length - distance);
+      }
+      while (queue.length) {
+        queue.sort((a, b) => a.cost - b.cost);
+        const { node, legs, cost } = queue.shift();
+        if (node === target) return { legs, cost };
+        if (visited.has(node)) continue;
+        visited.add(node);
+        for (const edge of geometry.edges) {
+          if (edge.a === node) offer(edge.b, [...legs, { edge, from: 0, to: edge.length }], cost + edge.length);
+          if (edge.b === node) offer(edge.a, [...legs, { edge, from: edge.length, to: 0 }], cost + edge.length);
+        }
+      }
+      throw new Error(`Route is disconnected: ${target}`);
+    }
+
+    function moveTo(id, animate, notify) {
+      cancelAnimationFrame(frame);
+      onArrival = notify;
+      if (!animate || still.matches || !position) return arrive(id);
+      const { legs, cost } = pathTo(id);
+      if (cost < 1) return arrive(id);
+      const start = performance.now();
+      const duration = Math.min(1150, 270 + cost * 1.2);
+      function tick(now) {
+        const time = Math.min(1, (now - start) / duration);
+        if (time === 1) return arrive(id);
+        let traveled = cost * time * time * (3 - 2 * time);
+        for (const { edge, from, to } of legs) {
+          const length = Math.abs(to - from);
+          if (traveled > length) { traveled -= length; continue; }
+          const distance = Math.min(edge.length, Math.max(0, from + Math.sign(to - from) * traveled));
+          const end = Math.max(1, edge.distances.findIndex(d => d >= distance));
+          const span = edge.distances[end] - edge.distances[end - 1];
+          const t = span ? (distance - edge.distances[end - 1]) / span : 0;
+          const a = edge.trail[end - 1], b = edge.trail[end];
+          position = { edge, distance };
+          place({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t }, edge.detour);
+          break;
+        }
+        frame = requestAnimationFrame(tick);
+      }
+      frame = requestAnimationFrame(tick);
+    }
+
+    function select(id, interactive = false) {
+      const current = stops.get(id);
+      if (!current) return;
+      for (const [key, { link, note }] of stops) {
+        note.hidden = key !== id;
+        if (key === id) link.setAttribute('aria-current', 'step');
+        else link.removeAttribute('aria-current');
+      }
+      root.dataset.stop = id;
+      back.href = '#' + current.link.id;
+      const heading = current.note.querySelector('h2');
+      const needsScroll = interactive && (narrow.matches || heading.getBoundingClientRect().bottom > innerHeight);
+      root.toggleAttribute('data-jump', needsScroll);
+      if (interactive && !needsScroll) status.textContent = '선택한 정거장: ' + heading.textContent;
+      moveTo(id, interactive, needsScroll ? () => {
+        current.note.scrollIntoView({ block: 'start' });
+        heading.focus({ preventScroll: true });
+      } : undefined);
+    }
+
+    links.forEach(link => link.addEventListener('click', event => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      select(link.dataset.stopLink, true);
+    }));
+    back.addEventListener('click', event => {
+      event.preventDefault();
+      stops.get(root.dataset.stop).link.focus();
+      root.removeAttribute('data-jump');
+    });
+    const restoreSelectedStop = () => select(links.find(link => link.hash === location.hash)?.dataset.stopLink ?? 'pointer');
+    window.addEventListener('hashchange', restoreSelectedStop);
+    cursor.append(terrain.querySelector('.station--pointer .pin'));
+    root.dataset.ready = '';
+    geometry = measureRoutes();
+    restoreSelectedStop();
+    new ResizeObserver(() => {
+      geometry = measureRoutes();
+      arrive(root.dataset.stop);
+    }).observe(terrain);
+    still.addEventListener('change', () => { if (still.matches) arrive(root.dataset.stop); });
+  </script>
+</body>
+</html>

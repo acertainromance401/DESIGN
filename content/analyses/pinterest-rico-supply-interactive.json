@@ -46,5 +46,41 @@
     { "key": "foreground-crosses-type", "focus": "layout.layering", "direction": "prefer", "basis": "inferred", "interpretation": "선택된 이미지가 활자를 가르면서 중앙 항목의 우선순위를 바꾸는 구도가 선호에 기여했을 수 있다.", "contextKey": "image-led-web", "context": "같은 구조의 여러 작업을 펼쳐보는 포트폴리오.", "application": "앞뒤 레이어의 전환은 중앙 작업에 제한하고 좌우 기준선을 보존한다.", "tradeoff": "겹침이 필수 제목의 시각적·보조기술 판독을 막지 않게 한다.", "evidenceIds": ["pin-video"] },
     { "key": "neutral-grid-image-color", "focus": "color.distribution", "direction": "prefer", "basis": "inferred", "interpretation": "배경의 명도는 바뀌어도 채도는 작업물에 남는 역할 분리가 선호에 기여했을 수 있다.", "contextKey": "image-led-web", "context": "작품의 색이 서로 다른 프로젝트 목록.", "application": "바탕과 라벨의 색을 중립에 두고 작품 자체를 색의 중심으로 삼는다.", "tradeoff": "반전되는 모든 상태에서 제목과 라벨 대비를 확인한다.", "evidenceIds": ["pin-video"] }
   ],
+  "character": {
+    "viewedState": "세로 미리보기와 12.98초 공개 영상의 밝고 어두운 표본 프레임. 입력 트리거는 미확인.",
+    "mood": {
+      "certainty": "estimated",
+      "label": "정돈된 목록 한가운데만 도발적이다",
+      "reasoning": "가로 구분선과 작은 라벨이 행을 차분하게 유지하는데, 채도가 높은 중앙 컷이 큰 프로젝트 이름을 가른다. 긴장은 전부 움직이는 데서가 아니라 한 곳만 규칙을 깨는 데서 온다.",
+      "observations": [{ "axis": "color", "topic": "유채색은 중앙 콘텐츠에" }, { "axis": "text-placement", "topic": "양쪽의 작은 라벨과 가운데의 큰 타이틀" }]
+    },
+    "style": {
+      "certainty": "estimated",
+      "label": "인덱스 행과 한 장의 대형 커버를 결합한 구성",
+      "reasoning": "작은 라벨·좁은 썸네일이 목록의 뼈대를 유지한다. 한 프로젝트만 큰 이미지와 가로로 긴 제목을 함께 받으므로 같은 구조에서 강도가 크게 달라진다.",
+      "observations": [{ "axis": "layout", "topic": "제목 가운데를 가르는 프로젝트 컷" }, { "axis": "typography", "topic": "크기로 차등을 줌" }]
+    },
+    "feel": {
+      "certainty": "estimated",
+      "label": "좁은 조각 사이에서 한 장의 이미지에 가까워지는 느낌",
+      "reasoning": "주변 인물 컷은 턱·입처럼 일부만 보여 주고 중앙의 큰 옆얼굴은 어깨까지 남긴다. 영상에서는 책과 기계도 같은 중심을 차지해, 대상은 달라져도 거리가 가까워졌다 멀어지는 감각이 이어진다.",
+      "observations": [{ "axis": "subject-composition", "topic": "얼굴을 다 보여주지 않는 연속 컷" }, { "axis": "subject-composition", "topic": "프로젝트에 따라 시점이 달라짐" }, { "axis": "motion", "topic": "중앙 이미지와 지면의 변화" }]
+    },
+    "impression": {
+      "certainty": "estimated",
+      "label": "행 번호보다 한 프로젝트의 장면이 먼저 남는다",
+      "reasoning": "중앙 이미지의 면적과 강조색이 양끝의 라벨보다 크고 선명하다. 뒤의 제목이 가려질 수 있어, 장면은 기억되더라도 프로젝트 이름을 같은 속도로 알아본다고 볼 수는 없다.",
+      "observations": [{ "axis": "color", "topic": "유채색은 중앙 콘텐츠에" }, { "axis": "layout", "topic": "제목 가운데를 가르는 프로젝트 컷" }]
+    },
+    "useCases": [{
+      "dimensions": ["mood", "style", "feel", "impression"],
+      "context": "소수 프로젝트를 한 항목씩 강조하는 작업 아카이브",
+      "goal": "목록 순서를 잃지 않으면서 지금 보고 있는 작업 한 건을 이미지로 기억하게 한다.",
+      "preserve": "행과 작은 라벨을 고정된 기준으로 삼고 한 번에 한 이미지만 크게 강조한다. 전체 프로젝트명은 겹침 바깥에서도 읽을 수 있게 둔다.",
+      "adapt": "밝기 반전이나 원본 컷은 복제하지 않는다. 마우스가 없어도 같은 콘텐츠가 보이고, 정지 목록으로도 이용할 수 있게 구현한다.",
+      "avoidWhen": "프로젝트를 빠르게 비교하거나 제목을 연속으로 읽어야 하는 목록에서는 커버가 이름 사이를 가르지 않게 한다.",
+      "verify": "터치와 키보드에서 모든 이름·링크가 노출되는지, 강조가 바뀌어도 행 순서와 읽는 위치가 사라지지 않는지 확인한다."
+    }]
+  },
   "limitations": ["공유 영상의 결과만 확인했다. 스크롤·포인터·전환 편집 중 무엇이 실제 트리거인지, 동작 줄이기와 키보드 지원, 구현 기술은 미확인이다."]
 }

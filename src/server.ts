@@ -7,7 +7,8 @@ import {
 } from "./catalog.js";
 import { VisualCatalog, visualGetShape, visualSearchShape } from "./visuals.js";
 import { reusePlatformSchema, technologyGetShape, visualPlanShape } from "./reuse.js";
-import { analysisAxes, analysisGetShape, analysisLogInfo, analysisSchema, analysisSearchShape } from "./analyses.js";
+import { analysisAxes, analysisCharacterShape, analysisGetShape, analysisLogInfo, analysisSchema, analysisSearchShape } from "./analyses.js";
+import { characterGuide, characterUri } from "./analysis-character.js";
 import { renderAnalysisLog } from "./analysis-logs.js";
 import { analysisFocuses, analysisScopeDocument, analysisScopeUri } from "./analysis-focuses.js";
 import { preferenceGetShape, preferenceUri } from "./analysis-preferences.js";
@@ -55,6 +56,7 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
       "These are mandatory cross-project anti-AI-template design rules, not optional cautions for one example. " +
       "Apply them to every design element in every project throughout selection, implementation, revision and visual verification. " +
       "Every tool response includes the mandatory document in designCautions; resource reads return it before the requested content. " +
+      "For using DESIGN from another project, read design://cross-project-workflow; its optional /map resource is a standalone interactive HTML diagram, not a live MCP client. " +
       "Do not default to boxed layouts, left accent bars or decorative diagonal arrows. " +
       "For design briefs, inspect the current project's needs, then use get_design_preferences and search_design_analyses with scope=preferred. Fetch only relevant evidence before making visual decisions. " +
       "Convert vague mood words into concrete choices, stating the supporting evidence, tradeoffs, and what to verify; do not turn one example into a universal preference. " +
@@ -69,6 +71,7 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
       "When choosing an implementation for a requested effect, search_design_technologies by purpose or platform, then get_design_technology for shortlisted options. Preserve the existing stack and prefer the simplest suitable approach; source-backed means documented example use, not installed or verified on the target. " +
       "Technology lookup does not load a framework, install a dependency, launch an editor, or validate hardware. The connected client must check available tools, permissions and compatibility before executing anything. " +
       "For accumulated reference observations, use search_design_analyses and get_design_analysis with an optional axis or specific focus (see design://analysis-scope), or browse design://analysis-logs/{axis}. Analysis observations retain evidence and uncertainty. " +
+      "In a full reference analysis, inspect the source and record element observations first. Then call analyze_design_character to prepare and validate mood, style, feel, impression and reuse cases; the client authors the interpretation. Search saved synthesis with the character and useCase filters. " +
       "New analyses are saved by the client through the documented local registration workflow, not by MCP. Read design://analysis-template, design://analysis-schema and design://analysis-workflow. " +
       "No external project access or runtime network requests are provided. Do not claim exhaustive coverage of every possible design.",
   });
@@ -80,6 +83,20 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
   }, uri => ({
     contents: [{ uri: uri.href, mimeType: "text/markdown", text: designCautions.document }],
   }));
+
+  server.registerResource("cross-project-workflow", "design://cross-project-workflow", {
+    title: "다른 프로젝트에서 DESIGN을 쓰는 흐름",
+    mimeType: "text/markdown",
+    description: "How the configured MCP server, optional repository lookup and target project fit together.",
+  }, uri => resourceResponse(uri.href, "text/markdown",
+    readFileSync(new URL("../docs/cross-project-design-flow.md", import.meta.url), "utf8")));
+
+  server.registerResource("cross-project-map", "design://cross-project-workflow/map", {
+    title: "DESIGN MCP 인터랙티브 조회 지도",
+    mimeType: "text/html",
+    description: "Save the standalone HTML and open it in a browser to follow the route. The map does not call MCP or edit files.",
+  }, uri => resourceResponse(uri.href, "text/html",
+    readFileSync(new URL("../docs/design-pointer-map.html", import.meta.url), "utf8")));
 
   server.registerTool("list_design_categories", {
     description: "List design categories, keywords, per-source counts, source baselines and reuse limitations. No full code is loaded into the response.",
@@ -100,7 +117,7 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
   }, args => respond(() => visuals.get(args)));
 
   server.registerTool("search_design_analyses", {
-    description: "Search saved observations. Use scope=preferred for user-provided taste references, axis for a section, or focus (e.g. lighting.shadows) for tagged findings only. Drafts are excluded by default.",
+    description: "Search saved observations by query (axis or focus narrows the findings), or use character and useCase to find interpreted mood/style/feel/impression and linked applications. Use scope=preferred for user-provided taste references. Drafts are excluded by default.",
     inputSchema: analysisSearchShape, annotations,
   }, args => respond(() => visuals.analyses.search(args)));
 
@@ -108,6 +125,11 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
     description: "Get a saved reference analysis, one axis, or just findings tagged with a focus and their evidence. Does not fetch or analyze a new external reference.",
     inputSchema: analysisGetShape, annotations,
   }, ({ id, axis, focus }) => respond(() => visuals.analyses.get(id, axis, focus)));
+
+  server.registerTool("analyze_design_character", {
+    description: "Prepare or validate a reference's mood, style, feel, impression and use cases against viewed evidence. Call with no arguments for the rubric, with id or a client-authored analysis record to see observations, or add character to review a proposed synthesis. No image inspection, network or saving is performed by the server.",
+    inputSchema: analysisCharacterShape, annotations,
+  }, args => respond(() => visuals.analyses.character(args)));
 
   server.registerTool("get_design_preferences", {
     description: "Read the evidence-ranked taste profile, optionally filtered by focus or contextKey. Distinguishes explicit feedback, recurring observations and tentative interpretations. This is not a trained model or an automatic design decision.",
@@ -126,6 +148,9 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
   server.registerResource("analysis-scope", analysisScopeUri, {
     title: "Detailed design analysis focuses", mimeType: "application/json",
   }, uri => resourceResponse(uri.href, "application/json", JSON.stringify({ document: analysisScopeDocument, focuses: analysisFocuses })));
+  server.registerResource("analysis-character", characterUri, {
+    title: "Evidence rubric for mood, style, feel, impression and applications", mimeType: "application/json",
+  }, uri => resourceResponse(uri.href, "application/json", JSON.stringify(characterGuide())));
   server.registerResource("analysis-schema", "design://analysis-schema", {
     title: "Reference analysis JSON Schema; cross-field checks also run on save", mimeType: "application/json",
   }, uri => resourceResponse(uri.href, "application/json", JSON.stringify(z.toJSONSchema(analysisSchema))));
@@ -295,7 +320,7 @@ export function createServer(catalog: DesignCatalog, visuals: VisualCatalog): Mc
         "Inspect the target project's existing UI, renderer, state, assets, tests and user edits. Preserve unrelated behavior.",
         "Call list_design_categories, search_design_visuals, get_design_visual and get_design_platform. Fetch get_design_technology only for selected implementations.",
         "Call create_visual_adoption_plan with explicit visualIds. Native/game guidance is not native code. Resolve sourceFiles and local-only exclusions before copying.",
-        "Check get_design_preferences and search_design_analyses with scope=preferred before choosing visual traits. Use get_design_analysis to inspect evidence. For a new reference, analyze color, layout and fonts separately, then follow design://analysis-workflow to persist client-authored JSON; MCP itself does not write files.",
+        "Check get_design_preferences and search_design_analyses with scope=preferred before choosing visual traits. Use get_design_analysis to inspect evidence. For a full new reference, analyze color, layout and fonts separately, then use analyze_design_character for grounded synthesis and follow design://analysis-workflow to persist client-authored JSON; MCP itself does not write files.",
         "The connected client must implement, build, run and visually verify the target. Report actual checks and unresolved API, asset-rights and device assumptions.",
       ].join("\n\n") },
     }],

@@ -725,6 +725,421 @@
         "additionalProperties": false
       }
     },
+    "character": {
+      "type": "object",
+      "properties": {
+        "viewedState": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600,
+          "description": "Inspected frame, viewport, or interaction state; not a claim about unseen views."
+        },
+        "mood": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "certainty": {
+                  "type": "string",
+                  "const": "estimated"
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "reasoning": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "observations": {
+                  "minItems": 1,
+                  "maxItems": 8,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "axis": {
+                        "type": "string",
+                        "enum": [
+                          "color",
+                          "layout",
+                          "typography",
+                          "text-placement",
+                          "subject-composition",
+                          "lighting",
+                          "motion",
+                          "texture",
+                          "interaction"
+                        ]
+                      },
+                      "topic": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 600
+                      }
+                    },
+                    "required": [
+                      "axis",
+                      "topic"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "certainty",
+                "label",
+                "reasoning",
+                "observations"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "certainty": {
+                  "type": "string",
+                  "const": "unknown"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                }
+              },
+              "required": [
+                "certainty",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "style": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "certainty": {
+                  "type": "string",
+                  "const": "estimated"
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "reasoning": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "observations": {
+                  "minItems": 1,
+                  "maxItems": 8,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "axis": {
+                        "type": "string",
+                        "enum": [
+                          "color",
+                          "layout",
+                          "typography",
+                          "text-placement",
+                          "subject-composition",
+                          "lighting",
+                          "motion",
+                          "texture",
+                          "interaction"
+                        ]
+                      },
+                      "topic": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 600
+                      }
+                    },
+                    "required": [
+                      "axis",
+                      "topic"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "certainty",
+                "label",
+                "reasoning",
+                "observations"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "certainty": {
+                  "type": "string",
+                  "const": "unknown"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                }
+              },
+              "required": [
+                "certainty",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "feel": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "certainty": {
+                  "type": "string",
+                  "const": "estimated"
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "reasoning": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "observations": {
+                  "minItems": 1,
+                  "maxItems": 8,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "axis": {
+                        "type": "string",
+                        "enum": [
+                          "color",
+                          "layout",
+                          "typography",
+                          "text-placement",
+                          "subject-composition",
+                          "lighting",
+                          "motion",
+                          "texture",
+                          "interaction"
+                        ]
+                      },
+                      "topic": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 600
+                      }
+                    },
+                    "required": [
+                      "axis",
+                      "topic"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "certainty",
+                "label",
+                "reasoning",
+                "observations"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "certainty": {
+                  "type": "string",
+                  "const": "unknown"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                }
+              },
+              "required": [
+                "certainty",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "impression": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "certainty": {
+                  "type": "string",
+                  "const": "estimated"
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "reasoning": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "observations": {
+                  "minItems": 1,
+                  "maxItems": 8,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "axis": {
+                        "type": "string",
+                        "enum": [
+                          "color",
+                          "layout",
+                          "typography",
+                          "text-placement",
+                          "subject-composition",
+                          "lighting",
+                          "motion",
+                          "texture",
+                          "interaction"
+                        ]
+                      },
+                      "topic": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 600
+                      }
+                    },
+                    "required": [
+                      "axis",
+                      "topic"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "certainty",
+                "label",
+                "reasoning",
+                "observations"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "certainty": {
+                  "type": "string",
+                  "const": "unknown"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                }
+              },
+              "required": [
+                "certainty",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "useCases": {
+          "maxItems": 5,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dimensions": {
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "mood",
+                    "style",
+                    "feel",
+                    "impression"
+                  ]
+                }
+              },
+              "context": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              },
+              "goal": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              },
+              "preserve": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              },
+              "adapt": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              },
+              "avoidWhen": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              },
+              "verify": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              }
+            },
+            "required": [
+              "dimensions",
+              "context",
+              "goal",
+              "preserve",
+              "adapt",
+              "avoidWhen",
+              "verify"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "viewedState",
+        "mood",
+        "style",
+        "feel",
+        "impression",
+        "useCases"
+      ],
+      "additionalProperties": false
+    },
     "preferenceFocuses": {
       "minItems": 1,
       "type": "array",

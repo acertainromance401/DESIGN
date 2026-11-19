@@ -23,6 +23,7 @@ for (const file of [
   "content/guides/layout.md", "content/design-cautions.md", "content/provenance.json",
   "content/library/index.json", "content/examples/modal-dialog.html", "content/design-reuse.json",
   "designs/index.html", "docs/design-inventory.md", "docs/platform-adoption.md", "docs/mcp-workflows.md",
+  "docs/cross-project-design-flow.md", "docs/design-pointer-map.html",
   "content/technology-options.json", "docs/technology-catalog.md",
   "content/analyses/halftone-talking-heads-study.json", "content/analysis-template.json", "content/analysis.schema.json",
   "content/analysis-exclusions.json", "docs/analyses/README.md", "docs/analyses/halftone-talking-heads-study.md",
@@ -111,6 +112,16 @@ try {
     assert.equal(rejected.structuredContent.error.code, "UNKNOWN_ANALYSIS");
     const analysisGuide = await client.readResource({ uri: "design://analysis-workflow" });
     assert.match(analysisGuide.contents[1].text, /analysis:save/u);
+    const workflow = await client.readResource({ uri: "design://cross-project-workflow" });
+    assert.match(workflow.contents[1].text, /\]\(\.\/design-pointer-map\.html\)/u);
+    const pointerMap = await client.readResource({ uri: "design://cross-project-workflow/map" });
+    assert.equal(pointerMap.contents[1].mimeType, "text/html");
+    assert.equal(pointerMap.contents[1].text, await readFile(path.join(installed, "docs/design-pointer-map.html"), "utf8"));
+    const moon = await client.callTool({ name: "search_design_analyses", arguments: {
+      scope: "preferred", character: { dimension: "mood", query: "고요 고립감" }, useCase: "전시 랜딩",
+    } });
+    assert.equal(moon.isError, undefined);
+    assert.ok(moon.structuredContent.results.some(result => result.id === "pinterest-moon-concentric-poster"));
     for (const { id } of counts.structuredContent.visualExamples.examples) {
       const { structuredContent: visual, isError } = await client.callTool({ name: "get_design_visual", arguments: { id, includeSource: true } });
       assert.equal(isError, undefined);

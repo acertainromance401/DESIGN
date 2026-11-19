@@ -24,7 +24,8 @@
 3. 분석 문장은 `confirmed` / `estimated` / `unknown`으로 구분하고 근거 ID를 연결합니다. 확인·추정에는 근거가 필수입니다. 모르는 색은 `null`을 사용합니다.
 4. 폰트의 CSS 선언 `declaredFamilies`와 실제 사용 서체 `renderedFamily`를 구분합니다. 실제 서체는 브라우저 관찰 근거가 있는 `rendered-confirmed`일 때만 기록합니다. CSS만 있으면 `declared-only`, 이미지 유추는 `estimated`로 두고 실제 서체는 `null`로 둡니다. 추정 후보·유사 대안은 `notes`에 명시합니다. 한글/영문 fallback, 웨이트·역할·출처·라이선스와 미확인 사항도 기록합니다.
 5. 각 축의 `reuse`에 독립적으로 가져갈 원칙을 적습니다. **실제로 선택을 바꾸는 관찰**만 `preferenceSignals`로 연결합니다. `limitations`에는 미검증 항목을 남깁니다.
-6. 작업 중에는 `draft`, 요청 범위의 관찰을 검토한 뒤에는 `analyzed`로 저장합니다. `analyzed`라도 개별 항목은 미확인일 수 있으며, 상태가 실제 렌더링 검증 완료를 뜻하지 않습니다. 초안 여부·폰트 미확인과 사용자의 전체 디자인 선호는 별개입니다.
+6. 전체 분석이면 `analyze_design_character`로 분위기·스타일·느낌·인상과 활용 방안을 검토하고 같은 JSON의 `character`에 추가합니다. 일부 요소만 분석한 경우에는 전체 인상을 저장하지 않습니다.
+7. 작업 중에는 `draft`, 요청 범위의 관찰을 검토한 뒤에는 `analyzed`로 저장합니다. `analyzed`라도 개별 항목은 미확인일 수 있으며, 상태가 실제 렌더링 검증 완료를 뜻하지 않습니다. 초안 여부·폰트 미확인과 사용자의 전체 디자인 선호는 별개입니다.
 
 범위를 지정하지 않으면 기본 세 축을 작성하고 자료에 해당하는 세부 축을 덧붙입니다. 일부 항목만 분석할 때는 `analysisScope`에 분석한 상위 `axis`만 적습니다. 예를 들어 색감만 검토했으면 `"analysisScope": ["color"]`와 `color`를 남기고 `layout`, `typography`, `elements`는 제외합니다. 완료한 색감 기록은 그대로 `analyzed`로 저장할 수 있고, 색감 로그에만 들어갑니다. `analysisScope`는 분석 범위이고, `preferenceFocuses`는 사용자가 좋다고 지정한 세부 선호 범위입니다.
 
@@ -44,6 +45,14 @@
 - **반복 판단:** 의미가 같은 특성·맥락에만 같은 `key`·`contextKey`를 재사용합니다. 두 개 이상의 독립 출처가 같은 `focus`·`key`·`contextKey`·`direction`을 뒷받침할 때 `recurring`으로 표시됩니다. 동일 자료의 다른 프레임은 한 출처입니다. 크롭·재게시처럼 같은 디자인에 서로 다른 경로가 있으면 모든 관련 기록에 같은 `source.referenceGroup`을 넣습니다. 비슷해 보여도 맥락이 다르거나 피드백이 충돌하면 별도로 남깁니다.
 
 새 디자인 요청에서는 **현재 요청·프로젝트 기능·접근성 → 관련 명시 피드백 → 반복 관찰 → 단일 예시 가설** 순서로 판단합니다. 예를 들어 “따뜻하지만 장식적이지 않게”라면 하프톤 예시의 밝고 따뜻한 바탕과 좁은 저채도 포인트만 시도할 수 있습니다. 도트나 얼굴까지 가져올 이유는 없고, 본문과 버튼의 대비는 별도로 검수합니다. 첫 근거가 약하면 되돌리기 쉬운 선택으로 시작하고, 결과 또는 후속 피드백으로 기준을 보완합니다. 이는 학습 모델이 아니라 근거가 쌓일 때 우선순위를 다시 계산하는 규칙입니다.
+
+### 분위기·스타일·느낌·인상과 활용
+
+1. `analyze_design_character`에 `record`(새 분석 JSON) 또는 `id`(기존 분석)를 보냅니다. 인수 없이 부르거나 `design://analysis-character`를 읽으면 네 차원의 질문·경계를 확인할 수 있습니다.
+2. 확인한 프레임·뷰포트·상태를 `viewedState`에 적습니다. 네 차원마다 `estimated`이면 짧은 판단(`label`), 시각적 이유(`reasoning`), 기존 관찰의 `axis`와 정확한 `topic`(`observations`)을 적습니다. 분위기에는 다른 관찰 두 개 이상을 연결합니다. `unknown`에는 이유만 기록하고 보이지 않은 상태나 의도를 보충하지 않습니다.
+3. 활용 방안(`useCases`)은 판단한 차원에 연결합니다. **맥락, 목표, 유지할 관계, 바꿔도 되는 표현, 피할 조건, 검수 기준**을 적습니다. 적합한 활용이 보이지 않으면 무리하게 쓰지 않고 한계에 이유를 남깁니다.
+4. `record` 또는 `id`에 작성한 `character`를 함께 보내 검토합니다. 새 `record` 안에 `character`를 넣어 보낼 수도 있습니다. 도구는 불명확한 관찰 참조, 시각 자료 없이 소스 코드만 연결한 판단, 미확인 판단에 연결한 활용을 거부합니다. **입력한 관찰이 이미지와 일치하는지 판정하는 비전 모델은 아닙니다.** 자료 열람과 해석은 연결된 AI가, 구조·근거 연결 검증은 MCP가 담당합니다.
+5. 검증한 `character`를 JSON에 합쳐 아래 명령으로 저장합니다. 보고서는 자동 생성됩니다. `character`가 없는 기존 기록은 그대로 유효하며 근거가 충분할 때만 보강합니다. [〈Moon〉 분석 예시](./analyses/pinterest-moon-concentric-poster.md#design-character)를 참고하세요.
 
 날짜는 `YYYY-MM-DD`입니다. `createdAt`은 처음 작성일, `updatedAt`은 실제 수정일입니다. `id`는 영문 소문자로 시작하며 영문 소문자·숫자·하이픈만 사용합니다.
 
@@ -79,8 +88,9 @@ npm run analysis:save -- /absolute/path/to/revised-reference.json --replace
 ## MCP에서 조회
 
 - `get_design_preferences` 또는 `design://design-preferences`: 취향 프로필. 도구는 `focus` 또는 `contextKey`로 좁힐 수 있습니다. 프로필은 선택의 근거를 제공하며 현재 요청에 맞는지는 연결된 AI가 판단합니다.
-- `search_design_analyses`: 저장된 예시 검색. 디자인 취향을 찾을 때는 `scope: "preferred"`를 사용합니다. `axis`를 지정하면 그 축의 내용만, `focus`를 지정하면 해당 태그가 붙은 관찰 제목·내용만 검색합니다. 작품명으로 찾으려면 `axis`·`focus`를 생략하고, ID를 이미 알면 `get_design_analysis`를 사용합니다. `status`(`analyzed | draft | all`), `visualId`, `limit`(최대 10), `offset`으로도 범위를 좁힙니다.
+- `search_design_analyses`: 저장된 예시 검색. 일반 `query`에 `axis`를 지정하면 그 축의 내용만, `focus`를 지정하면 해당 태그가 붙은 관찰 제목·내용만 검색합니다. `character.query`는 한 차원의 해석 안에서, `useCase`는 한 활용의 맥락·목표 안에서 모든 검색어가 있는지 확인합니다. 두 조건을 함께 주면 활용에 해당 해석이 연결되어 있어야 합니다. `scope: "preferred"`는 사용자 제공 선호 레퍼런스만 검색하며, 특정 요소만 선호한다고 지정한 예시는 종합 해석 검색에서 제외합니다. `status`(`analyzed | draft | all`), `visualId`, `limit`(최대 10), `offset`으로도 좁힙니다.
 - `get_design_analysis`: `id`만 주면 전체 분석, `axis`는 해당 상위 항목, `focus`는 태그가 붙은 관찰과 그 근거만 반환합니다. 관찰이 없는 경우 `ANALYSIS_AXIS_NOT_RECORDED` 또는 `ANALYSIS_FOCUS_NOT_RECORDED`로 알려줍니다. `focus`만으로 상위 항목을 알 수 있으므로 `axis`를 생략할 수 있습니다.
+- `analyze_design_character`: 기준 안내, 분석 입력의 근거 준비와 종합 결과 검증, 저장된 결과와 연결 근거 조회. 자체적으로 URL을 열거나 DB에 쓰지 않습니다.
 - `design://analyses`: 저장 기록 목록과 초안/분석 수, 요소별 `logs` 목록.
 - `design://analysis-scope`: 세부 기준 ID와 관찰 기준 목록.
 - `design://analysis-logs/{axis}`: 해당 요소의 사용자 선호 Markdown 로그. 예: `design://analysis-logs/lighting`. 색감 리소스는 8가지 비교표가 아닌, 그 아래의 누적 구역을 반환합니다.
@@ -96,6 +106,12 @@ npm run analysis:save -- /absolute/path/to/revised-reference.json --replace
 
 ```json
 { "tool": "get_design_analysis", "arguments": { "id": "halftone-talking-heads-study", "focus": "lighting.shadows" } }
+```
+
+```json
+{ "tool": "search_design_analyses", "arguments": {
+  "character": { "dimension": "mood", "query": "고요 고립감" }, "useCase": "전시 랜딩"
+} }
 ```
 
 초안은 기본 검색에서 제외됩니다. 찾아보려면 `status: "draft"` 또는 `"all"`을 명시합니다. 검색은 키워드 기반이며 이미지 유사도·자동 색상 추출·벡터 검색이 아닙니다.

@@ -1,6 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import { z } from "zod";
 import { DesignError } from "./catalog.js";
+import { characterDimensions, characterGuide, characterUri, designCharacterSchema } from "./analysis-character.js";
 import { analysisFocusInfo, analysisFocusSchema, analysisScopeUri, type AnalysisFocus } from "./analysis-focuses.js";
 import {
   analysisExclusionsSchema, buildPreferenceProfile, isPreferredReference, preferenceKeyword, preferenceSignalSchema,
@@ -22,6 +23,7 @@ const coreAxes = ["color", "layout", "typography"] as const;
 export const elementAxes = ["text-placement", "subject-composition", "lighting", "motion", "texture", "interaction"] as const;
 export const analysisAxes = [...coreAxes, ...elementAxes] as const;
 export type AnalysisAxis = typeof analysisAxes[number];
+const characterSchema = designCharacterSchema(analysisAxes);
 const axisDetails: Record<AnalysisAxis, { title: string; anchor: string }> = {
   color: { title: "색감 분석", anchor: "색감-분석" },
   layout: { title: "레이아웃 분석", anchor: "레이아웃-분석" },
@@ -85,6 +87,7 @@ const analysisRecord = z.strictObject({
     })),
   }).optional(),
   elements: z.partialRecord(z.enum(elementAxes), section).optional(),
+  character: characterSchema.optional(),
   preferenceFocuses: z.array(analysisFocusSchema).min(1).optional(),
   preferenceSignals: z.array(preferenceSignalSchema).optional(),
   limitations: z.array(text).min(1),
@@ -116,6 +119,38 @@ export const analysisSchema = analysisRecord.superRefine((record, context) => {
     if (!observed) {
       if (scope?.has(axis) ?? isCoreAxis) issue(path, "Section is required for the analysis scope");
       continue;
+    }
+    if (record.character) {
+      if (coreAxes.some(axis => !record[axis])) {
+        issue(["character"], "Character synthesis requires color, layout and typography sections; do not infer it from a partial analysis");
+      }
+      const observations = collectCharacterObservations(record);
+      for (const dimension of characterDimensions) {
+        const item = record.character[dimension];
+        if (item.certainty === "unknown") continue;
+        const seen = new Set<string>();
+        for (const [index, reference] of item.observations.entries()) {
+          const path = ["character", dimension, "observations", index];
+          const key = JSON.stringify([reference.axis, reference.topic]);
+          if (seen.has(key)) issue(path, "Duplicate observation reference");
+          seen.add(key);
+          const matches = observations.filter(observation =>
+            observation.axis === reference.axis && observation.topic === reference.topic);
+          if (matches.length !== 1) {
+            issue(path, "Reference must resolve to a single non-unknown observation with viewed evidence");
+          }
+        }
+        if (dimension === "mood" && seen.size < 2) {
+          issue(["character", dimension, "observations"], "Mood requires at least two distinct observations");
+        }
+      }
+      record.character.useCases.forEach((useCase, index) => {
+        const path = ["character", "useCases", index, "dimensions"];
+        if (new Set(useCase.dimensions).size !== useCase.dimensions.length) issue(path, "Duplicate character dimension");
+        if (useCase.dimensions.some(dimension => record.character?.[dimension].certainty !== "estimated")) {
+          issue(path, "Use cases must be grounded in interpreted dimensions, not unknown dimensions");
+        }
+      });
     }
     if (scope && !scope.has(axis)) issue(path, "Section is outside the analysis scope");
     if (record.status === "analyzed" && observed.findings.length === 0) {
@@ -189,8 +224,29 @@ export function getAnalysisSection(record: DesignAnalysis, axis: AnalysisAxis) {
   return axis === "color" || axis === "layout" || axis === "typography" ? record[axis] : record.elements?.[axis];
 }
 
+function collectCharacterObservations(record: DesignAnalysis) {
+  const viewedEvidence = new Set(record.evidence.filter(item => item.kind !== "source-code").map(item => item.id));
+  return analysisAxes.flatMap(axis => {
+    const findings = getAnalysisSection(record, axis)?.findings ?? [];
+    return findings.filter(item => item.certainty !== "unknown" &&
+      item.evidenceIds.some(id => viewedEvidence.has(id)) &&
+      findings.filter(other => other.topic === item.topic).length === 1,
+    ).map(item => ({ axis, ...item }));
+  });
+}
+
+const searchQuery = z.string().trim().min(1).max(200);
+export const analysisCharacterShape = {
+  id: slug.optional().describe("Saved reference ID. Omit for a new record or the general rubric."),
+  record: z.record(z.string(), z.unknown()).optional().describe("New client-authored analysis JSON with observations and evidence. Do not combine with id."),
+  character: characterSchema.optional().describe("Optional synthesis to review against id or record. Omit to inspect the available observations and rubric."),
+};
+
 export const analysisSearchShape = {
-  query: z.string().trim().min(1).max(200),
+  query: searchQuery.optional().describe("Keyword query for saved element observations or reference metadata. Provide this, character, or useCase."),
+  character: z.strictObject({ query: searchQuery, dimension: z.enum(characterDimensions).optional() }).optional()
+    .describe("Match the words within one interpreted dimension (mood, style, feel or impression)."),
+  useCase: searchQuery.optional().describe("Match the words within a single use case's context and goal, not avoid conditions."),
   axis: z.enum(["all", ...analysisAxes]).default("all"),
   focus: analysisFocusSchema.optional(),
   status: z.enum(["all", "draft", "analyzed"]).default("analyzed"),
@@ -201,6 +257,15 @@ export const analysisSearchShape = {
 };
 export const analysisGetShape = { id: slug, axis: z.enum(analysisAxes).optional(), focus: analysisFocusSchema.optional() };
 const normalized = (value: string) => value.normalize("NFKC").toLowerCase();
+function queryTerms(query: string) {
+  const terms = [...new Set(normalized(query).match(/[\p{L}\p{N}]+/gu) ?? [])];
+  if (terms.length === 0) throw new DesignError("EMPTY_ANALYSIS_QUERY", "Use a color, layout, font name or descriptive keyword.");
+  return terms;
+}
+function matchesTerms(value: string, terms: string[]) {
+  const body = normalized(value);
+  return terms.every(term => body.includes(term));
+}
 const sectionValues = (record: DesignAnalysis) =>
   [record.color, record.layout, record.typography, ...Object.values(record.elements ?? {})].filter(section => section !== undefined);
 
@@ -235,6 +300,7 @@ export class AnalysisCatalog {
       id: record.id, title: record.title, summary: record.summary,
       status: record.status, updatedAt: record.updatedAt, visualId: record.visualId ?? null,
       ...(record.preferenceFocuses ? { preferenceFocuses: record.preferenceFocuses } : {}),
+      ...(record.character ? { hasCharacter: true } : {}),
       uri: `design://analyses/${record.id}`, file: `content/analyses/${record.id}.json`,
       document: `docs/analyses/${record.id}.md`, axes: analysisAxes.filter(axis => !!getAnalysisSection(record, axis)),
     };
@@ -253,8 +319,9 @@ export class AnalysisCatalog {
       analysisCount: this.entries.length,
       analyzedCount: this.entries.filter(item => item.status === "analyzed").length,
       draftCount: this.entries.filter(item => item.status === "draft").length,
+      characterCount: this.entries.filter(item => item.status === "analyzed" && item.character).length,
       uri: "design://analyses", templateUri: "design://analysis-template", schemaUri: "design://analysis-schema",
-      recordingGuideUri: "design://analysis-workflow", scopeUri: analysisScopeUri, preferenceUri,
+      recordingGuideUri: "design://analysis-workflow", scopeUri: analysisScopeUri, preferenceUri, characterUri,
       analyses: this.entries.map(item => this.summary(item)),
       logs: analysisAxes.map(axis => ({ ...analysisLogInfo(axis), entryCount: this.logEntries(axis).length })),
       notice: "Saved reference observations, not implementation or automatic target inspection. Drafts are excluded from search by default.",
@@ -270,9 +337,46 @@ export class AnalysisCatalog {
       .map(item => JSON.stringify([item.keywords, ...sectionValues(item)])).join(" ");
   }
 
-  get(id: string, axis?: AnalysisAxis, focus?: AnalysisFocus) {
+  private lookup(id: string) {
     const record = this.entries.find(item => item.id === id);
     if (!record) throw new DesignError("UNKNOWN_ANALYSIS", `Unknown analysis "${id}". Call search_design_analyses.`);
+    return record;
+  }
+
+  character({ id, record: input, character }: z.infer<z.ZodObject<typeof analysisCharacterShape>>) {
+    if ((id && input) || (character && !id && !input) || (character && input?.character !== undefined)) {
+      throw new DesignError("INVALID_CHARACTER_INPUT", "Pass a saved id or a new record, not both. Supply a synthesis once, with its source record.");
+    }
+    const guide = characterGuide();
+    if (!id && !input) return { mode: "guide", ...guide };
+    const saved = id ? this.lookup(id) : undefined;
+    const result = analysisSchema.safeParse(character ? { ...(saved ?? input), character } : saved ?? input);
+    if (!result.success) {
+      throw new DesignError("INVALID_CHARACTER_RECORD", result.error.issues.map(issue =>
+        `${issue.path.join(".") || "record"}: ${issue.message}`).join("; "));
+    }
+    const record = result.data;
+    this.assertEligible(record);
+    const observations = collectCharacterObservations(record);
+    const referenced = record.character && new Set(characterDimensions.flatMap(dimension => {
+      const item = record.character?.[dimension];
+      return item?.certainty === "estimated"
+        ? item.observations.map(reference => JSON.stringify([reference.axis, reference.topic])) : [];
+    }));
+    const selected = observations.filter(item => !referenced || referenced.has(JSON.stringify([item.axis, item.topic])));
+    const usedEvidence = new Set(selected.flatMap(item => item.evidenceIds));
+    return {
+      mode: (character || input?.character ? "reviewed" : record.character ? "saved" : "prepare"),
+      id: record.id, title: record.title, status: record.status, ...guide,
+      fullAnalysis: coreAxes.every(axis => !!record[axis]), observations: selected,
+      evidence: record.evidence.filter(item => usedEvidence.has(item.id)),
+      ...(record.character ? { character: record.character } : {}),
+      limitations: record.limitations,
+    };
+  }
+
+  get(id: string, axis?: AnalysisAxis, focus?: AnalysisFocus) {
+    const record = this.lookup(id);
     const focusDefinition = resolveFocus(axis, focus);
     const selectedAxis = focusDefinition?.axis ?? axis;
     const notice = "Font declarations, rendered confirmation and estimates remain distinct. No external source was fetched by this request.";
@@ -302,14 +406,32 @@ export class AnalysisCatalog {
     const args = z.object(analysisSearchShape).parse(input);
     const focus = resolveFocus(args.axis, args.focus);
     const axis = focus?.axis ?? args.axis;
-    const terms = [...new Set(normalized(args.query).match(/[\p{L}\p{N}]+/gu) ?? [])];
-    if (terms.length === 0) throw new DesignError("EMPTY_ANALYSIS_QUERY", "Use a color, layout, font name or descriptive keyword.");
+    if (!args.query && (!args.character && !args.useCase || axis !== "all")) {
+      throw new DesignError("EMPTY_ANALYSIS_QUERY", "Pass a keyword query, character filter, or use case. Axis and focus filters require a keyword query.");
+    }
+    const terms = args.query ? queryTerms(args.query) : [];
+    const characterTerms = args.character && queryTerms(args.character.query);
+    const useCaseTerms = args.useCase && queryTerms(args.useCase);
     const ranked = this.entries.filter(item =>
       (args.status === "all" || item.status === args.status) && (!args.visualId || item.visualId === args.visualId) &&
       (args.scope === "all" || isPreferredReference(item)),
     ).flatMap(record => {
       const metadata = normalized(`${record.id} ${record.title} ${record.summary} ${record.keywords.join(" ")}`);
       const scopedFocuses = args.scope === "preferred" ? record.preferenceFocuses : undefined;
+      if (characterTerms || useCaseTerms) {
+        const character = record.character;
+        if (!character || scopedFocuses) return [];
+        const dimensions = args.character?.dimension ? [args.character.dimension] : characterDimensions;
+        const matchedDimensions = characterTerms ? dimensions.filter(dimension => {
+          const item = character[dimension];
+          return item.certainty === "estimated" && matchesTerms(`${item.label} ${item.reasoning}`, characterTerms);
+        }) : undefined;
+        if (matchedDimensions?.length === 0) return [];
+        if (useCaseTerms && !character.useCases.some(useCase =>
+          matchesTerms(`${useCase.context} ${useCase.goal}`, useCaseTerms) &&
+          (!matchedDimensions || useCase.dimensions.some(dimension => matchedDimensions.includes(dimension))))) return [];
+        if (!terms.length) return [{ record, score: 1 }];
+      }
       const observed = scopedFocuses
         ? (axis === "all" ? sectionValues(record) : [getAnalysisSection(record, axis)])
           .flatMap(section => (section?.findings ?? []).filter(item =>
@@ -326,11 +448,13 @@ export class AnalysisCatalog {
     }).filter(item => item.score > 0).sort((a, b) => b.score - a.score || a.record.id.localeCompare(b.record.id));
     const end = args.offset + args.limit;
     return {
-      query: args.query, axis, ...(focus ? { focus: focus.id } : {}), status: args.status, scope: args.scope,
+      ...(args.query ? { query: args.query } : {}),
+      ...(args.character ? { character: args.character } : {}), ...(args.useCase ? { useCase: args.useCase } : {}),
+      axis, ...(focus ? { focus: focus.id } : {}), status: args.status, scope: args.scope,
       total: ranked.length, offset: args.offset,
       nextOffset: end < ranked.length ? end : null,
       results: ranked.slice(args.offset, end).map(item => this.summary(item.record)),
-      matching: "Deterministic keyword search. Axis filters search one section; focus filters search only the tagged finding text.",
+      matching: "Deterministic keyword search. Axis/focus filters restrict query. Character and use-case filters require every keyword within one interpreted dimension or one stated use case, respectively. When combined, the use case must cite a matching dimension.",
     };
   }
 }

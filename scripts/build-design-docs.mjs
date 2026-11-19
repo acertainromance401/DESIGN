@@ -5,6 +5,7 @@ import { z } from "zod";
 import { analysisAxes, analysisLogInfo, analysisSchema, elementAxes, getAnalysisSection } from "../dist/analyses.js";
 import { renderAnalysisLog, renderFindingGroups } from "../dist/analysis-logs.js";
 import { analysisFocuses, analysisScopeDocument, analysisScopeUri } from "../dist/analysis-focuses.js";
+import { characterDimensions, characterRubric, characterUri } from "../dist/analysis-character.js";
 import { preferenceDocument, preferenceUri } from "../dist/analysis-preferences.js";
 import { technologyDocument, technologyIndexUri } from "../dist/technologies.js";
 
@@ -146,6 +147,10 @@ outputs.set(analysisIndex, [
   "| 항목별 문서 | 기록 수 | MCP 리소스 |", "| --- | ---: | --- |",
   ...catalog.analyses.list().logs.map(({ title, document, documentAnchor, entryCount, uri }) =>
     `| ${link(analysisIndex, `${document}${documentAnchor}`, title)} | ${entryCount} | \`${uri}\` |`),
+  "## 분위기·스타일·느낌·인상과 활용",
+  `${link(analysisIndex, "docs/recording-analyses.md#분위기스타일느낌인상과-활용", "분석·검증 방법")} · MCP: \`${characterUri}\``,
+  ...catalog.analyses.entries.filter(item => item.status === "analyzed" && item.character).map(item =>
+    `- ${link(analysisIndex, `docs/analyses/${item.id}.md#design-character`, item.title)}`),
   "## 예시별 상세 보고서",
   `전체 ${catalog.analyses.entries.length}건 / 분석 ${catalog.analyses.list().analyzedCount}건 / 초안 ${catalog.analyses.list().draftCount}건. 초안은 MCP 기본 검색에서 제외됩니다. 분석 상태도 개별 근거 밖의 렌더링·폰트 확인을 뜻하지 않습니다.`,
   "| 예시 | 상태 | 수정일 | 연결 시안 |", "| --- | --- | --- | --- |",
@@ -190,6 +195,29 @@ for (const record of catalog.analyses.entries) {
       return [`<a id="${anchor}"></a>\n\n## ${title}`, element.summary,
         observations(element), ...(element.reuse.length ? [heading("재사용", element.reuse)] : [])];
     }),
+    ...(record.character ? [
+      '<a id="design-character"></a>\n\n## 분위기·스타일·느낌·인상',
+      `**확인 범위:** ${record.character.viewedState}`,
+      ...characterDimensions.map(dimension => {
+        const { title } = characterRubric[dimension];
+        const item = record.character[dimension];
+        if (item.certainty === "unknown") return `### ${title}\n\n**미확인:** ${item.reason}`;
+        const sources = item.observations.map(({ axis, topic }) => {
+          const finding = getAnalysisSection(record, axis).findings.find(item => item.topic === topic);
+          const { anchor } = analysisLogInfo(axis);
+          return `[${topic}](#${anchor}) · 근거: ${finding.evidenceIds.join(", ")}`;
+        });
+        return `### ${title}\n\n**해석: ${item.label}**\n\n${item.reasoning}\n\n${bullets(sources)}`;
+      }),
+      ...(record.character.useCases.length ? [
+        "## 활용 방안",
+        ...record.character.useCases.map(item => `### ${item.context}\n\n${bullets([
+          `연결한 해석: ${item.dimensions.map(dimension => characterRubric[dimension].title).join(", ")}`,
+          `목표: ${item.goal}`, `유지할 것: ${item.preserve}`, `바꿔도 되는 것: ${item.adapt}`,
+          `피할 조건: ${item.avoidWhen}`, `검수: ${item.verify}`,
+        ])}`),
+      ] : []),
+    ] : []),
     ...(record.preferenceSignals?.length ? [
       "## 취향과 디자인 결정",
       ...record.preferenceSignals.map(signal => [

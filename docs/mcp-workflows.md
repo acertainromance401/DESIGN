@@ -1,5 +1,7 @@
 # 외부 프로젝트에서 디자인 MCP 활용하기
 
+처음이라면 [요청부터 조회·적용까지 흐름도](./cross-project-design-flow.md)에서 MCP와 저장소의 역할을 먼저 확인하세요.
+
 ## 1. 연결과 업데이트
 
 이 업데이트는 로컬 소스·빌드·패키지에 적용됩니다. npm 공개 배포나 이미 실행 중인 MCP 프로세스 교체를 자동 수행하지 않습니다.
@@ -57,6 +59,8 @@ Copilot Global은 위 구성이 아닌 [범용 설정 예](../examples/generic-m
 ### 참고 예시 분석을 축적하고 다시 찾기
 
 `list_design_categories.visualExamples.analysisLibrary` 또는 `design://analyses`에서 기록 수와 분석 목록, 요소별 `logs`를 확인합니다. `search_design_analyses`와 `get_design_analysis`에 `axis`를 주면 상위 항목을, `focus: "lighting.shadows"`처럼 `focus`를 주면 태그된 관찰만 조회합니다. 세부 범위는 `design://analysis-scope`에서 확인합니다. 초안은 기본 검색에서 제외되며, 기존 시안 상세의 `referenceAnalyses`와도 연결됩니다.
+
+전체 분석에서는 `analyze_design_character`로 분위기·스타일·느낌·인상과 활용 방안을 기존 관찰에 연결합니다. 기준과 근거 연결은 MCP가 검증하고, 자료 열람·해석과 저장은 연결된 AI가 담당합니다. 저장된 결과는 `search_design_analyses`의 `character`와 `useCase`로 함께 찾을 수 있습니다. [기록 예시와 사용법](./recording-analyses.md#분위기스타일느낌인상과-활용).
 
 새 예시를 받으면 `design://analysis-template`, `design://analysis-schema`, `design://analysis-workflow`를 참고해 분석하고 기본으로 등록합니다. 범위 지정이 없으면 색감·레이아웃·폰트를 나누고, “색감만”처럼 지정하면 그 항목만 분석·저장합니다. 연결된 AI가 JSON을 작성하고 DESIGN 소스 저장소에서 등록 명령을 실행해야 보존됩니다. MCP가 대화·이미지를 자동 저장하거나 원격 저장소에 쓰지는 않습니다. [작성·등록·MCP 재시작 안내](./recording-analyses.md)를 따릅니다. npm 설치본은 기록을 포함한 배포 시점의 스냅샷입니다.
 

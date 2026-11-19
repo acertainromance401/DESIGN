@@ -43,5 +43,41 @@
     "motion": { "summary": "전경 이동과 원근 변화가 프로젝트 그리드 출현으로 연결된다.", "findings": [{ "focus": "motion.transition", "topic": "썸네일 띠에서 2행 목록으로", "observation": "초반의 빈 무대와 제목 뒤로 작은 썸네일 띠가 나타난다. 중간에는 전경의 화면들이 커지고 위쪽으로 빠지며, 후반에는 여섯 작업이 3열 2행으로 정리된다.", "certainty": "confirmed", "evidenceIds": ["pin-video"] }], "reuse": ["모션의 마지막 상태가 다음 탐색에 필요한 목록을 드러내게 설계한다. 동작 줄이기에서는 해당 목록으로 바로 도달할 수 있게 한다."] }
   },
   "preferenceSignals": [{ "key": "foreground-crosses-type", "focus": "layout.layering", "direction": "prefer", "basis": "inferred", "interpretation": "프로젝트가 제목 앞을 통과하는 전환이 정적인 썸네일 목록과 다른 깊이를 만든 점이 선호에 기여했을 수 있다.", "contextKey": "image-led-web", "context": "작업 화면 자체를 시각 피사체로 쓰는 포트폴리오 도입.", "application": "작업을 소개하는 구간에만 원근과 겹침을 주고, 최종 탐색 목록은 읽기 쉽게 남긴다.", "tradeoff": "동작 줄이기와 작은 화면에서는 중간 레이어를 생략할 수 있어야 한다.", "evidenceIds": ["pin-video"] }],
+  "character": {
+    "viewedState": "공개 미리보기와 14.03초 소개 영상의 표본 프레임. Details.so 바깥 프레임과 내부 작업 무대를 구분.",
+    "mood": {
+      "certainty": "estimated",
+      "label": "빈 무대가 활기를 얻고 정돈으로 돌아온다",
+      "reasoning": "무채색 지면에 작은 유채색 작업물이 들어오고 전경으로 커지면서 활기가 생긴다. 마지막에는 2행 목록으로 정리돼 에너지가 계속 산만하게 남지 않는다.",
+      "observations": [{ "axis": "color", "topic": "무채색 UI와 유채색 작업물" }, { "axis": "motion", "topic": "썸네일 띠에서 2행 목록으로" }]
+    },
+    "style": {
+      "certainty": "estimated",
+      "label": "작업 화면 자체를 원근 레이어로 쓰는 포트폴리오",
+      "reasoning": "가는 대형 제목을 배경에 두고 작업 패널의 크기·각도와 겹침으로 앞뒤를 나눈다. 장식으로 전시 공간을 덧붙이기보다 작업 화면이 원근을 만든다.",
+      "observations": [{ "axis": "layout", "topic": "전경 썸네일과 제목의 겹침" }, { "axis": "subject-composition", "topic": "가까운 작업과 먼 작업의 크기·각도 차" }]
+    },
+    "feel": {
+      "certainty": "estimated",
+      "label": "멀리 떠 있던 화면이 가까워졌다가 평면으로 가라앉는다",
+      "reasoning": "작고 기울어진 패널과 크게 보이는 전경 패널의 차가 접근감을 준다. 클립 후반의 바둑판형 정렬은 거리 차를 없애 화면이 다시 평평하게 느껴진다.",
+      "observations": [{ "axis": "subject-composition", "topic": "가까운 작업과 먼 작업의 크기·각도 차" }, { "axis": "motion", "topic": "썸네일 띠에서 2행 목록으로" }]
+    },
+    "impression": {
+      "certainty": "estimated",
+      "label": "제목을 읽다가 전경 작업에 시선이 옮겨가고 목록에 도착한다",
+      "reasoning": "처음에는 빈 지면의 제목이 기준점이고, 중간에는 겹쳐진 헤드폰 패널이 그 자리를 가져간다. 영상의 마지막 그리드는 다시 여러 작업을 동등하게 훑을 수 있는 상태로 보인다.",
+      "observations": [{ "axis": "layout", "topic": "전경 썸네일과 제목의 겹침" }, { "axis": "motion", "topic": "썸네일 띠에서 2행 목록으로" }]
+    },
+    "useCases": [{
+      "dimensions": ["mood", "style", "feel", "impression"],
+      "context": "작업물을 먼저 소개한 뒤 바로 탐색하는 포트폴리오 입구",
+      "goal": "다양한 작업의 존재를 보여 주고 같은 흐름에서 읽기 쉬운 목록으로 안내한다.",
+      "preserve": "도입에만 앞뒤 거리와 크기 차를 쓰고, 종료 상태에는 작업명·링크가 있는 일반 그리드를 남긴다.",
+      "adapt": "패널 수와 이미지 종횡비는 실제 콘텐츠에 맞추고 작은 화면이나 동작 줄이기에서는 중간 연출을 생략한다.",
+      "avoidWhen": "작업명 탐색이나 키보드 접근이 우선인 화면에서 원근 장면을 거쳐야만 목록에 도달하는 구조를 쓰지 않는다.",
+      "verify": "애니메이션을 끄거나 건너뛰어도 같은 작업을 찾을 수 있는지, 포커스된 링크가 겹친 패널에 가리지 않는지 확인한다."
+    }]
+  },
   "limitations": ["외부 소개 영상의 시각 순서를 관찰했다. 스크롤·호버 등 실제 입력 트리거와 WebGL·CSS 등의 기술, 서체, 접근성 동작은 미확인이다."]
 }

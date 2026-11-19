@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -63,7 +63,7 @@ test("real stdio client discovers and calls tools, resources and prompts from an
   const firstLookup = await client.callTool({ name: "get_design_visual", arguments: { id: "black-minimal" } });
   assertCautions(firstLookup);
   const { tools } = await client.listTools();
-  assert.equal(tools.length, 13);
+  assert.equal(tools.length, 14);
   assert.ok(tools.every(({ annotations }) => annotations.readOnlyHint && !annotations.openWorldHint));
   const categories = await client.callTool({ name: "list_design_categories", arguments: {} });
   assertCautions(categories);
@@ -99,10 +99,10 @@ test("real stdio client discovers and calls tools, resources and prompts from an
   assert.equal(invalid.isError, true);
   const { resources } = await client.listResources();
   const availableCount = files => [...files.values()].filter(file => file.text !== null).length;
-  assert.equal(resources.length, 5 + patternCatalog.patterns.size + patternCatalog.guides.size +
+  assert.equal(resources.length, 7 + patternCatalog.patterns.size + patternCatalog.guides.size +
     availableCount(visualCatalog.files) + availableCount(visualCatalog.sources) +
     visualCatalog.reuse.families.length + visualCatalog.technologies.entries.length + visualCatalog.reuse.platforms.length +
-    6 + visualCatalog.analyses.entries.length + visualCatalog.analyses.list().logs.length);
+    7 + visualCatalog.analyses.entries.length + visualCatalog.analyses.list().logs.length);
   assert.equal(resources[0].uri, "design://design-cautions");
   const cautions = await client.readResource({ uri: "design://design-cautions" });
   assert.equal(cautions.contents.length, 1);
@@ -115,8 +115,18 @@ test("real stdio client discovers and calls tools, resources and prompts from an
     assert.equal(result.contents[0].text, cautions.contents[0].text, uri);
     assert.equal(result.contents[1].uri, uri);
   }
+  for (const [uri, mimeType, file] of [
+    ["design://cross-project-workflow", "text/markdown", "cross-project-design-flow.md"],
+    ["design://cross-project-workflow/map", "text/html", "design-pointer-map.html"],
+  ]) {
+    assert.ok(resources.some(resource => resource.uri === uri && resource.mimeType === mimeType));
+    const { contents: [, resource] } = await client.readResource({ uri });
+    assert.equal(resource.mimeType, mimeType);
+    assert.equal(resource.text, await readFile(new URL(`../docs/${file}`, import.meta.url), "utf8"));
+  }
   assert.equal(categories.structuredContent.visualExamples.exampleCount, 21);
   assert.ok(categories.structuredContent.visualExamples.analysisLibrary.analyzedCount >= 1);
+  assert.ok(categories.structuredContent.visualExamples.analysisLibrary.characterCount >= 1);
   const halftoneId = "halftone-talking-heads-study";
   const profile = await client.callTool({ name: "get_design_preferences", arguments: {} });
   assertCautions(profile);
@@ -171,6 +181,41 @@ test("real stdio client discovers and calls tools, resources and prompts from an
   } });
   assertCautions(focusedSearch);
   assert.deepEqual(focusedSearch.structuredContent.results.map(item => item.id), [halftoneId]);
+  const useTool = arguments_ => client.callTool({ name: "analyze_design_character", arguments: arguments_ });
+  const characterGuideResult = await useTool({});
+  assertCautions(characterGuideResult);
+  assert.deepEqual(Object.keys(characterGuideResult.structuredContent.rubric), ["mood", "style", "feel", "impression"]);
+  const rubric = await client.readResource({ uri: characterGuideResult.structuredContent.rubricUri });
+  assert.deepEqual(JSON.parse(rubric.contents[1].text).rubric, characterGuideResult.structuredContent.rubric);
+  const moonId = "pinterest-moon-concentric-poster";
+  const savedCharacter = await useTool({ id: moonId });
+  assertCautions(savedCharacter);
+  const { character, evidence } = savedCharacter.structuredContent;
+  assert.equal(savedCharacter.structuredContent.mode, "saved");
+  assert.equal(character.mood.certainty, "estimated");
+  assert.deepEqual(evidence.map(item => item.id), ["pin-preview"]);
+  const invalidCharacter = { ...character, mood: {
+    ...character.mood, observations: [{ axis: "layout", topic: "미등록 관찰" }],
+  } };
+  const unsupported = await useTool({ id: moonId, character: invalidCharacter });
+  assertCautions(unsupported);
+  assert.equal(unsupported.isError, true);
+  assert.equal(unsupported.structuredContent.error.code, "INVALID_CHARACTER_RECORD");
+  assert.match(unsupported.structuredContent.error.message, /character\.mood\.observations\.0/u);
+  const reviewed = await useTool({ id: moonId, character });
+  assertCautions(reviewed);
+  assert.equal(reviewed.structuredContent.mode, "reviewed");
+  const prepared = await useTool({ id: halftoneId });
+  assertCautions(prepared);
+  assert.equal(prepared.structuredContent.mode, "prepare");
+  assert.ok(prepared.structuredContent.observations.length > 0);
+  const characterSearch = await client.callTool({ name: "search_design_analyses", arguments: {
+    character: { dimension: "mood", query: "고요 고립감" }, useCase: "전시 랜딩", scope: "preferred",
+  } });
+  assertCautions(characterSearch);
+  assert.deepEqual(characterSearch.structuredContent.results.map(item => item.id), [moonId]);
+  const moonResource = await client.readResource({ uri: `design://analyses/${moonId}` });
+  assert.deepEqual(JSON.parse(moonResource.contents[1].text).character, character);
   const missingAxis = await client.callTool({ name: "get_design_analysis", arguments: {
     id: halftoneId, axis: "interaction",
   } });

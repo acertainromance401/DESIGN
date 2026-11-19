@@ -12,7 +12,7 @@
 - [시안별 기술 분석·구현 위치·자산·재사용 단위](./docs/design-inventory.md)
 - [시안·실전 디자인 기술 카탈로그](./docs/technology-catalog.md): 웹·그래픽·모션·네이티브·게임·자산 제작·검수 후보. `search_design_technologies`로 이름이나 목적을 검색하고 `get_design_technology`로 필요 조건과 제약을 확인합니다.
 - [SwiftUI·Metal·RealityKit·SpriteKit·Unity·Godot·Unreal 활용 가이드](./docs/platform-adoption.md)
-- [외부 프로젝트의 MCP 연결·도구 호출 예](./docs/mcp-workflows.md)
+- [다른 프로젝트에서 DESIGN을 쓰는 흐름도](./docs/cross-project-design-flow.md) · [인터랙티브 조회 지도](./docs/design-pointer-map.html) · [MCP 연결·도구 호출 예](./docs/mcp-workflows.md)
 - [작업공간 전체 구조와 파일 역할](./docs/workspace-map.md)
 
 원본은 `designs/{유형}/`에 한 번만 보관하며 이전 HTML 주소는 새 위치로 연결합니다. `search_design_visuals`에 `family`, `technology`, `platform`을 지정하고, `get_design_technology`, `get_design_platform`, `create_visual_adoption_plan`으로 구체화합니다. HTML 외 모듈은 `sourceFiles` 리소스로 별도 조회합니다.
@@ -35,6 +35,8 @@ npm run analysis:check
 ```
 
 MCP는 `search_design_analyses`와 `get_design_analysis`로 근거·추정·실제 서체 미확인을 구분해 조회합니다. 기존 시안 상세와도 연결될 수 있지만 기술 인벤토리와 선호 레퍼런스는 별개입니다. **대화만으로 자동 저장하지 않으며**, 클라이언트가 파일을 등록하고 MCP를 재시작해야 합니다. JSON과 보고서는 npm 배포 대상이므로 비공개 원문을 넣지 않습니다.
+
+`analyze_design_character`는 **분위기·스타일·느낌·인상**을 분리하고 활용 방안을 실제 관찰에 연결하는 [기준과 검증](./docs/recording-analyses.md#분위기스타일느낌인상과-활용)을 제공합니다. 연결된 AI가 원본을 보고 해석을 작성하며, MCP는 근거 링크를 검증합니다. 저장된 결과는 분위기와 활용처를 함께 검색할 수 있습니다.
 
 **앞으로 사용자가 제공하는 예시는 마음에 드는 디자인으로 받아들입니다.** 색감·레이아웃·폰트를 분리해 선호 레퍼런스로 축적하고, 이후 디자인에서 관련 기록과 반복되는 특징을 활용합니다. 전체 디자인 선호는 확인된 사실로, AI가 추론한 요소별 선호 이유·공통 경향은 해석으로 구분합니다. 비선호·비교용 등 별도 설명은 우선하며 AI가 고른 연구 시안까지 사용자 승인으로 확대하지 않습니다.
 
@@ -102,7 +104,7 @@ MCP는 `search_design_analyses`와 `get_design_analysis`로 근거·추정·실�
 - 한국어·영어 키워드 검색, 카테고리·출처·플랫폼별 예제 유무 필터와 페이지 단위 조회.
 - 패턴별 범용 원칙, 플랫폼별 적용 지침, 원본 의존성·구현 상태·주의사항·검증 기준.
 - 신규 프로젝트 설계와 기존 프로젝트 개선을 구분한 적용 가이드.
-- MCP Tools **13개**, Prompts **3개**. 패턴·가이드·시안·기술·플랫폼·소스·누적 분석·취향 프로필 리소스를 제공하며 원문 리소스 수는 로컬 전용 파일 가용성과 분석 기록 수에 따라 다릅니다.
+- MCP Tools **14개**, Prompts **3개**. 패턴·가이드·시안·기술·플랫폼·소스·누적 분석·취향 프로필 리소스를 제공하며 원문 리소스 수는 로컬 전용 파일 가용성과 분석 기록 수에 따라 다릅니다.
 - 별도 시각 예시 **21종**: 기존 15종에 서점·극장 SVG/3D·ASCII 캐릭터·광학 유리·로컬 전용 생일 분석을 추가했습니다. `search_design_visuals`와 `get_design_visual`로 유형·기술·자산을 조회합니다.
 - 원본 저장소나 개발자 컴퓨터의 절대 경로가 필요 없는 패키지.
 - 런타임 외부 API·LLM·검색 서비스·벡터 DB·API 키 없이 로컬 실행.

@@ -33,6 +33,34 @@
 
 | [상호작용 분석](<elements/interaction.md>) | 0 | `design://analysis-logs/interaction` |
 
+## 분위기·스타일·느낌·인상과 활용
+
+[분석·검증 방법](<../recording-analyses.md#분위기스타일느낌인상과-활용>) · MCP: `design://analysis-character`
+
+- [Coppola / Logan — 청록 헤드라이트와 큰 황색 제목의 영화 테마](<pinterest-coppola-logan-film-theme.md#design-character>)
+
+- [Frameform — 붉은 카메라와 대형 활자가 겹친 모션 포트폴리오](<pinterest-frameform-motion-portfolio.md#design-character>)
+
+- [IMA–HOME — 디스플레이 활자와 중앙 영상이 교대로 주도하는 에이전시](<pinterest-ima-home-showreel.md#design-character>)
+
+- [Inertia — 흐린 실루엣과 주황 궤적을 사용한 모션 스튜디오](<pinterest-inertia-motion-studio.md#design-character>)
+
+- [Katie Hunter — 한 정렬선에 제목과 연락처를 붙인 흑백 포트폴리오](<pinterest-katie-hunter-portfolio.md#design-character>)
+
+- [Moon — 동심원 안의 작은 우주인과 검은 여백](<pinterest-moon-concentric-poster.md#design-character>)
+
+- [Nexola — 얇은 그리드와 가운데 이미지 열을 쓴 에이전시](<pinterest-nexola-agency.md#design-character>)
+
+- [Opal Tadpole — 제품 실루엣과 거대한 푸터 워드마크](<pinterest-opal-tadpole.md#design-character>)
+
+- [Profico Academy — 어두운 본문 바깥에 색광을 모은 교육 페이지](<pinterest-profico-academy.md#design-character>)
+
+- [Rico Supply — 중앙 프로젝트 컷이 커지며 제목을 가르는 편집](<pinterest-rico-supply-interactive.md#design-character>)
+
+- [SwissBrut — 큰 활자와 프로젝트 이미지로 짠 스튜디오 포트폴리오](<pinterest-swissbrut-portfolio.md#design-character>)
+
+- [Trionn — 작업 썸네일이 원근을 지나 그리드로 모이는 포트폴리오](<pinterest-trionn-portfolio-motion.md#design-character>)
+
 ## 예시별 상세 보고서
 
 전체 34건 / 분석 34건 / 초안 0건. 초안은 MCP 기본 검색에서 제외됩니다. 분석 상태도 개별 근거 밖의 렌더링·폰트 확인을 뜻하지 않습니다.

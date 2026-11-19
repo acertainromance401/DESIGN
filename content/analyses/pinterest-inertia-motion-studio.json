@@ -39,5 +39,41 @@
     },
     "texture": { "summary": "방향성 있는 번짐으로 움직임의 인상을 낸다.", "findings": [{ "focus": "texture.edges", "topic": "선명한 정보와 흐린 피사체 경계", "observation": "인물의 외곽과 주황 띠가 번져 있지만 메뉴·설명은 선명하다. 움직이는 방향이나 애니메이션 여부는 정지 이미지로 확인할 수 없다.", "certainty": "confirmed", "evidenceIds": ["pin-preview"] }], "reuse": ["번짐은 장면 표현에만 쓰고 읽거나 눌러야 할 요소에는 적용하지 않는다."] }
   },
+  "character": {
+    "viewedState": "정지 미리보기의 인물·주황 띠·잘린 워드마크, 이어지는 소개와 작업 항목.",
+    "mood": {
+      "certainty": "estimated",
+      "label": "정지 화면을 가로지르는 초조한 에너지",
+      "reasoning": "세로로 긴 검은 인물에 가로로 번진 주황 띠가 교차한다. 배경과 정보는 비교적 차분하게 남아 한 방향의 긴장이 더 또렷하다. 실제 이동은 확인되지 않았다.",
+      "observations": [{ "axis": "color", "topic": "가로 주황색이 방향을 만듦" }, { "axis": "subject-composition", "topic": "가운데 세로 인물과 가로 궤적" }]
+    },
+    "style": {
+      "certainty": "estimated",
+      "label": "흐린 이미지와 정밀한 활자 레이어를 갈라 쓴 구성",
+      "reasoning": "인물의 외곽만 번지고 정보 글자는 선명하다. 가는 소문자 워드마크는 굵기보다 규모와 하단 잘림으로 앞쪽 레이어가 된다.",
+      "observations": [{ "axis": "texture", "topic": "선명한 정보와 흐린 피사체 경계" }, { "axis": "typography", "topic": "굵기보다 스케일로 강조" }, { "axis": "layout", "topic": "하단의 이름을 잘라 이미지 위에 놓음" }]
+    },
+    "feel": {
+      "certainty": "estimated",
+      "label": "가로로 스치는 듯하다가 여백에서 속도가 풀린다",
+      "reasoning": "번진 주황 선이 한 방향의 속도를 연상시킨다. 다음 문단에서는 같은 계열의 조각이 행 안에서 짧게 두 번만 보이고 왼쪽은 비어 있어, 긴 선과 짧은 삽입 사이에 리듬 차가 생긴다.",
+      "observations": [{ "axis": "subject-composition", "topic": "가운데 세로 인물과 가로 궤적" }, { "axis": "text-placement", "topic": "소개 문장 안의 작은 이미지 조각" }, { "axis": "layout", "topic": "소개 좌측을 비움" }]
+    },
+    "impression": {
+      "certainty": "estimated",
+      "label": "인물과 띠가 먼저 남고, 아래의 큰 이름이 장면을 묶는다",
+      "reasoning": "인물과 띠의 교차점에 색과 방향이 집중된다. 하단의 큰 이름이 그 앞을 가로지르고, 왼쪽 소개와 오른쪽 프리뷰는 작은 별도 정보로 보인다.",
+      "observations": [{ "axis": "subject-composition", "topic": "번진 피사체 앞의 선명한 활자" }, { "axis": "text-placement", "topic": "좌상단 소개·우상단 프리뷰·하단 워드마크" }]
+    },
+    "useCases": [{
+      "dimensions": ["mood", "style", "feel", "impression"],
+      "context": "정지 키비주얼로 속도감을 전할 모션 스튜디오 랜딩",
+      "goal": "자동 재생 없이도 작업 성격을 전달하고 서비스 설명은 바로 읽히게 한다.",
+      "preserve": "세로 피사체와 한 줄의 가로 방향성을 대비시키고, 정보 글자와 링크에는 번짐을 쓰지 않는다.",
+      "adapt": "직접 촬영·제작한 자산을 쓰고 인물을 새로 제작한다면 Blender 정적 실사풍 렌더를 사용한다. 포인트 색은 브랜드에 맞춰 바꾼다.",
+      "avoidWhen": "정보 신뢰도가 우선이거나 얼굴·제품 정면 자체가 중요한 화면에서는 중심 피사체를 흐리지 않는다.",
+      "verify": "움직이지 않는 첫 화면에서도 서비스와 이름을 알아볼 수 있는지, 모바일에서 워드마크 크롭이 글자를 알아볼 수 없게 만들지 않는지 확인한다."
+    }]
+  },
   "limitations": ["정지 이미지에서 보이는 블러를 실제 애니메이션이나 구현 기술 확인으로 간주하지 않는다.", "카드와 배지의 존재가 해당 요소 사용을 선호하거나 승인했다는 뜻은 아니다."]
 }
